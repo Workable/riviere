@@ -6,10 +6,10 @@ const { EVENT } = Loggable;
 function validateArgs(options) {
   const { adapter, logger } = options;
   if (!adapter || !adapter.onIncomingRequest || !adapter.onOutcomingResponse || !adapter.onError) {
-    throw new Error('no_valid_adapter');
+    throw new Error('invalid_adapter');
   }
   if (!logger) {
-    throw new Error('no_valid_logger');
+    throw new Error('invalid_logger');
   }
 }
 
