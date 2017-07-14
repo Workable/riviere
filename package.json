@@ -1,0 +1,28 @@
+{
+  "name": "riviere",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint-check": "./node_modules/.bin/eslint --print-config .eslintrc.js | eslint-config-prettier-check",
+    "precommit": "lint-staged"
+  },
+  "dependencies": {
+    "flat": "^2.0.1",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "koa": "^1.1.2",
+    "koa-bodyparser": "^2.5.0"
+  },
+  "engines": {
+    "node": "6.10.x"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --print-width 120 --single-quote true --write",
+      "git add"
+    ]
+  }
+}
