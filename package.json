@@ -13,7 +13,8 @@
     "flat": "^2.0.1",
     "flatstr": "^1.0.5",
     "lodash": "^4.17.4",
-    "log4js_honeybadger_appender": "^1.0.0"
+    "log4js_honeybadger_appender": "^1.0.0",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "koa": "^1.1.2",
