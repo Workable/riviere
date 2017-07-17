@@ -1,6 +1,7 @@
 const Loggable = require('./lib/loggable');
 const defaultAdapter = require('./lib/adapters/defaultAdapter');
 const log4jsAdapter = require('./lib/adapters/log4jsAdapter');
+const lodash = require('lodash');
 
 const { EVENT } = Loggable;
 
@@ -22,6 +23,10 @@ function safe(fn, log) {
   }
 }
 
+const defaultsOptions = {
+  defaultHeadersRegex: new RegExp('^x-.*', 'i')
+};
+
 module.exports = {
   middleware: (...args) => {
     validateArgs(...args);
@@ -29,6 +34,7 @@ module.exports = {
     const loggable = new Loggable(...args);
 
     const options = args[0];
+    lodash.defaults(options, defaultsOptions);
     const logger = options.logger;
     const { errorOptions = {} } = options;
     const { stacktrace = false, message } = errorOptions;
