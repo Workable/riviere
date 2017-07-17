@@ -13,7 +13,6 @@ Nodejs koa HTTP Middleware compatible with the logger of your choice.
 
 ## Installation
 
-If you use generator functions as route handlers then install:
 ```npm i --save riviere```
 
 ## Example
