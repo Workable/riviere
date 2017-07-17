@@ -9,6 +9,7 @@ Nodejs koa HTTP Middleware compatible with the logger of your choice.
 - log request body (configurable)
 - log request context (configurable)
 - log the outbound HTTP response
+- extensible by implementing adapters
 - handle unexpected errors
 
 ## Installation
