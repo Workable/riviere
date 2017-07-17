@@ -1,5 +1,6 @@
 const Loggable = require('./lib/loggable');
 const defaultAdapter = require('./lib/adapters/defaultAdapter');
+const uuidv4 = require('uuid/v4');
 const lodash = require('lodash');
 
 const { EVENT } = Loggable;
@@ -21,7 +22,12 @@ function safe(fn, log) {
 
 const defaultsOptions = {
   headersRegex: new RegExp('^x-.*', 'i'),
-  adapter: defaultAdapter()
+  adapter: defaultAdapter(),
+  getLogCtx: () => {
+    return {
+      requestId: uuidv4()
+    }
+  }
 };
 
 module.exports = {
