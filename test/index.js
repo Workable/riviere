@@ -43,8 +43,6 @@ const riviere = Riviere.middleware({
     logger: log4js.getLogger(),
     getLogCtx: ctx => {
         return {
-            method: ctx.request.method.toUpperCase(),
-            url: ctx.originalUrl,
             userId: 'exampleUserId',
             accountId: 'exampleAccountId',
             requestId: 'ExampleRequestId'
