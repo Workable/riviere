@@ -67,6 +67,7 @@ const options = {
         onError() => console.log('error');
     }
 };
+
 ```
 # Features
 - Use the logger of your choice.
@@ -74,17 +75,21 @@ const options = {
 - Log therequest headers (Configurable). By default all X-.* headers will be logged.
 - Log the request body (Configurable).
 - Log request context (Configurable).
-```
-[773572f2-6c3a-4d75-bdfa-0123bdff62c4] <-- POST /api/v1/somethingElse?someparam=ok userId="exampleUserId", accountId="exampleAccountId", requestId="773572f2-6c3a-4d75-bdfa-0123bdff62c4", method="POST", url="/api/v1/somethingElse?someparam=ok", headers.x-custom-user="exampleUserId", headers.x-custom-account="exampleAccountId", headers.x-request-id="exampleRequestId", body.sport_type ="sea", body.equipment=["paddle", "SUP board", "sunglasses"], log_tag="inbound_request"
-```
 - Log the outbound HTTP response.
-```
-[773572f2-6c3a-4d75-bdfa-0123bdff62c4] --> 200 9ms status=200, duration=9, userId="exampleUserId", accountId="exampleAccountId", requestId="773572f2-6c3a-4d75-bdfa-0123bdff62c4", method="POST", url="/api/v1/somethingElse?someparam=ok", log_tag="outbound_response"
-```
 - Customizable by implementing adapters.
 - Catch unexpected errors.
 - Enhanche the unexpected errors with the request context (HoneyBadger frendly)
 - Supports a winston like key=value log Format by default. The string values are wrapped inside double quotes (Logentries friendly).
+
+# Example logs
+
+```
+[773572f2-6c3a-4d75-bdfa-0123bdff62c4] <-- POST /api/v1/somethingElse?someparam=ok userId="exampleUserId", accountId="exampleAccountId", requestId="773572f2-6c3a-4d75-bdfa-0123bdff62c4", method="POST", url="/api/v1/somethingElse?someparam=ok", headers.x-custom-user="exampleUserId", headers.x-custom-account="exampleAccountId", headers.x-request-id="exampleRequestId", body.sport_type ="sea", body.equipment=["paddle", "SUP board", "sunglasses"], log_tag="inbound_request"
+```
+
+```
+[773572f2-6c3a-4d75-bdfa-0123bdff62c4] --> 200 9ms status=200, duration=9, userId="exampleUserId", accountId="exampleAccountId", requestId="773572f2-6c3a-4d75-bdfa-0123bdff62c4", method="POST", url="/api/v1/somethingElse?someparam=ok", log_tag="outbound_response"
+```
 
 ## License
 
