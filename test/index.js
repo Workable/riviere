@@ -1,7 +1,6 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const log4js = require('log4js');
-const path = require('path');
 
 const Riviere = require('./../index');
 
@@ -24,31 +23,24 @@ const getLogCtx = (ctx) => {
 
 log4js.configure({
     appenders: {
-        out: { type: 'stdout' },
-        inbound: {
-            type: path.join(__dirname, '../lib/appenders/inboundAppender'),
-        },
-        outbound: {
-            type: path.join(__dirname, '../lib/appenders/outboundAppender')
-        },
-        error: {
-            type: path.join(__dirname, '../lib/appenders/errorAppender')
+        console: {
+            type: 'console',
+            layout: {
+                type: 'pattern',
+                pattern: '%[[%d] [%p] %c%] %m'
+            }
         },
         honeybadger: {
-            type: path.join(__dirname, '../lib/appenders/honeyBadgerAppender')
+            type: 'log4js_honeybadger_appender'
         }
     },
     categories: {
-        default: { appenders: [ 'out' ], level: 'info' },
-        inbound: { appenders: [ 'inbound' ], level: 'info' },
-        outbound: { appenders: [ 'outbound' ], level: 'info' },
-        error: { appenders: [ 'error', 'honeybadger' ], level: 'error' }
+        default: { appenders: [ 'console', 'honeybadger' ], level: 'info' }
     }
 });
 
 const riviere = Riviere.middleware({
     logger: log4js.getLogger(),
-    adapter: Riviere.adapter.log4jsAdapter(),
     getLogCtx: ctx => {
         return {
             method: ctx.request.method.toUpperCase(),
@@ -59,7 +51,6 @@ const riviere = Riviere.middleware({
         };
     },
     bodyKeys: ['skills', 'edu', 'exp', 'loc', 'lastPageFallback'],
-    headersRegex: new RegExp('^x-.*', 'i'),
     errorOptions: {
         stacktrace: false,
         message: 'something went wrong'

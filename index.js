@@ -1,15 +1,11 @@
 const Loggable = require('./lib/loggable');
 const defaultAdapter = require('./lib/adapters/defaultAdapter');
-const log4jsAdapter = require('./lib/adapters/log4jsAdapter');
 const lodash = require('lodash');
 
 const { EVENT } = Loggable;
 
 function validateArgs(options) {
-  const { adapter, logger } = options;
-  if (!adapter || !adapter.onInboundRequest || !adapter.onOutboundResponse || !adapter.onError) {
-    throw new Error('invalid_adapter');
-  }
+  const { logger } = options;
   if (!logger) {
     throw new Error('invalid_logger');
   }
@@ -24,20 +20,21 @@ function safe(fn, log) {
 }
 
 const defaultsOptions = {
-  defaultHeadersRegex: new RegExp('^x-.*', 'i')
+  headersRegex: new RegExp('^x-.*', 'i'),
+  adapter: defaultAdapter()
 };
 
 module.exports = {
   middleware: (...args) => {
     validateArgs(...args);
 
-    const loggable = new Loggable(...args);
-
     const options = args[0];
     lodash.defaults(options, defaultsOptions);
     const logger = options.logger;
     const { errorOptions = {} } = options;
     const { stacktrace = false, message } = errorOptions;
+
+    const loggable = new Loggable(...args);
 
     return function*(next, ctx = this) {
       ctx.startedAt = new Date().getTime();
@@ -58,7 +55,6 @@ module.exports = {
   },
 
   adapter: {
-    defaultAdapter,
-    log4jsAdapter
+    defaultAdapter
   }
 };
