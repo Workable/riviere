@@ -45,6 +45,8 @@ const riviere = Riviere.middleware(options);
 - **headersRegex** | optional | The request headers to be logged(regex)
 - **bodyKeys** | optional | the JSON body fields to be logged
 - **getLogCtx** | optional | the ctx context to be logged
+- **adapter** | optional | customize the functionality by implementing a custom adapter
+
 Options Example:
 ```
 const options = {
