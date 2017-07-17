@@ -1,5 +1,6 @@
 const Loggable = require('./lib/loggable');
-const defaultAdapter = require('./lib/defaultAdapter');
+const defaultAdapter = require('./lib/adapters/defaultAdapter');
+const log4jsAdapter = require('./lib/adapters/log4jsAdapter');
 
 const { EVENT } = Loggable;
 
@@ -13,28 +14,45 @@ function validateArgs(options) {
   }
 }
 
+function safe(fn, log) {
+  try {
+    fn();
+  } catch (err) {
+    log.error(err);
+  }
+}
+
 module.exports = {
   middleware: (...args) => {
     validateArgs(...args);
 
     const loggable = new Loggable(...args);
 
-    return function*(next, ctx = this) {
-      loggable.emit(EVENT.INBOUND_REQUEST, { ctx });
+    const options = args[0];
+    const logger = options.logger;
+    const { errorOptions = {} } = options;
+    const { stacktrace = false, message } = errorOptions;
 
+    return function*(next, ctx = this) {
+      ctx.startedAt = new Date().getTime();
+      safe(() => loggable.emit(EVENT.INBOUND_REQUEST, { ctx }), logger);
       try {
         yield next;
       } catch (err) {
+        if (stacktrace) {
+          this.body = err.stack;
+        } else {
+          this.body = message || err.message;
+        }
         this.status = err.status || 500;
-
-        loggable.emit(EVENT.UNEXPECTED_ERROR, { ctx, err });
+        safe(() => loggable.emit(EVENT.UNEXPECTED_ERROR, { ctx, err }), logger);
       }
-
-      loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx });
+      safe(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
     };
   },
 
   adapter: {
-    defaultAdapter
+    defaultAdapter,
+    log4jsAdapter
   }
 };
