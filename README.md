@@ -1,5 +1,24 @@
 # riviere
 
-Koa HTTP logger
+Nodejs koa HTTP Middleware compatible with the logger of your choice.
 
-Work in Progress
+# Features
+- use the logger of your choice
+- log the incoming HTTP request
+- log request headers (configurable)
+- log request body (configurable)
+- log request request context (configurable)
+- log the outbound HTTP response
+- handle unexpected errors
+## Installation
+
+If you use generator functions as route handlers then install:
+```npm i --save riviere```
+
+## Example
+
+Work in progress
+
+## License
+
+  MIT
