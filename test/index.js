@@ -1,71 +1,187 @@
-const Koa = require('koa');
-const bodyParser = require('koa-bodyparser');
-const log4js = require('log4js');
+// todo refactor
+// todo add spies/stubs
+// todo add arg assertions
+// todo rename test case descriptions
 
-const Riviere = require('./../index');
+const should = require('should');
+const defaultAdapter = require('../lib/adapters/defaultAdapter');
 
-const logger = {
-    info: (...args) => {
-        console.log(...args)
-    },
-    error: (...args) => {
-        console.log(...args);
-    }
-};
-
-const getLogCtx = (ctx) => {
+const getThis = () => {
     return {
-        userId: 'exampleUserId',
-        accountId: 'exampleAccountId',
-        requestId: 'ExampleRequestId'
+        getLogCtx: () => {
+            return {
+                test: true,
+                bodyKeys: [ 'testKayA']
+            };
+        },
+        constructor: {
+            EVENT: {
+                INBOUND_REQUEST_EVENT: 'INBOUND_REQUEST_EVENT'
+            }
+        },
+        bodyKeys: ['testKeyA'],
+        logger: {
+            info: msg => null,
+            error: err => null
+        },
+        serialize: msg => msg
     };
 };
 
-log4js.configure({
-    appenders: {
-        console: {
-            type: 'console',
-            layout: {
-                type: 'pattern',
-                pattern: '%[[%d] [%p] %c%] %m'
-            }
-        },
-        honeybadger: {
-            type: 'log4js_honeybadger_appender'
-        }
-    },
-    categories: {
-        default: { appenders: [ 'console', 'honeybadger' ], level: 'info' }
+describe('defaultAdapter', () => {
+    it('should pass', () => {
+        should(typeof defaultAdapter).equal('function');
+    });
+    describe('onInboundRequest', () => {
+        it('should pass', () => {
+            const ctx = {
+                request: {
+                    method: 'get'
+                },
+                originalUrl: '/test'
+            };
+            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
+        });
+        it('POST && this.bodyKeys', () => {
+            const ctx = {
+                request: {
+                    method: 'post'
+                },
+                originalUrl: '/test'
+            };
+            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
+        });
+        it('POST && this.bodyKeys && bodyKeys exist in body', () => {
+            const ctx = {
+                request: {
+                    method: 'post',
+                    body: {
+                        testKeyA: true
+                    }
+                },
+                originalUrl: '/test'
+            };
+            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
+        });
+        it('headersRegex', () => {
+            const that = {
+                getLogCtx: () => {
+                    return {
+                        test: true,
+                        bodyKeys: [ 'testKayA']
+                    };
+                },
+                constructor: {
+                    EVENT: {
+                        INBOUND_REQUEST_EVENT: 'INBOUND_REQUEST_EVENT'
+                    }
+                },
+                bodyKeys: ['testKeyA'],
+                logger: {
+                    info: (msg) => null
+                },
+                headersRegex: new RegExp('XX-.*'),
+                serialize: msg => msg
+            };
+            const ctx = {
+                request: {
+                    method: 'post',
+                    body: {
+                        testKeyA: true
+                    },
+                    headers: {
+                       'XX-something': true,
+                        other: true
+                    }
+                },
+                originalUrl: '/test'
+            };
+            defaultAdapter().onInboundRequest.call(that, { ctx });
+        });
+        it('headersRegex && no matched headers', () => {
+            const that = {
+                getLogCtx: () => {
+                    return {
+                        test: true,
+                        bodyKeys: [ 'testKayA']
+                    };
+                },
+                constructor: {
+                    EVENT: {
+                        INBOUND_REQUEST_EVENT: 'INBOUND_REQUEST_EVENT'
+                    }
+                },
+                bodyKeys: ['testKeyA'],
+                logger: {
+                    info: (msg) => null
+                },
+                headersRegex: new RegExp('XX-.*'),
+                serialize: msg => msg
+            };
+            const ctx = {
+                request: {
+                    method: 'post',
+                    body: {
+                        testKeyA: true
+                    },
+                    headers: {
+                        other: true
+                    }
+                },
+                originalUrl: '/test'
+            };
+            defaultAdapter().onInboundRequest.call(that, { ctx });
+        });
+    });
+    describe('onOutboundResponse', () => {
+        it('should pass', () => {
+           should(typeof defaultAdapter().onOutboundResponse).equal('function');
+        });
+        it('should call this.logger.info', () => {
+            const ctx = {
+                request: {
+                    method: 'post'
+                },
+                originalUrl: '/test',
+                response: {
+                    status: 200
+                }
+            };
+            defaultAdapter().onOutboundResponse.call(getThis(), { ctx });
+        });
+    });
+    describe('onError', () => {
+        it('should pass', () => {
+            should(typeof defaultAdapter().onError).equal('function');
+        });
+        it('should call this.logger.error()', () => {
+            const ctx = {
+                request: {
+                    method: 'post'
+                },
+                originalUrl: '/test',
+                response: {
+                    status: 200
+                }
+            };
+            const err = new Error('something bad');
+            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
+            defaultAdapter().onError.call(getThis(), { ctx, err });
+        });
+    });
+});
+const Loggable = require('./../lib/loggable');
+const loggable = new Loggable({
+    adapter: {
+        onInboundRequest: () => null,
+        onOutboundResponse: () => null,
+        onError: () => null
     }
 });
-
-const riviere = Riviere.middleware({
-    logger: log4js.getLogger(),
-    getLogCtx: ctx => {
-        return {
-            userId: 'exampleUserId',
-            accountId: 'exampleAccountId',
-            requestId: 'ExampleRequestId'
-        };
-    },
-    bodyKeys: ['skills', 'edu', 'exp', 'loc', 'lastPageFallback'],
-    errorOptions: {
-        stacktrace: false,
-        message: 'something went wrong'
-    }
-
+describe('loggable', () => {
+    it('should pass', () => {
+        loggable.emit(Loggable.EVENT.INBOUND_REQUEST);
+        loggable.emit(Loggable.EVENT.OUTBOUND_RESPONSE);
+        loggable.emit(Loggable.EVENT.UNEXPECTED_ERROR);
+    });
 });
-
-const app = new Koa();
-
-app.use(bodyParser({ enableTypes: ['json'] }));
-
-app.use(riviere);
-
-app.use(function*(next) {
-    //throw new Error('omg');
-    this.body = 'Hello World';
-    yield next;
-});
-
-app.listen(3000);
