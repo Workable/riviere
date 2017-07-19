@@ -147,6 +147,7 @@ describe('defaultAdapter', () => {
                     status: 200
                 }
             };
+            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
             defaultAdapter().onOutboundResponse.call(getThis(), { ctx });
         });
     });
