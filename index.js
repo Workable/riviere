@@ -1,7 +1,9 @@
 const Loggable = require('./lib/loggable');
 const defaultAdapter = require('./lib/adapters/defaultAdapter');
+const serialize = require('./lib/serializers/serialzeToKeyValue');
 const uuidv4 = require('uuid/v4');
 const lodash = require('lodash');
+const http = require('http');
 
 const { EVENT } = Loggable;
 
@@ -23,6 +25,8 @@ function safe(fn, log) {
 const defaultsOptions = {
   headersRegex: new RegExp('^x-.*', 'i'),
   adapter: defaultAdapter(),
+  serialize,
+  server2server: false,
   getLogCtx: () => {
     return {
       requestId: uuidv4()
@@ -36,9 +40,13 @@ module.exports = {
 
     const options = args[0];
     lodash.defaults(options, defaultsOptions);
+
     const logger = options.logger;
-    const { errorOptions = {} } = options;
-    const { stacktrace = false, message } = errorOptions;
+    const outboundRequestId = options.outboundRequestId;
+
+    if (options.server2server) {
+        http.request = new Proxy(http.request, options.adapter.requestProxy({ logger, serialize, outboundRequestId }));
+    }
 
     const loggable = new Loggable(...args);
 
@@ -48,10 +56,10 @@ module.exports = {
       try {
         yield next;
       } catch (err) {
-        if (stacktrace) {
+        if (options.errorOptions.stacktrace) {
           this.body = err.stack;
         } else {
-          this.body = message || err.message;
+          this.body = options.errorOptions.message || err.message;
         }
         this.status = err.status || 500;
         safe(() => loggable.emit(EVENT.UNEXPECTED_ERROR, { ctx, err }), logger);
