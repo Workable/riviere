@@ -44,7 +44,7 @@ module.exports = {
     const logger = options.logger;
     const outboundRequestId = options.outboundRequestId;
 
-    if (options.server2server) {
+    if (options.logOutboundTraffic) {
         http.request = new Proxy(http.request, options.adapter.requestProxy({ logger, serialize, outboundRequestId }));
     }
 

@@ -23,7 +23,7 @@ const getThis = () => {
     };
 };
 
-describe.only('defaultAdapter', () => {
+describe('defaultAdapter', () => {
     it('should pass', () => {
         should(typeof defaultAdapter).equal('function');
     });
