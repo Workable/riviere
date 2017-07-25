@@ -1,6 +1,6 @@
 const Loggable = require('./lib/loggable');
 const defaultAdapter = require('./lib/adapters/defaultAdapter');
-const serialize = require('./lib/serializers/serialzeToKeyValue');
+const serialize = require('./lib/serializers/serializeToKeyValue');
 const uuidv4 = require('uuid/v4');
 const lodash = require('lodash');
 const http = require('http');
