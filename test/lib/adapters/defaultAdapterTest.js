@@ -25,7 +25,7 @@ const getThis = () => {
 
 describe('defaultAdapter', () => {
     it('should pass', () => {
-        should(typeof defaultAdapter).equal('function');
+        should(typeof defaultAdapter).equal('object');
     });
     describe('onInboundRequest', () => {
         it('should pass', () => {
@@ -35,7 +35,7 @@ describe('defaultAdapter', () => {
                 },
                 originalUrl: '/test'
             };
-            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
+            defaultAdapter.onInboundRequest.call(getThis(), { ctx });
         });
         it('POST && this.bodyKeys', () => {
             const ctx = {
@@ -44,7 +44,7 @@ describe('defaultAdapter', () => {
                 },
                 originalUrl: '/test'
             };
-            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
+            defaultAdapter.onInboundRequest.call(getThis(), { ctx });
         });
         it('POST && this.bodyKeys && bodyKeys exist in body', () => {
             const ctx = {
@@ -56,7 +56,7 @@ describe('defaultAdapter', () => {
                 },
                 originalUrl: '/test'
             };
-            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
+            defaultAdapter.onInboundRequest.call(getThis(), { ctx });
         });
         it('headersRegex', () => {
             const that = {
@@ -91,7 +91,7 @@ describe('defaultAdapter', () => {
                 },
                 originalUrl: '/test'
             };
-            defaultAdapter().onInboundRequest.call(that, { ctx });
+            defaultAdapter.onInboundRequest.call(that, { ctx });
         });
         it('headersRegex && no matched headers', () => {
             const that = {
@@ -125,12 +125,12 @@ describe('defaultAdapter', () => {
                 },
                 originalUrl: '/test'
             };
-            defaultAdapter().onInboundRequest.call(that, { ctx });
+            defaultAdapter.onInboundRequest.call(that, { ctx });
         });
     });
     describe('onOutboundResponse', () => {
         it('should pass', () => {
-            should(typeof defaultAdapter().onOutboundResponse).equal('function');
+            should(typeof defaultAdapter.onOutboundResponse).equal('function');
         });
         it('should call this.logger.info', () => {
             const ctx = {
@@ -142,13 +142,13 @@ describe('defaultAdapter', () => {
                     status: 200
                 }
             };
-            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
-            defaultAdapter().onOutboundResponse.call(getThis(), { ctx });
+            defaultAdapter.onInboundRequest.call(getThis(), { ctx });
+            defaultAdapter.onOutboundResponse.call(getThis(), { ctx });
         });
     });
     describe('onError', () => {
         it('should pass', () => {
-            should(typeof defaultAdapter().onError).equal('function');
+            should(typeof defaultAdapter.onError).equal('function');
         });
         it('should call this.logger.error()', () => {
             const ctx = {
@@ -161,8 +161,8 @@ describe('defaultAdapter', () => {
                 }
             };
             const err = new Error('something bad');
-            defaultAdapter().onInboundRequest.call(getThis(), { ctx });
-            defaultAdapter().onError.call(getThis(), { ctx, err });
+            defaultAdapter.onInboundRequest.call(getThis(), { ctx });
+            defaultAdapter.onError.call(getThis(), { ctx, err });
         });
     });
     describe('requestProxy', () => {
@@ -174,7 +174,7 @@ describe('defaultAdapter', () => {
             };
             const serialize = (a) => a;
             const outboundRequestId = 'test';
-            const requestProxy = defaultAdapter().requestProxy({ logger, serialize, outboundRequestId });
+            const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId });
             const incomingMessage = {
                 method: 'GET',
                 port: '8080',
@@ -210,7 +210,7 @@ describe('defaultAdapter', () => {
             };
             const serialize = (a) => a;
             const outboundRequestId = 'test';
-            const requestProxy = defaultAdapter().requestProxy({ logger, serialize, outboundRequestId });
+            const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId });
             const incomingMessage = {
                 method: 'GET',
                 port: '8080',
@@ -243,7 +243,7 @@ describe('defaultAdapter', () => {
             };
             const serialize = (a) => a;
             const outboundRequestId = 'test';
-            const requestProxy = defaultAdapter().requestProxy({ logger, serialize, outboundRequestId });
+            const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId });
             const incomingMessage = {
                 method: 'GET',
                 port: '8080',
@@ -274,7 +274,7 @@ describe('defaultAdapter', () => {
                 }
             };
             const serialize = (a) => a;
-            const requestProxy = defaultAdapter().requestProxy({ logger, serialize});
+            const requestProxy = defaultAdapter.requestProxy({ logger, serialize});
             const incomingMessage = {
                 method: 'GET',
                 port: '8080',
