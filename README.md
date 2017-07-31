@@ -1,10 +1,7 @@
-Work in Progress...
-
-[![Coverage Status](https://coveralls.io/repos/github/Workable/riviere/badge.svg?branch=master)](https://coveralls.io/github/Workable/riviere?branch=master)
-
-# riviere
+# riviere&nbsp;&nbsp;[![Coverage Status](https://coveralls.io/repos/github/Workable/riviere/badge.svg?branch=master)](https://coveralls.io/github/Workable/riviere?branch=master)
 
 Nodejs koa HTTP Middleware compatible with the logger of your choice.
+Work in Progress...
 
 ## Installation
 
