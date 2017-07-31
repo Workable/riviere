@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "workable-node",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "operator-linebreak": "off",
+    "security/detect-object-injection": "off",
+    "max-len": [
+      "error",
+      {
+        "code": 120, "ignoreUrls": true
+      }
+    ]
+  }
+}
