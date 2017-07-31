@@ -33,11 +33,5 @@
   },
   "engines": {
     "node": "6.10.x"
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --print-width 120 --single-quote true --write",
-      "git add"
-    ]
   }
 }
