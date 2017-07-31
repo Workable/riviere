@@ -1,5 +1,7 @@
 Work in Progress...
 
+[![Coverage Status](https://coveralls.io/repos/github/Workable/riviere/badge.svg?branch=master)](https://coveralls.io/github/Workable/riviere?branch=master)
+
 # riviere
 
 Nodejs koa HTTP Middleware compatible with the logger of your choice.

@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "test": "./node_modules/.bin/nyc node_modules/ava/cli.js test/**/*.js",
-    "report-cov": "./node_modules/.bin/nyc report --reporter=html",
+    "posttest": "./node_modules/.bin/nyc report --reporter=html",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "eslint-check": "./node_modules/.bin/eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "precommit": "lint-staged"
   },
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "ava": "^0.21.0",
+    "coveralls": "^2.13.1",
     "koa": "^1.1.2",
     "koa-bodyparser": "^2.5.0",
     "nyc": "^11.1.0"
