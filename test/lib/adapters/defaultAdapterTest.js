@@ -1,4 +1,4 @@
-const defaultAdapter = require('../../../lib/adapters/defaultAdapter');
+const defaultAdapter = require('../../../lib/adapters/default');
 const should = require('should');
 
 const getThis = () => {

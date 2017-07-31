@@ -1,6 +1,5 @@
 const Loggable = require('./lib/loggable');
-const defaultAdapter = require('./lib/adapters/defaultAdapter');
-const serialize = require('./lib/serializers/serializeToKeyValue');
+const defaultAdapter = require('./lib/adapters/default');
 const uuidv4 = require('uuid/v4');
 const lodash = require('lodash');
 const http = require('http');
@@ -24,8 +23,7 @@ function safe(fn, log) {
 
 const defaultsOptions = {
   headersRegex: new RegExp('^x-.*', 'i'),
-  adapter: defaultAdapter(),
-  serialize,
+  adapter: defaultAdapter,
   server2server: false,
   getLogCtx: () => {
     return {
@@ -45,7 +43,7 @@ module.exports = {
     const outboundRequestId = options.outboundRequestId;
 
     if (options.logOutboundTraffic) {
-        http.request = new Proxy(http.request, options.adapter.requestProxy({ logger, serialize, outboundRequestId }));
+        http.request = new Proxy(http.request, options.adapter.requestProxy({ logger, outboundRequestId }));
     }
 
     const loggable = new Loggable(...args);
