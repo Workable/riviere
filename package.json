@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "test": "./node_modules/.bin/nyc node_modules/ava/cli.js test/**/*.js",
-    "report": "./node_modules/.bin/nyc report --reporter=html",
+    "report-cov": "./node_modules/.bin/nyc report --reporter=html",
     "eslint-check": "./node_modules/.bin/eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "precommit": "lint-staged"
   },
