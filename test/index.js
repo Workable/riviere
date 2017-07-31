@@ -1,3 +1,5 @@
+const { test } = require('ava');
+
 const Loggable = require('./../lib/loggable');
 const loggable = new Loggable({
     adapter: {
@@ -8,10 +10,9 @@ const loggable = new Loggable({
 });
 
 
-describe('loggable', () => {
-    it('should pass', () => {
-        loggable.emit(loggable.constructor.EVENT.INBOUND_REQUEST);
-        loggable.emit(loggable.constructor.EVENT.OUTBOUND_RESPONSE);
-        loggable.emit(loggable.constructor.EVENT.UNEXPECTED_ERROR);
-    });
+test('should pass', t => {
+    loggable.emit(loggable.constructor.EVENT.INBOUND_REQUEST);
+    loggable.emit(loggable.constructor.EVENT.OUTBOUND_RESPONSE);
+    loggable.emit(loggable.constructor.EVENT.UNEXPECTED_ERROR);
+    t.pass();
 });
