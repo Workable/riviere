@@ -230,6 +230,7 @@ test('defaultAdapter.onError should call this.logger.error()', t => {
 
 test('defaultAdapter.requestProxy should default the arg to empty obj', t => {
     defaultAdapter.requestProxy();
+    t.pass();
 });
 
 test('defaultAdapter.requestProxy should pass when incomingMessage.url exists', t => {

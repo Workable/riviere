@@ -22,7 +22,7 @@
     "koa": "^1.1.2",
     "koa-bodyparser": "^2.5.0",
     "nyc": "^11.1.0",
-    "sinon": "^1.17.4"
+    "sinon": "^1.17.7"
   },
   "engines": {
     "node": "6.10.x"
