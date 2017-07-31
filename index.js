@@ -28,7 +28,7 @@ const defaultsOptions = {
   getLogCtx: () => {
     return {
       requestId: uuidv4()
-    }
+    };
   }
 };
 
@@ -43,7 +43,7 @@ module.exports = {
     const outboundRequestId = options.outboundRequestId;
 
     if (options.logOutboundTraffic) {
-        http.request = new Proxy(http.request, options.adapter.requestProxy({ logger, outboundRequestId }));
+      http.request = new Proxy(http.request, options.adapter.requestProxy({ logger, outboundRequestId }));
     }
 
     const loggable = new Loggable(...args);
