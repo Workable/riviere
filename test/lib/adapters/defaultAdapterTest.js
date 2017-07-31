@@ -228,6 +228,10 @@ test('defaultAdapter.onError should call this.logger.error()', t => {
     t.pass();
 });
 
+test('defaultAdapter.requestProxy should default the arg to empty obj', t => {
+    defaultAdapter.requestProxy();
+});
+
 test('defaultAdapter.requestProxy should pass when incomingMessage.url exists', t => {
     const logger = {
         info: () => {
@@ -397,6 +401,73 @@ test('defaultAdapter.requestProxy should pass when requestId key is not given', 
                     fn({
                         statusCode: 200
                     });
+                }
+            }
+        }
+    };
+    http.request = new Proxy(http.request, requestProxy);
+    http.request(incomingMessage);
+    t.pass();
+});
+
+test('defaultAdapter.requestProxy should pass if the proxy throws an error before proxying', t => {
+    const logger = {
+        info: () => {
+
+        },
+        error: () => {
+
+        }
+    };
+    const serialize = (a) => a;
+    const outboundRequestId = 'test';
+    const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId });
+    const incomingMessage = null;
+    const http = {
+        request: () => {
+            return {
+                on: (event, fn) => {
+                    fn({
+                        statusCode: 200
+                    });
+                }
+            }
+        }
+    };
+    http.request = new Proxy(http.request, requestProxy);
+    http.request(incomingMessage);
+    t.pass();
+});
+
+test('defaultAdapter.requestProxy should pass if the proxy throws an error after proxying', t => {
+    const logger = {
+        info: () => {
+
+        },
+        error: () => {
+        }
+    };
+    const serialize = (a) => a;
+    const outboundRequestId = 'test';
+    const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId });
+    const incomingMessage = {
+        method: 'GET',
+        port: '8080',
+        headers: {
+            test: 'ok'
+        },
+        url: {
+            protocol: 'http:',
+            pathname: '/some',
+            query: 'some=something',
+            host: 'some-host'
+        }
+    };
+    const http = {
+        request: () => {
+            return {
+                on: (event, fn) => {
+                    fn(null);
                 }
             }
         }
