@@ -24,7 +24,14 @@ function safe(fn, log) {
 const defaultsOptions = {
   headersRegex: new RegExp('^x-.*', 'i'),
   adapter: defaultAdapter,
-  server2server: false,
+  outbound: {
+    enabled: false,
+    level: 'info'
+  },
+  inbound: {
+    enabled: true, // todo: right now this value is being ignored
+    level: 'info'
+  },
   getLogCtx: () => {
     return {
       requestId: uuidv4()
@@ -42,8 +49,10 @@ module.exports = {
     const logger = options.logger;
     const outboundRequestId = options.outboundRequestId;
 
-    if (options.logOutboundTraffic) {
-      http.request = new Proxy(http.request, options.adapter.requestProxy({ logger, outboundRequestId }));
+      const level = options.outbound.level;
+
+      if (options.outbound.enabled) {
+      http.request = new Proxy(http.request, options.adapter.requestProxy({ logger, level, outboundRequestId }));
     }
 
     const loggable = new Loggable(...args);
