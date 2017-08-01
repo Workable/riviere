@@ -18,8 +18,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-The source code in the lib/serializers/toKeyValue.js file contains a copied source code part from the
-https://github.com/winstonjs/winston project. The original license can be found below:
+The source code in the lib/serializers/toKeyValue.js file contains a copied
+source code part from the https://github.com/winstonjs/winston project.
+The original license can be found below:
 
 Copyright (c) 2010 Charlie Robbins
 
