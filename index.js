@@ -44,7 +44,7 @@ module.exports = {
     validateArgs(...args);
 
     const options = args[0];
-    lodash.defaults(options, defaultsOptions);
+    lodash.defaultsDeep(options, defaultsOptions);
 
     const logger = options.logger;
     const outboundRequestId = options.outboundRequestId;
