@@ -57,11 +57,11 @@ module.exports = {
 
     const loggable = new Loggable(...args);
 
-    return function*(next, ctx = this) {
+    return async function(ctx, next) {
       ctx.startedAt = new Date().getTime();
       safe(() => loggable.emit(EVENT.INBOUND_REQUEST, { ctx }), logger);
       try {
-        yield next;
+        await next();
       } catch (err) {
         if (options.errorOptions.stacktrace) {
           this.body = err.stack;
