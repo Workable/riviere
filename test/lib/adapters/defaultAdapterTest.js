@@ -36,7 +36,10 @@ test('defaultAdapter should be an object', t => {
 test('defaultAdapter.onInboundRequest should pass', t => {
   const ctx = {
     request: {
-      method: 'get'
+      method: 'get',
+        req: {
+            url: '/test'
+        }
     },
     originalUrl: '/test'
   };
@@ -50,9 +53,15 @@ test('defaultAdapter.onInboundRequest POST && this.bodyKeys', t => {
       method: 'POST',
       body: {
         testKeyA: 'ok'
-      }
+      },
+        req: {
+            url: '/test'
+        }
     },
-    originalUrl: '/test'
+    originalUrl: '/test',
+    req: {
+
+    }
   };
   defaultAdapter.onInboundRequest.call(getThis(), { ctx });
   t.pass();
@@ -64,7 +73,10 @@ test('defaultAdapter.onInboundRequest POST && this.bodyKeys no picked keys', t =
       method: 'POST',
       body: {
         testKeySomethinfElse: 'ok'
-      }
+      },
+        req: {
+            url: '/test'
+        }
     },
     originalUrl: '/test'
   };
@@ -78,7 +90,10 @@ test('defaultAdapter.onInboundRequest POST && this.bodyKeys && bodyKeys exist in
       method: 'post',
       body: {
         testKeyA: true
-      }
+      },
+        req: {
+            url: '/test'
+        }
     },
     originalUrl: '/test'
   };
@@ -93,7 +108,10 @@ test('defaultAdapter.onInboundRequest health', t => {
       path: '/health',
       body: {
         testKeyA: true
-      }
+      },
+        req: {
+            url: '/test'
+        }
     },
     originalUrl: '/health'
   };
@@ -133,7 +151,10 @@ test('defaultAdapter.onInboundRequest headersRegex', t => {
       headers: {
         'XX-something': true,
         other: true
-      }
+      },
+        req: {
+            url: '/test'
+        }
     },
     originalUrl: '/test'
   };
@@ -172,7 +193,10 @@ test('defaultAdapter.onInboundRequest headersRegex && no matched headers', t => 
       },
       headers: {
         other: true
-      }
+      },
+        req: {
+           url: '/test'
+        }
     },
     originalUrl: '/test'
   };
@@ -188,8 +212,14 @@ test('defaultAdapter.onOutboundResponse should pass', t => {
 test('defaultAdapter.onOutboundResponse should call this.logger.info', t => {
   const ctx = {
     request: {
-      method: 'post'
+      method: 'post',
+        req: {
+          url: '/test'
+        }
     },
+      req: {
+          url: '/test'
+      },
     originalUrl: '/test',
     response: {
       status: 200
@@ -204,7 +234,10 @@ test('defaultAdapter.onOutboundResponse health', t => {
   const ctx = {
     request: {
       method: 'GET',
-      path: '/health'
+      path: '/health',
+        req: {
+            url: '/health'
+        }
     },
     originalUrl: '/health',
     response: {
@@ -224,7 +257,10 @@ test('defaultAdapter.onError should pass', t => {
 test('defaultAdapter.onError should call this.logger.error()', t => {
   const ctx = {
     request: {
-      method: 'post'
+      method: 'post',
+        req: {
+            url: '/test'
+        }
     },
     originalUrl: '/test',
     response: {
