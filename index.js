@@ -36,7 +36,8 @@ const defaultsOptions = {
     return {
       requestId: uuidv4()
     };
-  }
+  },
+  sync: false
 };
 
 module.exports = {
@@ -46,13 +47,17 @@ module.exports = {
     const options = args[0];
     lodash.defaultsDeep(options, defaultsOptions);
 
-    const logger = options.logger;
-    const outboundRequestId = options.outboundRequestId;
+    const { logger, outboundRequestId, sync} = options;
 
-      const level = options.outbound.level;
+    const level = options.outbound.level;
 
-      if (options.outbound.enabled) {
-      http.request = new Proxy(http.request, options.adapter.requestProxy({ logger, level, outboundRequestId }));
+    if (options.outbound.enabled) {
+      http.request = new Proxy(http.request, options.adapter.requestProxy({
+        logger,
+        level,
+        outboundRequestId,
+        sync
+      }));
     }
 
     const loggable = new Loggable(...args);
