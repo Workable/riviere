@@ -69,11 +69,11 @@ module.exports = {
         await next();
       } catch (err) {
         if (options.errorOptions.stacktrace) {
-          this.body = err.stack;
+          ctx.body = err.stack;
         } else {
-          this.body = options.errorOptions.message || err.message;
+          ctx.body = options.errorOptions.message || err.message;
         }
-        this.status = err.status || 500;
+        ctx.status = err.status || 500;
         safe(() => loggable.emit(EVENT.UNEXPECTED_ERROR, { ctx, err }), logger);
       }
       safe(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
