@@ -54,7 +54,7 @@ Options Example:
 const options = {
     logger, // required
     headersRegex: new RegExp('^x-.*', 'i'),
-    bodyKeys: ['cars', drivers'],
+    bodyKeys: ['cars', 'drivers'],
     getLogCtx: (ctx) => {
         return {
             userId: 'exampleUserId',
@@ -63,9 +63,9 @@ const options = {
         };
     },
     adapter: {
-        onInboundRequest: () => console.log('incoming request');
-        onOutboundResponse() => console.log('outbound response');
-        onError() => console.log('error');
+        onInboundRequest: () => console.log('incoming request'),
+        onOutboundResponse: () => console.log('outbound response'),
+        onError: () => console.log('error')
     }
 };
 
