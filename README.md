@@ -9,7 +9,7 @@ Work in Progress...
 
 ## Usage
 
-```
+```js
 const Koa = require('koa'); // koa version 1
 const app = new Koa();
 const Riviere = require('riviere');
@@ -36,7 +36,7 @@ app.listen(3000);
 ```
 
 # Configuration
-```
+```js
 // pass the options argument 
 const riviere = Riviere.middleware(options);
 ```
@@ -50,7 +50,7 @@ const riviere = Riviere.middleware(options);
 - **serialize** | optional | Define the format of the logged context
 
 Options Example:
-```
+```js
 const options = {
     logger, // required
     headersRegex: new RegExp('^x-.*', 'i'),
