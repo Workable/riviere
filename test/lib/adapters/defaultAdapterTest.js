@@ -4,7 +4,7 @@ const defaultAdapter = require('../../../lib/adapters/default');
 
 const getThis = () => {
   return {
-    getLogCtx: () => {
+    context: () => {
       return {
         test: true,
         bodyKeys: ['testKayA']
@@ -121,7 +121,7 @@ test('defaultAdapter.onInboundRequest health', t => {
 
 test('defaultAdapter.onInboundRequest headersRegex', t => {
   const that = {
-    getLogCtx: () => {
+    context: () => {
       return {
         test: true,
         bodyKeys: ['testKayA']
@@ -164,7 +164,7 @@ test('defaultAdapter.onInboundRequest headersRegex', t => {
 
 test('defaultAdapter.onInboundRequest headersRegex && no matched headers', t => {
   const that = {
-    getLogCtx: () => {
+    context: () => {
       return {
         test: true,
         bodyKeys: ['testKayA']
@@ -283,8 +283,8 @@ test('defaultAdapter.requestProxy should pass when incomingMessage.url exists', 
     info: () => {}
   };
   const serialize = a => a;
-  const outboundRequestId = 'test';
-  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId, level: 'info' });
+  const traceHeaderName = 'test';
+  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
   const incomingMessage = {
     method: 'GET',
     port: '8080',
@@ -319,8 +319,8 @@ test('defaultAdapter.requestProxy should pass when no protocol', t => {
     info: () => {}
   };
   const serialize = a => a;
-  const outboundRequestId = 'test';
-  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId, level: 'info' });
+  const traceHeaderName = 'test';
+  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
   const incomingMessage = {
     method: 'GET',
     port: '8080',
@@ -355,8 +355,8 @@ test('defaultAdapter.requestProxy should pass when incomingMessage.url does not 
     info: () => {}
   };
   const serialize = a => a;
-  const outboundRequestId = 'test';
-  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId, level: 'info' });
+  const traceHeaderName = 'test';
+  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
   const incomingMessage = {
     method: 'GET',
     port: '8080',
@@ -388,8 +388,8 @@ test('defaultAdapter.requestProxy should pass when requestId does not exist', t 
     info: () => {}
   };
   const serialize = a => a;
-  const outboundRequestId = 'test';
-  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId, level: 'info' });
+  const traceHeaderName = 'test';
+  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
   const incomingMessage = {
     method: 'GET',
     port: '8080',
@@ -450,8 +450,8 @@ test('defaultAdapter.requestProxy should pass if the proxy throws an error befor
     error: () => {}
   };
   const serialize = a => a;
-  const outboundRequestId = 'test';
-  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId });
+  const traceHeaderName = 'test';
+  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName });
   const incomingMessage = null;
   const http = {
     request: () => {
@@ -475,8 +475,8 @@ test('defaultAdapter.requestProxy should pass if the proxy throws an error after
     error: () => {}
   };
   const serialize = a => a;
-  const outboundRequestId = 'test';
-  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, outboundRequestId, level: 'info' });
+  const traceHeaderName = 'test';
+  const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
   const incomingMessage = {
     method: 'GET',
     port: '8080',
