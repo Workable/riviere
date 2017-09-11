@@ -4,8 +4,6 @@ Trace HTTP requests and server errors.
 
 Riviere is a koa middleware that decorates your middleware chain with inbound request/response and error logging.
 
-**WIP**
-
 ## Features
 
 - Log inbound request/responses made from web clients to your server
