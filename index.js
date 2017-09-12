@@ -11,7 +11,6 @@ module.exports = {
   middleware: (options) => {
     const {
       errors,
-      level,
       logger,
       inbound,
       outbound,
@@ -23,7 +22,7 @@ module.exports = {
 
     if (outbound.enabled) {
       http.request = new Proxy(http.request, options.adapter.requestProxy({
-        level,
+        level: outbound.level,
         logger,
         traceHeaderName,
         sync
