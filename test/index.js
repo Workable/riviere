@@ -1,17 +1,30 @@
-const { test } = require('ava');
-
 const Loggable = require('./../lib/loggable');
-const loggable = new Loggable({
-  adapter: {
-    onInboundRequest: () => null,
-    onOutboundResponse: () => null,
-    onError: () => null
-  }
-});
+const sinon = require('sinon');
+const should = require('should');
 
-test('should pass', t => {
-  loggable.emit(loggable.constructor.EVENT.INBOUND_REQUEST);
-  loggable.emit(loggable.constructor.EVENT.OUTBOUND_RESPONSE);
-  loggable.emit(loggable.constructor.EVENT.UNEXPECTED_ERROR);
-  t.pass();
+const sandbox = sinon.sandbox.create();
+
+const adapter = {
+  onInboundRequest: sandbox.spy(),
+  onOutboundResponse: sandbox.spy(),
+  onError: sandbox.spy()
+};
+
+const loggable = new Loggable({ adapter });
+
+describe('#loggable', () => {
+  it('should emit INBOUND_REQUEST event', () => {
+    loggable.emit(loggable.constructor.EVENT.INBOUND_REQUEST);
+    adapter.onInboundRequest.calledOnce.should.equal(true);
+  });
+
+  it('should emit INBOUND_REQUEST event', () => {
+    loggable.emit(loggable.constructor.EVENT.OUTBOUND_RESPONSE);
+    adapter.onOutboundResponse.calledOnce.should.equal(true);
+  });
+
+  it('should emit INBOUND_REQUEST event', () => {
+    loggable.emit(loggable.constructor.EVENT.UNEXPECTED_ERROR);
+    adapter.onError.calledOnce.should.equal(true);
+  });
 });

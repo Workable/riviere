@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "./node_modules/.bin/nyc node_modules/ava/cli.js test/**/*.js",
+    "test": "./node_modules/.bin/nyc node_modules/mocha/bin/mocha test/**/*.js",
     "posttest": "./node_modules/.bin/nyc report --reporter=html --reporter=lcov",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "eslint-check": "./node_modules/.bin/eslint --print-config .eslintrc.js | eslint-config-prettier-check",
@@ -26,16 +26,19 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "ava": "^0.21.0",
     "coveralls": "^2.13.1",
     "eslint": "^4.3.0",
     "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-prettier": "^2.1.2",
+    "husky": "^0.14.3",
     "koa": "^1.1.2",
     "koa-bodyparser": "^2.5.0",
     "lint-staged": "^4.0.2",
+    "mocha": "^3.5.3",
     "nyc": "^11.1.0",
-    "prettier": "^1.5.3"
+    "prettier": "^1.5.3",
+    "should": "^13.1.0",
+    "sinon": "^4.0.0"
   },
   "engines": {
     "node": "6.10.x"
