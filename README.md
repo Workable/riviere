@@ -15,7 +15,7 @@ Riviere is a koa middleware that decorates your middleware chain with inbound re
 - Include hand-picked keys from request body in every log entry
 - Catch and log errors that might occur during the req/res lifecycle
 - Enhanche the unexpected errors with the request context (HoneyBadger frendly)
-- Works with koa 2.x and koa 1.x
+- Works with koa 2.x
 
 ## Installation
 
@@ -24,23 +24,7 @@ Riviere is a koa middleware that decorates your middleware chain with inbound re
 ## Usage
 
 ```js
-const Koa = require('koa'); // koa version 1
-const app = new Koa();
-const riviere = require('riviere');
-
-// pass riviere options here
-const options = {
-  // ...
-};
-
-app.use(riviere(options));
-
-app.use(function*(next) {
-  this.body = 'Hello World';
-  yield next;
-});
-
-app.listen(3000);
+todo
 
 ```
 
