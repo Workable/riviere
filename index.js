@@ -8,7 +8,7 @@ const utils = require('./lib/utils');
 const { EVENT } = Loggable;
 
 module.exports = {
-  middleware: options => {
+  middleware: (options = {}) => {
     const { errors, logger, inbound, outbound, sync, traceHeaderName } = defaultsDeep(options, defaultOptions);
 
     const loggable = new Loggable(options);

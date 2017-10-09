@@ -53,18 +53,21 @@ describe('#defaultAdapter', () => {
             logger.info.args[0][0].should.eql({
               method: 'GET',
               protocol: 'http',
-              host: 'some-host',
               port: '8080',
               path: '/some',
               query: 'some=something',
               requestId: 'ok',
+              href: undefined,
+              host: 'some-host',
               log_tag: 'outbound_request'
             });
             logger.info.args[1][0].should.eql({
               method: 'GET',
               path: '/some',
+              host: 'some-host',
               duration: 0,
               status: undefined,
+              protocol: 'http',
               requestId: 'ok',
               log_tag: 'inbound_response'
             });
@@ -163,18 +166,21 @@ describe('#defaultAdapter', () => {
       logger.info.callCount.should.eql(2);
       logger.info.args[0][0].should.eql({
         method: 'GET',
-        protocol: 'https',
-        host: undefined,
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
         requestId: 'ok',
+        host: undefined,
+        protocol: 'https',
+        href: undefined,
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.eql({
         method: 'GET',
         path: '/some?somequery=query',
         status: 200,
+        host: undefined,
+        protocol: 'https',
         duration: 0,
         requestId: 'ok',
         log_tag: 'inbound_response'
@@ -191,7 +197,9 @@ describe('#defaultAdapter', () => {
       const incomingMessage = {
         method: 'GET',
         port: '8080',
-        headers: {},
+        headers: {
+          [traceHeaderName]: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2'
+        },
         protocol: 'https:',
         path: '/some?somequery=query',
         host: 'test-host'
@@ -217,15 +225,18 @@ describe('#defaultAdapter', () => {
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
-        requestId: undefined,
+        href: undefined,
+        requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.eql({
         method: 'GET',
+        host: undefined,
         path: '/some?somequery=query',
         status: 200,
         duration: 0,
-        requestId: undefined,
+        protocol: 'https',
+        requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         log_tag: 'inbound_response'
       });
     });
@@ -235,11 +246,14 @@ describe('#defaultAdapter', () => {
         info: sandbox.spy()
       };
       const serialize = a => a;
-      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, level: 'info' });
+      const traceHeaderName = 'test';
+      const requestProxy = defaultAdapter.requestProxy({ logger, traceHeaderName, serialize, level: 'info' });
       const incomingMessage = {
         method: 'GET',
         port: '8080',
-        headers: {},
+        headers: {
+          [traceHeaderName]: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2'
+        },
         protocol: 'https:',
         path: '/some?somequery=query',
         host: 'test-host'
@@ -265,7 +279,8 @@ describe('#defaultAdapter', () => {
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
-        requestId: undefined,
+        href: undefined,
+        requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.eql({
@@ -273,7 +288,9 @@ describe('#defaultAdapter', () => {
         path: '/some?somequery=query',
         status: 200,
         duration: 0,
-        requestId: undefined,
+        host: undefined,
+        protocol: 'https',
+        requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         log_tag: 'inbound_response'
       });
     });
@@ -338,6 +355,7 @@ describe('#defaultAdapter', () => {
         method: 'GET',
         protocol: 'http',
         host: 'some-host',
+        href: undefined,
         port: '8080',
         path: '/some',
         query: 'some=something',

@@ -6,6 +6,8 @@ const getOpts = require('../../../../fixtures/getOpts');
 
 const sandbox = sinon.sandbox.create();
 
+const uuid = '9b4f5d20-7a31-468a-b0f8-298013cbe940';
+
 describe('#defaultAdapter', () => {
   describe('.onError()', () => {
     it('should pass', () => {
@@ -23,6 +25,11 @@ describe('#defaultAdapter', () => {
             url: '/test'
           }
         },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
         originalUrl: '/test',
         response: {
           status: 200
@@ -38,7 +45,7 @@ describe('#defaultAdapter', () => {
         method: 'POST',
         path: '/test',
         query: null,
-        metaHeaders: {},
+        requestId: uuid,
         log_tag: 'inbound_request'
       });
       defaultAdapter.onError.call(opts, { ctx, err });
@@ -53,7 +60,8 @@ describe('#defaultAdapter', () => {
         protocol: undefined,
         method: 'POST',
         path: '/test',
-        query: null
+        query: null,
+        requestId: uuid
       });
       opts.logger.error.args[0][0].message.should.equal('something bad');
     });

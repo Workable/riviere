@@ -7,6 +7,8 @@ const sandbox = sinon.sandbox.create();
 
 const getOpts = require('../../../../fixtures/getOpts');
 
+const uuid = '9b4f5d20-7a31-468a-b0f8-298013cbe940';
+
 describe('#defaultAdapter', () => {
   describe('.onInboundRequest()', () => {
     it('should pass', () => {
@@ -20,6 +22,11 @@ describe('#defaultAdapter', () => {
             url: '/test'
           }
         },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
         originalUrl: '/test'
       };
       const opts = getOpts(sandbox);
@@ -31,7 +38,7 @@ describe('#defaultAdapter', () => {
         method: 'GET',
         path: '/test',
         query: null,
-        metaHeaders: {},
+        requestId: uuid,
         log_tag: 'inbound_request'
       });
     });
@@ -50,6 +57,11 @@ describe('#defaultAdapter', () => {
             url: '/test'
           }
         },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
         originalUrl: '/test'
       };
       const opts = getOpts(sandbox);
@@ -61,7 +73,7 @@ describe('#defaultAdapter', () => {
         method: 'POST',
         path: '/test',
         query: null,
-        metaHeaders: {},
+        requestId: uuid,
         metaBody: {
           'body.skills': 'ok'
         },
@@ -83,6 +95,11 @@ describe('#defaultAdapter', () => {
             url: '/test'
           }
         },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
         originalUrl: '/test'
       };
       const opts = getOpts(sandbox);
@@ -94,7 +111,7 @@ describe('#defaultAdapter', () => {
         method: 'POST',
         path: '/test',
         query: null,
-        metaHeaders: {},
+        requestId: uuid,
         log_tag: 'inbound_request'
       });
     });
@@ -113,6 +130,11 @@ describe('#defaultAdapter', () => {
             url: '/test'
           }
         },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
         originalUrl: '/test'
       };
       const opts = getOpts(sandbox);
@@ -124,7 +146,7 @@ describe('#defaultAdapter', () => {
         method: 'POST',
         path: '/test',
         query: null,
-        metaHeaders: {},
+        requestId: uuid,
         log_tag: 'inbound_request'
       });
     });
@@ -144,6 +166,11 @@ describe('#defaultAdapter', () => {
             url: '/test'
           }
         },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
         originalUrl: '/health'
       };
       const opts = getOpts(sandbox);
@@ -155,6 +182,7 @@ describe('#defaultAdapter', () => {
         method: 'GET',
         path: '/test',
         query: null,
+        requestId: uuid,
         log_tag: 'inbound_request_health'
       });
     });
@@ -181,6 +209,7 @@ describe('#defaultAdapter', () => {
         inbound: {
           level: 'info'
         },
+        traceHeaderName: 'x-ap-id',
         sync: true
       };
       const ctx = {
@@ -197,6 +226,11 @@ describe('#defaultAdapter', () => {
             url: '/test'
           }
         },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
         originalUrl: '/test'
       };
       defaultAdapter.onInboundRequest.call(opts, { ctx });
@@ -208,6 +242,7 @@ describe('#defaultAdapter', () => {
         method: 'POST',
         path: '/test',
         query: null,
+        requestId: uuid,
         metaHeaders: { 'headers.XX-something': true },
         log_tag: 'inbound_request'
       });
@@ -239,6 +274,7 @@ describe('#defaultAdapter', () => {
         inbound: {
           level: 'info'
         },
+        traceHeaderName: 'x-ap-id',
         sync: true
       };
       const ctx = {
@@ -254,6 +290,11 @@ describe('#defaultAdapter', () => {
             url: '/test'
           }
         },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
         originalUrl: '/test'
       };
       defaultAdapter.onInboundRequest.call(opts, { ctx });
@@ -265,7 +306,7 @@ describe('#defaultAdapter', () => {
         method: 'POST',
         path: '/test',
         query: null,
-        metaHeaders: {},
+        requestId: uuid,
         log_tag: 'inbound_request'
       });
     });

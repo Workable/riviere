@@ -7,6 +7,8 @@ const sandbox = sinon.sandbox.create();
 
 const getOpts = require('../../../../fixtures/getOpts');
 
+const uuid = '9b4f5d20-7a31-468a-b0f8-298013cbe940';
+
 describe('#defaultAdapter', () => {
   describe('.onOutboundResponse()', () => {
     it('should pass', () => {
@@ -25,7 +27,10 @@ describe('#defaultAdapter', () => {
           }
         },
         req: {
-          url: '/test'
+          url: '/test',
+          headers: {
+            'x-ap-id': uuid
+          }
         },
         originalUrl: '/test',
         response: {
@@ -42,7 +47,7 @@ describe('#defaultAdapter', () => {
         method: 'POST',
         path: '/test',
         query: null,
-        metaHeaders: {},
+        requestId: uuid,
         log_tag: 'inbound_request'
       });
       opts.logger.info.args[1][0].should.eql({
@@ -53,6 +58,7 @@ describe('#defaultAdapter', () => {
         method: 'POST',
         path: '/test',
         query: null,
+        requestId: uuid,
         log_tag: 'outbound_response'
       });
     });
@@ -69,6 +75,11 @@ describe('#defaultAdapter', () => {
             url: '/health'
           }
         },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
         originalUrl: '/health',
         response: {
           status: 200
@@ -83,6 +94,7 @@ describe('#defaultAdapter', () => {
         method: 'GET',
         path: '/health',
         query: null,
+        requestId: uuid,
         log_tag: 'inbound_request_health'
       });
       opts.logger.info.args[1][0].should.eql({
@@ -93,6 +105,7 @@ describe('#defaultAdapter', () => {
         query: null,
         log_tag: 'outbound_response_health',
         status: undefined,
+        requestId: uuid,
         duration: NaN
       });
     });
