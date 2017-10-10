@@ -1,21 +1,21 @@
-# riviere[![Coverage Status](https://coveralls.io/repos/github/Workable/riviere/badge.svg?branch=master)](https://coveralls.io/github/Workable/riviere?branch=master)
+# riviere
 
-Trace HTTP requests and server errors.
+[![Coverage Status](https://coveralls.io/repos/github/Workable/riviere/badge.svg?branch=master)](https://coveralls.io/github/Workable/riviere?branch=master)
 
-Riviere is a koa middleware that decorates your middleware chain with inbound request/response and error logging.
+Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic logs.
 
 ## Features
 
-- Log inbound request/responses made from web clients to your server
-- Log outbound request/responses made from your server to other microservices
-- Works any logger and is fully customizable due to plugable adapters
-- Winston like key=value log format by default (default configuration)
-- String values are escaped correctly (Logentries friendly)
-- Include custom headers in every log entry
-- Include hand-picked keys from request body in every log entry
-- Catch and log errors that might occur during the req/res lifecycle
-- Enhanche the unexpected errors with the request context (HoneyBadger frendly)
-- Works with koa 2.x
+- Log all the HTTP(s) requests tha are coming into your server and the corresponding responses.
+  (`inbound_request`/`outbound_response`)
+- Log all the HTTP(s) requests that your server sends to any external systems and the corresponding responses.
+  (`outbound_request`/`inbound_response`)
+- Log any unhandled error that is thrown inside a requests's context.
+
+## Requirements
+
+* Node version >= 8
+* Koa verison >= 2
 
 ## Installation
 
@@ -23,75 +23,264 @@ Riviere is a koa middleware that decorates your middleware chain with inbound re
 
 ## Usage
 
+*Example*:
+
 ```js
-todo
+const Koa = require('koa');
+const Riviere = require('riviere');
+
+const app = new Koa();
+
+app.use(Riviere.middleware());
+app.use(async function(ctx) {
+    ctx.body = 'Hello World';
+});
+
+app.listen(3000);
+```
+
+*Example with outbound HTTP traffic*:
+
+```js
+const Koa = require('koa');
+const Riviere = require('riviere');
+
+// this is just an example, you can use any http library
+const rp = require('request-promise');
+
+const app = new Koa();
+
+app.use(Riviere.middleware());
+app.use(async function(ctx) {
+  await rp({
+    uri: 'https://www.google.com',
+    // You can include the X-Riviere-Id header
+    // to trace the request's context inside which
+    // the external request is made
+    // This is optional but recommended for better tracing:
+    headers: {
+      'X-Riviere-Id': ctx.headers['X-Riviere-Id']
+    }
+  });
+  ctx.body = 'Hello World';
+});
+
+app.listen(3000);
 
 ```
 
 ## Configuration
 
+The behavior of the riviere middleware can be configured by passing a configuration object,
+as argument to the `Riviere.middleware()` method call.
+
+*Example*:
+```js
+const riviereConfObj = {}; 
+app.use(Riviere.middleware(riviereConfObj));
+```
+
+The supported key-value options, for the configuration object are described below.
+
 ### Available options:
 
-**adapter**
+**color**
 
-Customize functionality by implementing a custom adapter. Defaults to `defaultAdapter.js`
+Log colored log messages. Defaults to: `true`
 
-*Example*
+*Example*:
 ```js
 {
-  onInboundRequest: () => console.log('incoming request');
-  onOutboundResponse() => console.log('outbound response');
-  onError() => console.log('error');
+    color: true
 }
 ```
 
 **context**
 
-The context to be included in every log entry. Defaults to `{ requestId: uuidv4() }`
+The context to be included in every `inbound_request` and `outbound_response`
+log message. Defaults to empty Object: `{}`.
 
+*Example*:
+
+```js
+{
+    context: (ctx) => {
+        return {
+            userId: ctx.request.headers['user-id'],
+            accountId: ctx.request.headers['account-id']
+        };
+    }
+}
+```
+
+**bodyKeys**
+
+This option can be used to log specific values from the `JSON` body of the `inbound` `POST` requests.
+Defaults to empty Array `[]`. 
+To use this option, the `POST` request's body should be a valid `JSON`.
+Most often this mean that you should register the `Koa` `bodyParser` middleware
+(https://www.npmjs.com/package/body-parser) (or something equivalent), 
+before registering the `riviere` middleware.
+
+*Example*:
+
+```js
+{
+    bodyKeys: [ 
+        'education', 
+        'work_experience'
+    ]
+}
+```
+
+**headersRegex**
+
+Specify a regular expression to match the request headers,
+that should be included in every `inbound_request` log message.
+Defaults to `new RegExp('^X-.+', 'i')`.
+All the inbound request's headers starting with "X-" will be logged by default.
+
+*Example*:
+
+```js
+{
+    headersRegex: new RegExp('X-.+', 'i')
+}
+```
 
 **errors**
 
-Error logging configuration
+Unhandled Error inside a request's context 
 
 **errors.enabled**
 
 Control if error logging is enabled. Defaults to `true`.
 
-**errors.callback**
-
-Control how the server responds to unexpected errors
-
-*Example of the default callback*
+*Example*:
 
 ```js
-(ctx, error) => {
-  ctx.status = error.status || 500;
-
-  if (ctx.status < 500) {
-    ctx.body = {
-      error: error.message
+{
+    errors: {
+        enabled: true
     }
-  } else {
-    ctx.body = {
-      error: 'Internal server error'
-    };
-  }
+}
+```
+
+**errors.callback**
+
+Control how the server handles any unhandled errors inside a request's context.
+The default handler is being shown in the following example.
+
+*Example*:
+
+```js
+{
+    errors: {
+        callback: (ctx, error) => {
+            ctx.status = error.status || 500;
+        
+            if (ctx.status < 500) {
+                ctx.body = {error: error.message};
+            } else {
+                ctx.body = {error: 'Internal server error'};
+            }
+        }
+    }   
 }
 ```
 
 **health**
 
-Specify your health endpoints in order to log a minimum subset of information. Defaults to `[]`.
+Specify your health endpoints in order to log a minimum subset of information,
+for these `inbound_requests`. Defaults to `[]`.
+This may be useful when: You have a load balancer or other system that pings your server at a specific end-point,
+periodically, to determine the health of your server, and you do not want to log much details regarding these requests.
 
 *Example*
 
 ```js
-[
-  { path: '/health', method: 'GET' }
-]
+{
+    health: [
+        { 
+            path: '/health', 
+            method: 'GET'
+        }
+    ] 
+}
 ```
 
+**traceHeaderName**
+
+Theis is a Header key for the request id header. 
+Defaults to: `X-Riviere-Id`.
+If you already use a request id header you may need to set this options.
+For example for Heroku deployments, 
+you most often want to set the `riviere` `traceHeaderName` to: `X-Request-ID`
+(https://devcenter.heroku.com/articles/http-request-id)
+
+*Example*:
+
+```js
+{
+    traceHeaderName: 'X-Request-ID'
+}
+```
+
+**inbound**
+
+Inbound HTTP traffic configuration
+
+**inbound.enabled**
+
+Enable inbound HTTP traffic logs. Defaults to `true`.
+
+*Example*:
+
+```js
+{
+    inbound: {
+        enabled: true
+    }
+}
+```
+
+**outbound**
+
+Outbound HTTP traffic configuration
+
+**outbound.enabled**
+
+Enable outbound HTTP traffic logs. Defaults to `true`.
+
+*Example*:
+
+```js
+{
+    outbound: {
+        enabled: true
+    }
+}
+```
+
+<!---
+**outbound.info**
+
+Set the log level for outbound HTTP traffic. Defaults to `info`.
+
+**sync**
+
+Control whether logs should be flushed in a sync or async fashion (experimental). Defaults to `true`.
+
+*Example*
+
+```js
+{
+  headersRegex: /X-.+/ to match all custom HTTP headers.
+}
+```
+-->
+
+<!---
 **logger**
 
 Pass the logger object
@@ -104,65 +293,12 @@ Pass the logger object
   error: console.error
 }
 ```
-
-**inbound**
-
-Inbound HTTP traffic configuration
-
-**inbound.enabled**
-
-Control if logging for inbound HTTP traffic is enabled. Defaults to `true`.
-
+-->
+<!---
 **inbound.info**
 
 Set the log level for inbound HTTP traffic. Defaults to `info`.
-
-**outbound**
-
-Outbound HTTP traffic configuration
-
-**outbound.enabled**
-
-Control if logging for outbound HTTP traffic is enabled. Defaults to `false`.
-
-**outbound.info**
-
-Set the log level for outbound HTTP traffic. Defaults to `info`.
-
-**sync**
-
-Control whether logs should be flushed in a sync or async fashion (experimental). Defaults to `true`.
-
-**bodyKeys**
-
-Pass an array of body keys that should be included in every log entry. Defaults to `[]`.
-
-**headersRegex**
-
-Specify a regular expression to match request headers that should be included in every log entry. Defaults to `''`.
-
-*Example*
-
-```js
-{
-  headersRegex: /X-.+/ to match all custom HTTP headers.
-}
-```
-
-**traceHeaderName**
-
-Custom header to correlate inbound and outbound HTTP traffic. Defaults to `X-Riviere-Id`.
-
-
-## Example logs
-
-```
-[773572f2-6c3a-4d75-bdfa-0123bdff62c4] <-- POST /api/v1/somethingElse?someparam=ok userId="exampleUserId", accountId="exampleAccountId", requestId="773572f2-6c3a-4d75-bdfa-0123bdff62c4", method="POST", url="/api/v1/somethingElse?someparam=ok", headers.x-custom-user="exampleUserId", headers.x-custom-account="exampleAccountId", headers.x-request-id="exampleRequestId", body.sport_type ="sea", body.equipment=["paddle", "SUP board", "sunglasses"], log_tag="inbound_request"
-```
-
-```
-[773572f2-6c3a-4d75-bdfa-0123bdff62c4] --> 200 9ms status=200, duration=9, userId="exampleUserId", accountId="exampleAccountId", requestId="773572f2-6c3a-4d75-bdfa-0123bdff62c4", method="POST", url="/api/v1/somethingElse?someparam=ok", log_tag="outbound_response"
-```
+-->
 
 ## License
 
