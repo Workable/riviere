@@ -12,6 +12,10 @@ Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic
   (`outbound_request`/`inbound_response`)
 - Log any unhandled error that is thrown inside a requests's context.
 
+## Example logs
+
+![alt text](https://github.com/Workable/riviere/blob/default_config_fixes/images/riviere_logs_screen_1.png)
+
 ## Requirements
 
 * Node version >= 8
