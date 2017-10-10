@@ -4,6 +4,31 @@
 
 Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic logs.
 
+---
+
+# Table of contents
+1. [Features](#Features)
+2. [Example logs](#Example_logs)
+3. [Requirements](#Requirements)
+4. [Installation](#Installation)
+5. [Usage](#Usage)
+6. [Configuration](#Configuration)
+7. [Available Options](#Available_options)
+    1. [bodyKeys](#options_body_keys)
+    2. [color](#options_color)
+    3. [context](#options_context)
+    4. [errors.callback](#options_errors_callback)
+    5. [errors.enabled](#options_errors_enabled)               
+    6. [headersRegex](#options_headers_regex)
+    7. [health](#options_health)
+    8. [inbound.enabled](#options_inbound_enabled)
+    9. [outbound.enabled](#options_outbound_enabled)
+    10. [traceHeaderName](#options_trace_header_name)
+8. [License](#License)    
+
+---
+
+<a name="Features"></a>
 ## Features
 
 - Log all the HTTP(s) requests tha are coming into your server and the corresponding responses.
@@ -12,19 +37,31 @@ Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic
   (`outbound_request`/`inbound_response`)
 - Log any unhandled error that is thrown inside a requests's context.
 
-## Example logs
+---
 
-![alt text](https://github.com/pmatzavin/test_riviere/blob/default_config_fixes/images/riviere_logs_screen_2.png)
+<a name="Example_logs"></a>
+## Example logs 
 
+![alt text](https://github.com/Workable/riviere/tree/default_config_fixes/images/riviere_logs_screen_2.png)
+
+---
+
+<a name="Requirements"></a>
 ## Requirements
 
 * Node version >= 8
 * Koa verison >= 2
 
+---
+
+<a name="Installation"></a>
 ## Installation
 
 ```npm i --save riviere```
 
+---
+
+<a name="Usage"></a>
 ## Usage
 
 *Example*:
@@ -70,9 +107,11 @@ app.use(async function(ctx) {
 });
 
 app.listen(3000);
-
 ```
 
+---
+
+<a name="Configuration"></a>
 ## Configuration
 
 The behavior of the riviere middleware can be configured by passing a configuration object,
@@ -86,37 +125,12 @@ app.use(Riviere.middleware(riviereConfObj));
 
 The supported key-value options, for the configuration object are described below.
 
-### Available options:
+---
 
-**color**
+<a name="Available_options"></a>
+### Available options
 
-Log colored log messages. Defaults to: `true`
-
-*Example*:
-```js
-{
-    color: true
-}
-```
-
-**context**
-
-The context to be included in every `inbound_request` and `outbound_response`
-log message. Defaults to empty Object: `{}`.
-
-*Example*:
-
-```js
-{
-    context: (ctx) => {
-        return {
-            userId: ctx.request.headers['user-id'],
-            accountId: ctx.request.headers['account-id']
-        };
-    }
-}
-```
-
+<a name="options_body_keys"></a>
 **bodyKeys**
 
 This option can be used to log specific values from the `JSON` body of the `inbound` `POST` requests.
@@ -137,39 +151,43 @@ before registering the `riviere` middleware.
 }
 ```
 
-**headersRegex**
+<a name="options_color"></a>
+**color**
 
-Specify a regular expression to match the request headers,
-that should be included in every `inbound_request` log message.
-Defaults to `new RegExp('^X-.+', 'i')`.
-All the inbound request's headers starting with "X-" will be logged by default.
+Log colored log messages. Defaults to: `true`
 
 *Example*:
-
 ```js
 {
-    headersRegex: new RegExp('X-.+', 'i')
+    color: true
 }
 ```
 
-**errors**
+<a name="options_context"></a>
+**context**
 
-Unhandled Error inside a request's context 
-
-**errors.enabled**
-
-Control if error logging is enabled. Defaults to `true`.
+The context to be included in every `inbound_request` and `outbound_response`
+log message. Defaults to empty Object: `{}`.
 
 *Example*:
 
 ```js
 {
-    errors: {
-        enabled: true
+    context: (ctx) => {
+        return {
+            userId: ctx.request.headers['user-id'],
+            accountId: ctx.request.headers['account-id']
+        };
     }
 }
 ```
 
+<a name="options_errors"></a>
+**errors**
+
+Unhandled Error inside a request's context 
+
+<a name="options_errors_callback"></a>
 **errors.callback**
 
 Control how the server handles any unhandled errors inside a request's context.
@@ -193,6 +211,38 @@ The default handler is being shown in the following example.
 }
 ```
 
+<a name="options_errors_enabled"></a>
+**errors.enabled**
+
+Control if error logging is enabled. Defaults to `true`.
+
+*Example*:
+
+```js
+{
+    errors: {
+        enabled: true
+    }
+}
+```
+
+<a name="options_headers_regex"></a>
+**headersRegex**
+
+Specify a regular expression to match the request headers,
+that should be included in every `inbound_request` log message.
+Defaults to `new RegExp('^X-.+', 'i')`.
+All the inbound request's headers starting with "X-" will be logged by default.
+
+*Example*:
+
+```js
+{
+    headersRegex: new RegExp('X-.+', 'i')
+}
+```
+
+<a name="options_health"></a>
 **health**
 
 Specify your health endpoints in order to log a minimum subset of information,
@@ -213,6 +263,47 @@ periodically, to determine the health of your server, and you do not want to log
 }
 ```
 
+<a name="options_inbound"></a>
+**inbound**
+
+Inbound HTTP traffic configuration
+
+<a name="options_inbound_enabled"></a>
+**inbound.enabled**
+
+Enable inbound HTTP traffic logs. Defaults to `true`.
+
+*Example*:
+
+```js
+{
+    inbound: {
+        enabled: true
+    }
+}
+```
+
+<a name="options_outbound"></a>
+**outbound**
+
+Outbound HTTP traffic configuration
+
+<a name="options_outbound_enabled"></a>
+**outbound.enabled**
+
+Enable outbound HTTP traffic logs. Defaults to `true`.
+
+*Example*:
+
+```js
+{
+    outbound: {
+        enabled: true
+    }
+}
+```
+
+<a name="options_trace_header_name"></a>
 **traceHeaderName**
 
 Theis is a Header key for the request id header. 
@@ -230,41 +321,7 @@ you most often want to set the `riviere` `traceHeaderName` to: `X-Request-ID`
 }
 ```
 
-**inbound**
-
-Inbound HTTP traffic configuration
-
-**inbound.enabled**
-
-Enable inbound HTTP traffic logs. Defaults to `true`.
-
-*Example*:
-
-```js
-{
-    inbound: {
-        enabled: true
-    }
-}
-```
-
-**outbound**
-
-Outbound HTTP traffic configuration
-
-**outbound.enabled**
-
-Enable outbound HTTP traffic logs. Defaults to `true`.
-
-*Example*:
-
-```js
-{
-    outbound: {
-        enabled: true
-    }
-}
-```
+---
 
 <!---
 **outbound.info**
@@ -304,6 +361,7 @@ Pass the logger object
 Set the log level for inbound HTTP traffic. Defaults to `info`.
 -->
 
+<a name="License"></a>
 ## License
 
   MIT
