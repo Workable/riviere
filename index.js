@@ -9,7 +9,7 @@ const { EVENT } = Loggable;
 
 module.exports = {
   middleware: (options = {}) => {
-    const { errors, logger, inbound, outbound, sync, traceHeaderName } = defaultsDeep(options, defaultOptions);
+    const { errors, logger, inbound, outbound, sync, traceHeaderName } = defaultsDeep(options, defaultOptions(options));
 
     const loggable = new Loggable(options);
 
