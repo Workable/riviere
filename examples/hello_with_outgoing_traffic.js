@@ -1,11 +1,10 @@
 const Koa = require('koa');
+const Riviere = require('riviere');
 const rp = require('request-promise');
-
-const riviere = require('../index');
 
 const app = new Koa();
 
-app.use(riviere.middleware());
+app.use(Riviere.middleware());
 app.use(async function(ctx) {
   await rp({
     uri: 'https://www.google.com',
@@ -16,4 +15,4 @@ app.use(async function(ctx) {
   ctx.body = 'Hello World';
 });
 
-app.listen(3001);
+app.listen(3000);

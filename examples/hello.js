@@ -1,6 +1,6 @@
 const Koa = require('koa');
 
-const Riviere = require('../index');
+const Riviere = require('riviere');
 
 const app = new Koa();
 
@@ -9,4 +9,4 @@ app.use(async function(ctx) {
   ctx.body = 'Hello World';
 });
 
-app.listen(3001);
+app.listen(3000);
