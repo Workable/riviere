@@ -37,6 +37,9 @@ Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic
   (`outbound_request`/`inbound_response`)
 - Log any unhandled error that is thrown inside a requests's context.
 
+Upcoming Features:
+- Support any logger that is able to format json objects into log messages (like log4js, winston, pino, etc ...)
+- Support Express
 ---
 
 <a name="Example_logs"></a>
