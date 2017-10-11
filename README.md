@@ -42,7 +42,7 @@ Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic
 <a name="Example_logs"></a>
 ## Example logs 
 
-![alt text](https://github.com/Workable/riviere/tree/default_config_fixes/images/riviere_logs_screen_2.png)
+![alt text](https://github.com/Workable/riviere/blob/master/images/riviere_logs_screen_2.png)
 
 ---
 
