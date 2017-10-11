@@ -53,7 +53,7 @@ Upcoming Features:
 ## Requirements
 
 * Node version >= 8
-* Koa verison >= 2
+* Koa version >= 2
 
 ---
 
