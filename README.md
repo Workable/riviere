@@ -374,4 +374,5 @@ Set the log level for inbound HTTP traffic. Defaults to `info`.
 <a name="License"></a>
 ## License
 
-  MIT
+  MIT 
+  (![see LICENCE](https://github.com/Workable/riviere/blob/master/LICENCE))
