@@ -9,7 +9,7 @@ app.use(async function(ctx) {
   await rp({
     uri: 'https://www.google.com',
     headers: {
-      'X-Riviere-Id': ctx.headers['X-Riviere-Id']
+      'x-riviere-id': ctx.request.headers['x-riviere-id']
     }
   });
   ctx.body = 'Hello World';
