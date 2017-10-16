@@ -38,8 +38,9 @@ Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic
 - Log any unhandled error that is thrown inside a requests's context.
 
 Upcoming Features:
-- Support any logger that is able to format json objects into log messages (like log4js, winston, pino, etc ...)
-- Support Express
+- Support any logger that is able to format json objects into log messages (like log4js, winston, pino, etc ...).
+- Easier context tracing: You will no longer have to manually include the request id in the `outbound_request`'s headers,
+  to match with the parent `inbound_request`. ([see section: Example with outbound HTTP traffic](#example_with_outbound_http_traffic))
 ---
 
 <a name="Example_logs"></a>
@@ -90,6 +91,7 @@ app.use(async function(ctx) {
 app.listen(3000);
 ```
 
+<a name="example_with_outbound_http_traffic"></a>
 *Example with outbound HTTP traffic*:
 
 ```js
@@ -109,6 +111,7 @@ app.use(async function(ctx) {
     // to trace the request's context inside which
     // the external request is made
     // This is optional but recommended for better tracing:
+    // In an upcoming release this will be done automatically by the riviere middleware.
     headers: {
       'X-Riviere-Id': ctx.headers['X-Riviere-Id']
     }
