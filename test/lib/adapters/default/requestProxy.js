@@ -66,6 +66,7 @@ describe('#defaultAdapter', () => {
               path: '/some',
               host: 'some-host',
               duration: 0,
+              query: 'some=something',
               status: undefined,
               protocol: 'http',
               requestId: 'ok',
@@ -182,6 +183,7 @@ describe('#defaultAdapter', () => {
         host: undefined,
         protocol: 'https',
         duration: 0,
+        query: undefined,
         requestId: 'ok',
         log_tag: 'inbound_response'
       });
@@ -235,6 +237,7 @@ describe('#defaultAdapter', () => {
         path: '/some?somequery=query',
         status: 200,
         duration: 0,
+        query: undefined,
         protocol: 'https',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         log_tag: 'inbound_response'
@@ -289,6 +292,7 @@ describe('#defaultAdapter', () => {
         status: 200,
         duration: 0,
         host: undefined,
+        query: undefined,
         protocol: 'https',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         log_tag: 'inbound_response'
