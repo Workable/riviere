@@ -4,6 +4,8 @@
 
 Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic logs.
 
+Use `riviere` if you want an easy way to log all the HTTP traffic for your server.
+
 ---
 
 # Table of contents
@@ -31,16 +33,14 @@ Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic
 <a name="Features"></a>
 ## Features
 
-- Log all the HTTP(s) requests tha are coming into your server and the corresponding responses.
+- Log all the HTTP(s) requests that are coming into your server and the corresponding responses.
   (`inbound_request`/`outbound_response`)
 - Log all the HTTP(s) requests that your server sends to any external systems and the corresponding responses.
   (`outbound_request`/`inbound_response`)
-- Log any unhandled error that is thrown inside a requests's context.
+- Log any unhandled errors that are thrown inside a requests's context.
 
 Upcoming Features:
-- Support any logger that is able to format json objects into log messages (like log4js, winston, pino, etc ...).
-- Easier context tracing: You will no longer have to manually include the request id in the `outbound_request`'s headers,
-  to match with the parent `inbound_request`. ([see section: Example with outbound HTTP traffic](#example_with_outbound_http_traffic))
+- Support any logger that is able to format json objects into log messages (like log4js, winston, pino, etc ...)
 ---
 
 <a name="Example_logs"></a>
