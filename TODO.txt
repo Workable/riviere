@@ -1,6 +1,0 @@
-- support server-2-server request-response logs
-- support server-2-rabbitmq request-response logs
-- expose a logger in the HTTP context for logging custom http contexted logs
-- support logs outside the HTTP-context
-- support Koa 2
-- support Express
