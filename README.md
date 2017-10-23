@@ -6,6 +6,8 @@ Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic
 
 Use `riviere` if you want an easy way to log all the HTTP traffic for your server.
 
+`riviere` works independently of your logging library, if you  use any.
+
 ---
 
 # Table of contents
@@ -20,12 +22,10 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     2. [color](#options_color)
     3. [context](#options_context)
     4. [errors.callback](#options_errors_callback)
-    5. [errors.enabled](#options_errors_enabled)               
-    6. [headersRegex](#options_headers_regex)
-    7. [health](#options_health)
-    8. [inbound.enabled](#options_inbound_enabled)
-    9. [outbound.enabled](#options_outbound_enabled)
-    10. [traceHeaderName](#options_trace_header_name)
+    5. [headersRegex](#options_headers_regex)
+    6. [health](#options_health)
+    7. [outbound.enabled](#options_outbound_enabled)
+    8. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)    
 
 ---
@@ -132,7 +132,41 @@ as argument to the `Riviere.middleware()` method call.
 
 *Example*:
 ```js
-const riviereConfObj = {}; 
+const riviereConfObj = {
+    bodyKeys: [ 
+        'education', 
+        'work_experience'
+    ],
+    color: true,
+    context: (ctx) => {
+        return {
+            userId: ctx.request.headers['user-id'],
+            accountId: ctx.request.headers['account-id']
+        };
+    },
+    errors: {
+        callback: (ctx, error) => {
+            ctx.status = error.status || 500;
+        
+            if (ctx.status < 500) {
+                ctx.body = {error: error.message};
+            } else {
+                ctx.body = {error: 'Internal server error'};
+            }
+        }
+    },
+    headersRegex: new RegExp('X-.+', 'i'),
+    health: [
+        { 
+            path: '/health', 
+            method: 'GET'
+        }
+    ],
+    outbound: {
+        enabled: true
+    },
+    traceHeaderName: 'X-Request-Id'    
+}; 
 app.use(Riviere.middleware(riviereConfObj));
 ```
 
@@ -198,13 +232,11 @@ log message. Defaults to empty Object: `{}`.
 <a name="options_errors"></a>
 **errors**
 
-Unhandled Error inside a request's context 
-
 <a name="options_errors_callback"></a>
 **errors.callback**
 
 Control how the server handles any unhandled errors inside a request's context.
-The default handler is being shown in the following example.
+The default is to do nothing.
 
 *Example*:
 
@@ -221,21 +253,6 @@ The default handler is being shown in the following example.
             }
         }
     }   
-}
-```
-
-<a name="options_errors_enabled"></a>
-**errors.enabled**
-
-Control if error logging is enabled. Defaults to `true`.
-
-*Example*:
-
-```js
-{
-    errors: {
-        enabled: true
-    }
 }
 ```
 
@@ -276,30 +293,8 @@ periodically, to determine the health of your server, and you do not want to log
 }
 ```
 
-<a name="options_inbound"></a>
-**inbound**
-
-Inbound HTTP traffic configuration
-
-<a name="options_inbound_enabled"></a>
-**inbound.enabled**
-
-Enable inbound HTTP traffic logs. Defaults to `true`.
-
-*Example*:
-
-```js
-{
-    inbound: {
-        enabled: true
-    }
-}
-```
-
 <a name="options_outbound"></a>
 **outbound**
-
-Outbound HTTP traffic configuration
 
 <a name="options_outbound_enabled"></a>
 **outbound.enabled**

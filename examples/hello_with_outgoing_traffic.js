@@ -15,7 +15,7 @@ app.use(async function(ctx) {
     // the external request is made
     // This is optional but recommended for better tracing:
     headers: {
-      'X-Riviere-Id': ctx.request.headers['x-riviere-id'] // notice that this s lowercase
+      'X-Riviere-Id': ctx.request.headers['x-riviere-id'] // notice that this is lowercase
     }
   });
   ctx.body = 'Hello World';
