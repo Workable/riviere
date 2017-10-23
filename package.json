@@ -4,15 +4,28 @@
   "description": "log inbound/outbound HTTP traffic",
   "main": "index.js",
   "license": "MIT",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/Workable/riviere"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Workable/riviere"
   },
   "bugs": {
     "url": "https://github.com/Workable/riviere/issues"
   },
   "homepage": "https://github.com/Workable/riviere",
-  "keywords": ["logs", "logging", "logger", "http logger", "http", "tracing", "traffic", "inbound", "outbound", "incoming", "outcoming", "koa"],
+  "keywords": [
+    "logs",
+    "logging",
+    "logger",
+    "http logger",
+    "http",
+    "tracing",
+    "traffic",
+    "inbound",
+    "outbound",
+    "incoming",
+    "outcoming",
+    "koa"
+  ],
   "scripts": {
     "test": "./node_modules/.bin/nyc node_modules/mocha/bin/mocha test/**/*.js",
     "posttest": "./node_modules/.bin/nyc report --reporter=html --reporter=lcov",
@@ -28,11 +41,9 @@
   },
   "dependencies": {
     "colors": "^1.1.2",
-    "eslint-config-workable-node": "git://github.com/Workable/eslint-config-workable-node.git#v1.0.0",
     "flat": "^2.0.1",
     "flatstr": "^1.0.5",
     "lodash": "^4.17.4",
-    "log4js_honeybadger_appender": "^1.0.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
