@@ -8,6 +8,11 @@
     "type" : "git",
     "url" : "https://github.com/Workable/riviere"
   },
+  "bugs": {
+    "url": "https://github.com/Workable/riviere/issues"
+  },
+  "homepage": "https://github.com/Workable/riviere",
+  "keywords": ["logs", "logging", "logger", "http logger", "http", "tracing", "traffic", "inbound", "outbound", "incoming", "outcoming", "koa"],
   "scripts": {
     "test": "./node_modules/.bin/nyc node_modules/mocha/bin/mocha test/**/*.js",
     "posttest": "./node_modules/.bin/nyc report --reporter=html --reporter=lcov",
