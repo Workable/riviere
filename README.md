@@ -134,21 +134,21 @@ In this case the `riviere` will use its default configuration.
 
 The default configuration object is the following:
 
-```json
-{
-    "context": ctx => {
+```js
+const riviereConfObj = {
+    context: ctx => {
       return {};
     },
-    "errors": {
+    errors: {
       callback: (ctx, error) => undefined
     },
-    "health": [],
-    "outbound": {
-      "enabled": true
+    health: [],
+    outbound: {
+      enabled: true
     },
-    "bodyKeys": [],
-    "headersRegex": new RegExp('^X-.*', 'i'),
-    "traceHeaderName": 'X-Riviere-Id'
+    bodyKeys: [],
+    headersRegex: new RegExp('^X-.*', 'i'),
+    traceHeaderName: 'X-Riviere-Id'
 }
 ```
 
