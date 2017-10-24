@@ -111,9 +111,8 @@ app.use(async function(ctx) {
     // to trace the request's context inside which
     // the external request is made
     // This is optional but recommended for better tracing:
-    // In an upcoming release this will be done automatically by the riviere middleware.
     headers: {
-      'X-Riviere-Id': ctx.headers['X-Riviere-Id']
+      'X-Riviere-Id': ctx.request.headers['x-riviere-id'] // notice that this is lowercase
     }
   });
   ctx.body = 'Hello World';
