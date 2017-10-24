@@ -348,7 +348,7 @@ you most often want to set the `riviere` `traceHeaderName` to: `X-Request-Id`
 
 ```js
 {
-    traceHeaderName: 'X-Request-ID'
+    traceHeaderName: 'X-Request-Id'
 }
 ```
 
