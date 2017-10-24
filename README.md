@@ -129,7 +129,31 @@ app.listen(3000);
 The behavior of the riviere middleware can be configured by passing a configuration object,
 as argument to the `Riviere.middleware()` method call.
 
-*Example*:
+You can start using `riviere'` by just calling `app.use(Riviere.middleware())`.
+In this case the `riviere` will use its default configuration.
+
+The default configuration object is the following:
+
+```json
+{
+    "context": ctx => {
+      return {};
+    },
+    "errors": {
+      callback: (ctx, error) => undefined
+    },
+    "health": [],
+    "outbound": {
+      "enabled": true
+    },
+    "bodyKeys": [],
+    "headersRegex": new RegExp('^X-.*', 'i'),
+    "traceHeaderName": 'X-Riviere-Id'
+}
+```
+
+Here is an example of a more advanced configuration:
+
 ```js
 const riviereConfObj = {
     bodyKeys: [ 
