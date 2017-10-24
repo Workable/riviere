@@ -1,11 +1,12 @@
-# riviere
+[![NPM](https://nodei.co/npm/riviere.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/riviere/)
 
 [![Coverage Status](https://coveralls.io/repos/github/Workable/riviere/badge.svg?branch=master)](https://coveralls.io/github/Workable/riviere?branch=master)
 
-Riviere decorates your `Koa` middleware chain with inbound/outbound HTTP traffic logs.
+# riviere
+
+The `riviere` module decorates your `Koa` middleware chain with inbound/outbound HTTP traffic logs.
 
 Use `riviere` if you want an easy way to log all the HTTP traffic for your server.
-
 `riviere` works independently of your logging library, if you  use any.
 
 ---
