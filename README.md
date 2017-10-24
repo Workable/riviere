@@ -341,7 +341,7 @@ Theis is a Header key for the request id header.
 Defaults to: `X-Riviere-Id`.
 If you already use a request id header you may need to set this options.
 For example for Heroku deployments, 
-you most often want to set the `riviere` `traceHeaderName` to: `X-Request-ID`
+you most often want to set the `riviere` `traceHeaderName` to: `X-Request-Id`
 (https://devcenter.heroku.com/articles/http-request-id)
 
 *Example*:
