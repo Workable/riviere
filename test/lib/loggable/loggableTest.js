@@ -1,6 +1,7 @@
-const Loggable = require('./../lib/loggable');
 const sinon = require('sinon');
 const should = require('should');
+
+const Loggable = require('./../../../lib/loggable');
 
 const sandbox = sinon.sandbox.create();
 
@@ -13,6 +14,9 @@ const adapter = {
 const loggable = new Loggable({ adapter });
 
 describe('#loggable', () => {
+  after(() => {
+    sandbox.restore();
+  });
   it('should emit INBOUND_REQUEST event', () => {
     loggable.emit(loggable.constructor.EVENT.INBOUND_REQUEST);
     adapter.onInboundRequest.calledOnce.should.equal(true);

@@ -141,7 +141,9 @@ const riviereConfObj = {
       return {};
     },
     errors: {
-      callback: (ctx, error) => undefined
+      callback: (ctx, error) => {
+          throw(error);
+      }
     },
     health: [],
     outbound: {
@@ -260,7 +262,7 @@ log message. Defaults to empty Object: `{}`.
 **errors.callback**
 
 Control how the server handles any unhandled errors inside a request's context.
-The default is to do nothing.
+The default is to re-throw the unhandled error.
 
 *Example*:
 

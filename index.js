@@ -31,8 +31,8 @@ module.exports = {
       try {
         await next();
       } catch (err) {
-        errors.callback(ctx, err);
         utils.safeExec(() => loggable.emit(EVENT.UNEXPECTED_ERROR, { ctx, err }), logger);
+        errors.callback(ctx, err);
       }
 
       utils.safeExec(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
