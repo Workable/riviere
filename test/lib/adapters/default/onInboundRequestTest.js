@@ -43,6 +43,36 @@ describe('#defaultAdapter', () => {
       });
     });
 
+    it('should pass when forceIds is true and request id is not defined', () => {
+      const ctx = {
+        request: {
+          headers: {
+            test_user_id_header: 'test-user-id'
+          },
+          method: 'get',
+          req: {
+            url: '/test'
+          }
+        },
+        req: {
+          headers: {}
+        },
+        originalUrl: '/test'
+      };
+      const opts = getOpts(sandbox);
+      opts.forceIds = true;
+      defaultAdapter.onInboundRequest.call(opts, { ctx });
+      opts.logger.info.calledOnce.should.equal(true);
+      opts.logger.info.args[0][0].should.containEql({
+        userId: 'test-user-id',
+        protocol: undefined,
+        method: 'GET',
+        path: '/test',
+        query: null,
+        log_tag: 'inbound_request'
+      });
+    });
+
     it('should pass when POST && this.bodyKeys', () => {
       const ctx = {
         request: {
