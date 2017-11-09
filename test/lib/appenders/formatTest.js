@@ -211,7 +211,7 @@ describe('appenders/format', () => {
         href: 'http://www.google.com'
       });
       msg.should.equal(
-        '[testRequestId] <= http://www.google.com 200 7ms | method="GET", path="test-path", log_tag="inbound_response", status=200, duration=7'
+        '[testRequestId] <= GET http://www.google.com 200 7ms | method="GET", path="test-path", log_tag="inbound_response", status=200, duration=7'
       );
     });
 
@@ -228,7 +228,7 @@ describe('appenders/format', () => {
       });
       msg.should.equal(
         `${chalk[colors['inbound_response']](
-          '[testRequestId] <= http://www.google.com 200 7ms |'
+          '[testRequestId] <= GET http://www.google.com 200 7ms |'
         )} method="GET", path="test-path", log_tag="inbound_response", status=200, duration=7`
       );
     });
@@ -246,7 +246,7 @@ describe('appenders/format', () => {
       });
       msg.should.equal(
         `${chalk[colors.err](
-          '[testRequestId] <= http://www.google.com 500 7ms |'
+          '[testRequestId] <= GET http://www.google.com 500 7ms |'
         )} method="GET", path="test-path", log_tag="inbound_response", status=500, duration=7`
       );
     });
@@ -263,7 +263,7 @@ describe('appenders/format', () => {
         href: 'http://www.google.com'
       });
       msg.should.equal(
-        '[1970-01-01T00:00:00.000Z] [testRequestId] <= http://www.google.com 500 7ms | method="GET", path="test-path", log_tag="inbound_response", status=500, duration=7'
+        '[1970-01-01T00:00:00.000Z] [testRequestId] <= GET http://www.google.com 500 7ms | method="GET", path="test-path", log_tag="inbound_response", status=500, duration=7'
       );
     });
   });
