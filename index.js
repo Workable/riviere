@@ -1,4 +1,5 @@
 const http = require('http');
+const https = require('https');
 const defaultsDeep = require('lodash/defaultsDeep');
 const Loggable = require('./lib/loggable');
 const defaultOptions = require('./lib/options');
@@ -15,6 +16,14 @@ module.exports = {
     if (outbound.enabled) {
       http.request = new Proxy(
         http.request,
+        options.adapter.requestProxy({
+          level: outbound.level,
+          logger,
+          traceHeaderName
+        })
+      );
+      https.request = new Proxy(
+        https.request,
         options.adapter.requestProxy({
           level: outbound.level,
           logger,
