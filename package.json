@@ -1,6 +1,6 @@
 {
   "name": "riviere",
-  "version": "0.2.16",
+  "version": "0.2.17",
   "description": "log inbound/outbound HTTP traffic",
   "main": "index.js",
   "license": "MIT",
