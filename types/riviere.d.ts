@@ -1,4 +1,4 @@
-export function middleware(options: {
+export function middleware(options?: {
   color?: boolean,
   adapter?: any,
   context?: (ctx: any) => any,
