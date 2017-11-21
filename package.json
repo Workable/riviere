@@ -2,6 +2,7 @@
   "name": "riviere",
   "version": "0.2.18",
   "description": "log inbound/outbound HTTP traffic",
+  "types": "./types/riviere.d.ts",
   "main": "index.js",
   "license": "MIT",
   "repository": {
