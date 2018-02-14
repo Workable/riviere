@@ -418,5 +418,66 @@ describe('#defaultAdapter', () => {
         log_tag: 'outbound_request'
       });
     });
+
+    it('should not throw if the request has no headers', () => {
+      const logger = {
+        info: sandbox.spy()
+      };
+      const serialize = a => a;
+      const traceHeaderName = 'test';
+      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
+      const http = {
+        request: () => {
+          return {
+            on: (event, fn) => {
+              fn({
+                statusCode: 200
+              });
+            }
+          };
+        }
+      };
+      const incomingMessage = {
+        method: 'GET',
+        port: '8080',
+        url: {
+          protocol: 'http:',
+          pathname: '/some',
+          query: 'some=something',
+          host: 'some-host'
+        }
+      };
+      const httpRequest = () => {
+        return {
+          on: (on, cb) => {
+            const res = {};
+            cb(res);
+            logger.info.callCount.should.equal(2);
+            logger.info.args[0][0].should.containEql({
+              method: 'GET',
+              protocol: 'http',
+              port: '8080',
+              path: '/some',
+              query: 'some=something',
+              href: undefined,
+              host: 'some-host',
+              log_tag: 'outbound_request'
+            });
+            logger.info.args[1][0].should.containEql({
+              method: 'GET',
+              path: '/some',
+              host: 'some-host',
+              duration: 0,
+              query: 'some=something',
+              status: undefined,
+              protocol: 'http',
+              log_tag: 'inbound_response'
+            });
+          }
+        };
+      };
+      http.request = new Proxy(httpRequest, requestProxy);
+      http.request(incomingMessage);
+    });
   });
 });
