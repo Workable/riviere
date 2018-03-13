@@ -8,7 +8,7 @@ const { EVENT } = Loggable;
 
 module.exports = {
   middleware: (options = {}) => {
-    const { errors, logger, outbound, traceHeaderName } = defaultsDeep(options, defaultOptions(options));
+    const { errors = {}, logger, inbound, outbound, traceHeaderName } = defaultsDeep(options, defaultOptions(options));
 
     const loggable = new Loggable(options);
 
@@ -20,16 +20,25 @@ module.exports = {
     return async function(ctx, next) {
       ctx.riviereStartedAt = new Date().getTime();
 
-      utils.safeExec(() => loggable.emit(EVENT.INBOUND_REQUEST, { ctx }), logger);
+      if (inbound.enabled) {
+        utils.safeExec(() => loggable.emit(EVENT.INBOUND_REQUEST, { ctx }), logger);
+      }
 
       try {
         await next();
       } catch (err) {
-        utils.safeExec(() => loggable.emit(EVENT.UNEXPECTED_ERROR, { ctx, err }), logger);
-        errors.callback(ctx, err);
+        if (errors.enabled) {
+          utils.safeExec(() => loggable.emit(EVENT.UNEXPECTED_ERROR, { ctx, err }), logger);
+        }
+
+        if (typeof errors.callback === 'function') {
+          errors.callback(ctx, err);
+        }
       }
 
-      utils.safeExec(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
+      if (inbound.enabled) {
+        utils.safeExec(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
+      }
     };
   }
 };
