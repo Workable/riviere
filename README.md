@@ -27,7 +27,7 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     6. [health](#options_health)
     7. [outbound.enabled](#options_outbound_enabled)
     8. [traceHeaderName](#options_trace_header_name)
-8. [License](#License)    
+8. [License](#License)
 
 ---
 
@@ -45,7 +45,7 @@ Upcoming Features:
 ---
 
 <a name="Example_logs"></a>
-## Example logs 
+## Example logs
 
 ![alt text](https://raw.githubusercontent.com/Workable/riviere/images/images/riviere_logs_screen_5.png)
 
@@ -138,16 +138,20 @@ The default configuration object is the following:
 ```js
 const riviereConfObj = {
     context: ctx => {
-      return {};
+        return {};
     },
     errors: {
-      callback: (ctx, error) => {
-          throw(error);
-      }
+        enabled: true,
+        callback: (ctx, error) => {
+            throw(error);
+        }
     },
     health: [],
+    inbound: {
+        enabled: true,
+    }
     outbound: {
-      enabled: true
+        enabled: true
     },
     bodyKeys: [],
     headersRegex: new RegExp('^X-.*', 'i'),
@@ -159,8 +163,8 @@ Here is an example of a more advanced configuration:
 
 ```js
 const riviereConfObj = {
-    bodyKeys: [ 
-        'education', 
+    bodyKeys: [
+        'education',
         'work_experience'
     ],
     color: true,
@@ -171,9 +175,10 @@ const riviereConfObj = {
         };
     },
     errors: {
+        enabled: true,
         callback: (ctx, error) => {
             ctx.status = error.status || 500;
-        
+
             if (ctx.status < 500) {
                 ctx.body = {error: error.message};
             } else {
@@ -183,16 +188,16 @@ const riviereConfObj = {
     },
     headersRegex: new RegExp('X-.+', 'i'),
     health: [
-        { 
-            path: '/health', 
+        {
+            path: '/health',
             method: 'GET'
         }
     ],
     outbound: {
         enabled: true
     },
-    traceHeaderName: 'X-Request-Id'    
-}; 
+    traceHeaderName: 'X-Request-Id'
+};
 app.use(Riviere.middleware(riviereConfObj));
 ```
 
@@ -203,22 +208,30 @@ The supported key-value options, for the configuration object are described belo
 <a name="Available_options"></a>
 ### Available options
 
+<a name="options_inbound"></a>
+**inbound**
+
+<a name="options_inbound_enabled"></a>
+**inbound.enabled**
+
+Enable inbound HTTP traffic logging. Defaults to `true`.
+
 <a name="options_body_keys"></a>
 **bodyKeys**
 
 This option can be used to log specific values from the `JSON` body of the `inbound` `POST` requests.
-Defaults to empty Array `[]`. 
+Defaults to empty Array `[]`.
 To use this option, the `POST` request's body should be a valid `JSON`.
 Most often this mean that you should register the `Koa` `bodyParser` middleware
-(https://www.npmjs.com/package/body-parser) (or something equivalent), 
+(https://www.npmjs.com/package/body-parser) (or something equivalent),
 before registering the `riviere` middleware.
 
 *Example*:
 
 ```js
 {
-    bodyKeys: [ 
-        'education', 
+    bodyKeys: [
+        'education',
         'work_experience'
     ]
 }
@@ -258,6 +271,11 @@ log message. Defaults to empty Object: `{}`.
 <a name="options_errors"></a>
 **errors**
 
+<a name="options_errors_enabled"></a>
+**errors.enabled**
+
+Enable inbound HTTP traffic logs. Defaults to `true`.
+
 <a name="options_errors_callback"></a>
 **errors.callback**
 
@@ -271,14 +289,14 @@ The default is to re-throw the unhandled error.
     errors: {
         callback: (ctx, error) => {
             ctx.status = error.status || 500;
-        
+
             if (ctx.status < 500) {
                 ctx.body = {error: error.message};
             } else {
                 ctx.body = {error: 'Internal server error'};
             }
         }
-    }   
+    }
 }
 ```
 
@@ -311,11 +329,11 @@ periodically, to determine the health of your server, and you do not want to log
 ```js
 {
     health: [
-        { 
-            path: '/health', 
+        {
+            path: '/health',
             method: 'GET'
         }
-    ] 
+    ]
 }
 ```
 
@@ -340,10 +358,10 @@ Enable outbound HTTP traffic logs. Defaults to `true`.
 <a name="options_trace_header_name"></a>
 **traceHeaderName**
 
-Theis is a Header key for the request id header. 
+Theis is a Header key for the request id header.
 Defaults to: `X-Riviere-Id`.
 If you already use a request id header you may need to set this options.
-For example for Heroku deployments, 
+For example for Heroku deployments,
 you most often want to set the `riviere` `traceHeaderName` to: `X-Request-Id`
 (https://devcenter.heroku.com/articles/http-request-id)
 
@@ -398,5 +416,5 @@ Set the log level for inbound HTTP traffic. Defaults to `info`.
 <a name="License"></a>
 ## License
 
-  MIT 
+  MIT
   (![see LICENCE](https://github.com/Workable/riviere/blob/master/LICENCE))
