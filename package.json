@@ -1,6 +1,6 @@
 {
   "name": "riviere",
-  "version": "0.2.23",
+  "version": "0.2.24",
   "description": "log inbound/outbound HTTP traffic",
   "types": "./types/riviere.d.ts",
   "main": "index.js",
