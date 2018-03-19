@@ -13,7 +13,7 @@ module.exports = {
     const loggable = new Loggable(options);
 
     if (outbound.enabled) {
-      const handler = options.adapter.requestProxy({ level: outbound.level, logger, traceHeaderName });
+      const handler = options.adapter.requestProxy({ level: outbound.level, logger, traceHeaderName, opts: outbound });
       httpProxy(handler);
     }
 
