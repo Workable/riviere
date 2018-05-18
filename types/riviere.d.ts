@@ -15,7 +15,8 @@ export function middleware(options?: {
   },
   outbound?: {
     enabled: boolean,
-    level: string
+    level: string,
+    https?: boolean
   },
   bodyKeys?: Array<string>,
   headersRegex?: RegExp,
