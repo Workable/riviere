@@ -3,6 +3,7 @@ const Loggable = require('./lib/loggable');
 const defaultOptions = require('./lib/options');
 const utils = require('./lib/utils');
 const httpProxy = require('./lib/proxies/http').proxy;
+const httpsProxy = require('./lib/proxies/https').proxy;
 
 const { EVENT } = Loggable;
 
@@ -15,6 +16,10 @@ module.exports = {
     if (outbound.enabled) {
       const handler = options.adapter.requestProxy({ level: outbound.level, logger, traceHeaderName, opts: outbound });
       httpProxy(handler);
+
+      if (outbound.https) {
+        httpsProxy(handler);
+      }
     }
 
     return async function(ctx, next) {
