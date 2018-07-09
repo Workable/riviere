@@ -34,10 +34,12 @@ describe('#defaultAdapter', () => {
         },
         originalUrl: '/test',
         response: {
+          headers: {},
           status: 200
         }
       };
       const opts = getOpts(sandbox);
+      opts.headersRegex = new RegExp('location', 'i');
       defaultAdapter.onInboundRequest.call(opts, { ctx });
       defaultAdapter.onOutboundResponse.call(opts, { ctx });
       opts.logger.info.callCount.should.equal(2);
@@ -59,6 +61,52 @@ describe('#defaultAdapter', () => {
         path: '/test',
         query: null,
         requestId: uuid,
+        headers: {},
+        log_tag: 'outbound_response'
+      });
+    });
+
+    it('should log headers', () => {
+      const ctx = {
+        request: {
+          method: 'post',
+          headers: {
+            test_user_id_header: 'test-user-id'
+          },
+          req: {
+            url: '/test'
+          }
+        },
+        req: {
+          url: '/test',
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
+        originalUrl: '/test',
+        response: {
+          status: 200,
+          headers: {
+            Location: '/test/foo',
+            'Set-Cookie': 'deadbeef'
+          }
+        }
+      };
+      const opts = getOpts(sandbox);
+      opts.headersRegex = new RegExp('location', 'i');
+      defaultAdapter.onInboundRequest.call(opts, { ctx });
+      defaultAdapter.onOutboundResponse.call(opts, { ctx });
+      opts.logger.info.callCount.should.equal(2);
+      opts.logger.info.args[1][0].should.eql({
+        status: undefined,
+        duration: NaN,
+        userId: 'test-user-id',
+        protocol: undefined,
+        method: 'POST',
+        path: '/test',
+        query: null,
+        requestId: uuid,
+        headers: { 'headers.Location': '/test/foo' },
         log_tag: 'outbound_response'
       });
     });
