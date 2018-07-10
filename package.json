@@ -1,5 +1,5 @@
 {
-  "name": "riviere",
+  "name": "@workablehr/riviere",
   "version": "0.3.0",
   "description": "log inbound/outbound HTTP traffic",
   "types": "./types/riviere.d.ts",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Workable/riviere"
+    "url": "git+https://github.com/Workable/riviere.git"
   },
   "bugs": {
     "url": "https://github.com/Workable/riviere/issues"
@@ -28,9 +28,9 @@
     "koa"
   ],
   "scripts": {
-    "test": "./node_modules/.bin/nyc node_modules/mocha/bin/mocha test/**/*.js",
-    "posttest": "./node_modules/.bin/nyc report --reporter=html --reporter=lcov",
-    "eslint-check": "./node_modules/.bin/eslint --print-config .eslintrc.js | eslint-config-prettier-check",
+    "test": "nyc node_modules/mocha/bin/mocha test/**/*.js",
+    "posttest": "nyc report --reporter=html --reporter=lcov",
+    "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "precommit": "lint-staged"
   },
   "lint-staged": {
@@ -62,5 +62,11 @@
   },
   "engines": {
     "node": "10.x.x"
-  }
+  },
+  "directories": {
+    "example": "examples",
+    "lib": "lib",
+    "test": "test"
+  },
+  "author": ""
 }
