@@ -340,5 +340,39 @@ describe('#defaultAdapter', () => {
         log_tag: 'inbound_request'
       });
     });
+
+    it('should log full path when configured', () => {
+      const ctx = {
+        request: {
+          headers: {
+            test_user_id_header: 'test-user-id'
+          },
+          method: 'get',
+          origin: 'http://test.lvh.me:8080',
+          req: {
+            url: '/test'
+          }
+        },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
+        originalUrl: '/test'
+      };
+      const opts = getOpts(sandbox);
+      opts.inbound.includeHost = true;
+      defaultAdapter.onInboundRequest.call(opts, { ctx });
+      opts.logger.info.calledOnce.should.equal(true);
+      opts.logger.info.args[0][0].should.eql({
+        userId: 'test-user-id',
+        protocol: undefined,
+        method: 'GET',
+        path: 'http://test.lvh.me:8080/test',
+        query: null,
+        requestId: uuid,
+        log_tag: 'inbound_request'
+      });
+    });
   });
 });

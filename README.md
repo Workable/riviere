@@ -216,6 +216,11 @@ The supported key-value options, for the configuration object are described belo
 
 Enable inbound HTTP traffic logging. Defaults to `true`.
 
+<a name="options_inbound_includeHost"></a>
+**inbound.includeHost**
+
+Log full path, including host on inbound requests. Defaults to `false`.
+
 <a name="options_body_keys"></a>
 **bodyKeys**
 
