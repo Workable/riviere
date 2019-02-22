@@ -39,10 +39,10 @@ module.exports = {
         if (typeof errors.callback === 'function') {
           errors.callback(ctx, err);
         }
-      }
-
-      if (inbound.enabled) {
-        utils.safeExec(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
+      } finally {
+        if (inbound.enabled) {
+          utils.safeExec(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
+        }
       }
     };
   }
