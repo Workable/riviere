@@ -9,6 +9,7 @@ const adapter = require('./../lib/adapters/default');
 describe('middleware', () => {
   beforeEach(() => {
     sandbox.stub(adapter, 'onInboundRequest').callsFake(() => null);
+    sandbox.stub(adapter, 'onOutboundResponse').callsFake(() => null);
   });
 
   afterEach(() => {
