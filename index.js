@@ -37,7 +37,7 @@ module.exports = {
         }
 
         if (typeof errors.callback === 'function') {
-          errors.callback(ctx, err);
+          await errors.callback(ctx, err);
         }
       } finally {
         if (inbound.enabled) {
