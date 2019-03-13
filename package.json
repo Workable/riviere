@@ -1,6 +1,6 @@
 {
   "name": "@workablehr/riviere",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "log inbound/outbound HTTP traffic",
   "types": "./types/riviere.d.ts",
   "main": "index.js",
