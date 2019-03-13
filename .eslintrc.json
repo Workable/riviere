@@ -3,6 +3,9 @@
     "workable-node",
     "prettier"
   ],
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
   "plugins": [
     "prettier"
   ],
