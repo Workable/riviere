@@ -142,8 +142,8 @@ const configuration = {
     },
     errors: {
         enabled: true,
-        callback: (ctx, error) => {
-            throw(error);
+        callback: (err, ctx) => {
+            throw(err);
         }
     },
     health: [],
@@ -293,11 +293,11 @@ The default is to re-throw the unhandled error.
 ```js
 {
     errors: {
-        callback: (ctx, error) => {
-            ctx.status = error.status || 500;
+        callback: (err, ctx) => {
+            ctx.status = err.status || 500;
 
             if (ctx.status < 500) {
-                ctx.body = {error: error.message};
+                ctx.body = {error: err.message};
             } else {
                 ctx.body = {error: 'Internal server error'};
             }

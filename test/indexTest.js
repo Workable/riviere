@@ -67,7 +67,7 @@ describe('riviere', () => {
     }
 
     errorsCallback.calledOnce.should.equal(true);
-    errorsCallback.args[0][0].test.should.equal('ok');
-    errorsCallback.args[0][1].message.should.equal('something bad happened');
+    errorsCallback.args[0][0].message.should.equal('something bad happened');
+    errorsCallback.args[0][1].test.should.equal('ok');
   });
 });
