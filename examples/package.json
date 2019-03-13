@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "koa": "^2.3.0",
-    "request-promise": "^4.2.2",
-    "riviere": "^0.2.18"
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   }
 }

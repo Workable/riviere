@@ -1,10 +1,11 @@
 const Koa = require('koa');
-const riviere = require('riviere');
+const riviere = require('../index');
 
 const app = new Koa();
 
 app.use(riviere());
-app.use(async function(ctx) {
+
+app.use(function(ctx) {
   ctx.body = 'Hello World';
 });
 
