@@ -1,10 +1,10 @@
 const Koa = require('koa');
-const riviere = require('riviere');
+const riviere = require('../index');
 
 const app = new Koa();
 
 app.use(riviere());
-app.use(async function() {
+app.use(function() {
   throw new Error('something went wrong');
 });
 
