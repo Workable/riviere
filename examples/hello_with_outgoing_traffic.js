@@ -1,12 +1,12 @@
 const Koa = require('koa');
-const Riviere = require('riviere');
+const riviere = require('riviere');
 
 // this is just an example, you can use any http library
 const rp = require('request-promise');
 
 const app = new Koa();
 
-app.use(Riviere.middleware());
+app.use(riviere());
 app.use(async function(ctx) {
   await rp({
     uri: 'https://www.google.com',
