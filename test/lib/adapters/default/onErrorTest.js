@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const should = require('should');
 
 const defaultAdapter = require('../../../../lib/adapters/default');
-const getOpts = require('../../../../fixtures/getOpts');
+const getOpts = require('../../../fixtures/getOpts');
 
 const sandbox = sinon.sandbox.create();
 
