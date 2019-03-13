@@ -36,7 +36,7 @@ function buildRiviere(options = {}) {
       }
 
       if (typeof errors.callback === 'function') {
-        await errors.callback(ctx, err);
+        await errors.callback(err, ctx);
       }
     } finally {
       if (inbound.enabled) {
