@@ -5,7 +5,7 @@ const should = require('should');
 
 const sandbox = sinon.sandbox.create();
 
-const getOpts = require('../../../../fixtures/getOpts');
+const getOpts = require('../../../fixtures/getOpts');
 
 const uuid = '9b4f5d20-7a31-468a-b0f8-298013cbe940';
 

@@ -28,7 +28,7 @@
     "koa"
   ],
   "scripts": {
-    "test": "nyc node_modules/mocha/bin/mocha test/**/*.js",
+    "test": "nyc node_modules/mocha/bin/mocha test/**/*Test.js",
     "posttest": "nyc report --reporter=html --reporter=lcov",
     "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "precommit": "lint-staged"
