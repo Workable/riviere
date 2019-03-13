@@ -80,11 +80,11 @@ Assuming that the following example server is running:
 
 ```js
 const Koa = require('koa');
-const Riviere = require('riviere');
+const riviere = require('riviere');
 
 const app = new Koa();
 
-app.use(Riviere.middleware());
+app.use(riviere());
 app.use(async function(ctx) {
     ctx.body = 'Hello World';
 });
@@ -97,14 +97,14 @@ app.listen(3000);
 
 ```js
 const Koa = require('koa');
-const Riviere = require('riviere');
+const riviere = require('riviere');
 
 // this is just an example, you can use any http library
 const rp = require('request-promise');
 
 const app = new Koa();
 
-app.use(Riviere.middleware());
+app.use(riviere());
 app.use(async function(ctx) {
   await rp({
     uri: 'https://www.google.com',
@@ -128,15 +128,15 @@ app.listen(3000);
 ## Configuration
 
 The behavior of the riviere middleware can be configured by passing a configuration object,
-as argument to the `Riviere.middleware()` method call.
+as argument to the `riviere()` method call.
 
-You can start using `riviere'` by just calling `app.use(Riviere.middleware())`.
+You can start using `riviere'` by just calling `app.use(riviere())`.
 In this case the `riviere` will use its default configuration.
 
 The default configuration object is the following:
 
 ```js
-const riviereConfObj = {
+const configuration = {
     context: ctx => {
         return {};
     },
@@ -162,7 +162,7 @@ const riviereConfObj = {
 Here is an example of a more advanced configuration:
 
 ```js
-const riviereConfObj = {
+const configuration = {
     bodyKeys: [
         'education',
         'work_experience'
@@ -198,7 +198,8 @@ const riviereConfObj = {
     },
     traceHeaderName: 'X-Request-Id'
 };
-app.use(Riviere.middleware(riviereConfObj));
+
+app.use(riviere(configuration));
 ```
 
 The supported key-value options, for the configuration object are described below.

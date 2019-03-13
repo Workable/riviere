@@ -1,11 +1,10 @@
 const Koa = require('koa');
-
-const Riviere = require('riviere');
+const riviere = require('riviere');
 
 const app = new Koa();
 
 app.use(
-  Riviere.middleware({
+  riviere({
     errors: {
       // i dont want to rethrow any unhandled errors here
       callback: (ctx, err) => null

@@ -1,12 +1,11 @@
 const sinon = require('sinon');
-const should = require('should');
 
 const sandbox = sinon.sandbox.create();
 
-const MiddlewareFactory = require('./../index');
+const riviere = require('./../index');
 const adapter = require('./../lib/adapters/default');
 
-describe('middleware', () => {
+describe('riviere', () => {
   beforeEach(() => {
     sandbox.stub(adapter, 'onInboundRequest').callsFake(() => null);
     sandbox.stub(adapter, 'onOutboundResponse').callsFake(() => null);
@@ -19,7 +18,7 @@ describe('middleware', () => {
   it('should re-throw any errors by default', async function() {
     const logger = { error: sandbox.spy() };
 
-    const middlewrare = MiddlewareFactory.middleware({
+    const middleware = riviere({
       logger: {
         error: logger.error
       }
@@ -32,8 +31,10 @@ describe('middleware', () => {
     };
 
     try {
-      await middlewrare(ctx, next);
-    } catch (err) {}
+      await middleware(ctx, next);
+    } catch (_) {
+      // ignore
+    }
 
     logger.error.calledOnce.should.equal(true);
   });
@@ -42,7 +43,7 @@ describe('middleware', () => {
     const logger = { error: sandbox.spy() };
     const errorsCallback = sandbox.spy();
 
-    const middlewrare = MiddlewareFactory.middleware({
+    const middleware = riviere({
       logger: {
         error: logger.error
       },
@@ -60,8 +61,10 @@ describe('middleware', () => {
     };
 
     try {
-      await middlewrare(ctx, next);
-    } catch (err) {}
+      await middleware(ctx, next);
+    } catch (_) {
+      // ignore
+    }
 
     errorsCallback.calledOnce.should.equal(true);
     errorsCallback.args[0][0].test.should.equal('ok');
