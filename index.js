@@ -46,4 +46,6 @@ function buildRiviere(options = {}) {
   };
 }
 
+buildRiviere;.riviere = buildRiviere;
+
 module.exports = buildRiviere;
