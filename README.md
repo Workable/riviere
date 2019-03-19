@@ -1,5 +1,3 @@
-[![NPM](https://nodei.co/npm/riviere.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/@workablehr/riviere/)
-
 [![Coverage Status](https://coveralls.io/repos/github/Workable/riviere/badge.svg?branch=master)](https://coveralls.io/github/Workable/riviere?branch=master)
 
 # riviere
