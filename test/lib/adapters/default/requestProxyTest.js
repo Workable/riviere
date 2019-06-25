@@ -1,7 +1,6 @@
 const defaultAdapter = require('../../../../lib/adapters/default');
 
 const sinon = require('sinon');
-const should = require('should');
 
 const sandbox = sinon.sandbox.create();
 
@@ -19,7 +18,12 @@ describe('#defaultAdapter', () => {
       };
       const serialize = a => a;
       const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        serialize,
+        traceHeaderName,
+        level: 'info'
+      });
       const incomingMessage = {
         method: 'GET',
         port: '8080',
@@ -86,7 +90,12 @@ describe('#defaultAdapter', () => {
       };
       const serialize = a => a;
       const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        serialize,
+        traceHeaderName,
+        level: 'info'
+      });
       const incomingMessage = {
         method: 'GET',
         port: '8080',
@@ -140,7 +149,12 @@ describe('#defaultAdapter', () => {
       };
       const serialize = a => a;
       const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        serialize,
+        traceHeaderName,
+        level: 'info'
+      });
       const incomingMessage = {
         method: 'GET',
         port: '8080',
@@ -195,7 +209,13 @@ describe('#defaultAdapter', () => {
       };
       const serialize = a => a;
       const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        serialize,
+        traceHeaderName,
+        level: 'info',
+        opts: { headersRegex: new RegExp('test', 'i') }
+      });
       const incomingMessage = {
         method: 'GET',
         port: '8080',
@@ -218,6 +238,7 @@ describe('#defaultAdapter', () => {
       http.request = new Proxy(http.request, requestProxy);
       http.request(incomingMessage);
       logger.info.callCount.should.eql(2);
+      logger.info.args[0][0].should.have.property('headers.test');
       logger.info.args[0][0].should.containEql({
         method: 'GET',
         protocol: 'https',
@@ -246,7 +267,12 @@ describe('#defaultAdapter', () => {
       };
       const serialize = a => a;
       const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        serialize,
+        traceHeaderName,
+        level: 'info'
+      });
       const incomingMessage = {
         method: 'GET',
         port: '8080',
@@ -295,13 +321,18 @@ describe('#defaultAdapter', () => {
       });
     });
 
-    it('should pass when requestId key is not given', () => {
+    it('should pass when requestId key is given', () => {
       const logger = {
         info: sandbox.spy()
       };
       const serialize = a => a;
       const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({ logger, traceHeaderName, serialize, level: 'info' });
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        traceHeaderName,
+        serialize,
+        level: 'info'
+      });
       const incomingMessage = {
         method: 'GET',
         port: '8080',
@@ -357,7 +388,11 @@ describe('#defaultAdapter', () => {
       };
       const serialize = a => a;
       const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName });
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        serialize,
+        traceHeaderName
+      });
       const incomingMessage = null;
       const http = {
         request: () => {
@@ -380,7 +415,12 @@ describe('#defaultAdapter', () => {
       };
       const serialize = a => a;
       const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        serialize,
+        traceHeaderName,
+        level: 'info'
+      });
       const incomingMessage = {
         method: 'GET',
         port: '8080',
@@ -425,7 +465,12 @@ describe('#defaultAdapter', () => {
       };
       const serialize = a => a;
       const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({ logger, serialize, traceHeaderName, level: 'info' });
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        serialize,
+        traceHeaderName,
+        level: 'info'
+      });
       const http = {
         request: () => {
           return {
