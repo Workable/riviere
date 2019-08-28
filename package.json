@@ -42,7 +42,7 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "flat": "^4.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
