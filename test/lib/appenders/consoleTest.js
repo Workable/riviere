@@ -1,34 +1,39 @@
 const sinon = require('sinon');
 
 const consoleAppender = require('../../../lib/appenders/console');
+const SimpleFormatter = require('../../../lib/formatters/SimpleFormatter');
 
 const sandbox = sinon.sandbox.create();
 
 describe('console', () => {
-  before(() => {
+  beforeEach(() => {
     this.clock = sinon.useFakeTimers();
+
+    this.formatObject = sandbox.spy(SimpleFormatter.prototype, 'formatObject');
   });
 
-  after(() => {
+  afterEach(() => {
     sandbox.restore();
     this.clock.restore();
   });
 
   it('should format and send msg to the stdout', () => {
-    const c = consoleAppender();
+    const c = consoleAppender({ styles: ['simple'] });
     c({
       log_tag: 'inbound_request'
     });
+    this.formatObject.calledOnce.should.equal(true);
   });
 
   it('should format and send msg to the stdout if log_tag is not defined and data is error', () => {
-    const c = consoleAppender();
+    const c = consoleAppender({ styles: ['simple'] });
     const data = new Error('test-error');
     data.context = {};
     data.params = {
       log_tag: 'unexpected_error'
     };
     c(data);
+    this.formatObject.calledOnce.should.equal(false);
   });
 
   it('should pass if log_tag is not defined and data is error and data.params.log_tag is not supported', () => {

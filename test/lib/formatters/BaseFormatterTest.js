@@ -5,14 +5,14 @@ const sinon = require('sinon');
 const BaseFormatter = require('../../../lib/formatters/BaseFormatter');
 const colors = require('../../../lib/appenders/colors');
 
-describe('Test Base Formatter', function() {
-  it('should not implement formatObject', function() {
+describe('Test Base Formatter', () => {
+  it('should not implement formatObject', () => {
     this.baseFormatter = new BaseFormatter();
     delete this.baseFormatter.formatObject;
     assert.throws(this.baseFormatter.formatObject, /Not implemented/);
   });
 
-  it('should return empty string in getPrefix if request type does not exist', function() {
+  it('should return empty string in getPrefix if request type does not exist', () => {
     const obj = { method: 'GET', requestId: 'testRequestId', path: 'test-path', log_tag: 'inbound_request' };
     this.baseFormatter = new BaseFormatter(false, false, '');
     const prefix = this.baseFormatter.getPrefix(obj);
@@ -20,7 +20,7 @@ describe('Test Base Formatter', function() {
     prefix.should.equal('');
   });
 
-  it('should return href if exists in passed object', function() {
+  it('should return href if exists in passed object', () => {
     const obj = { href: 'test-href', path: 'test-path' };
     this.baseFormatter = new BaseFormatter(false, false, '');
     const href = this.baseFormatter.getHrefFromRes(obj);
@@ -28,7 +28,7 @@ describe('Test Base Formatter', function() {
     href.should.equal(obj.href);
   });
 
-  it('should return href computed by object passed', function() {
+  it('should return href computed by object passed', () => {
     const obj = { path: 'test-path', protocol: 'https', host: 'workable.com/' };
     this.baseFormatter = new BaseFormatter(false, false, '');
     const href = this.baseFormatter.getHrefFromRes(obj);
@@ -36,7 +36,7 @@ describe('Test Base Formatter', function() {
     href.should.equal(`${obj.protocol}://${obj.host}${obj.path}`);
   });
 
-  it('should return href computed by object passed with query', function() {
+  it('should return href computed by object passed with query', () => {
     const obj = { query: 'test-query', protocol: 'https', host: 'workable.com/' };
     this.baseFormatter = new BaseFormatter(false, false, '');
     const href = this.baseFormatter.getHrefFromRes(obj);
@@ -44,7 +44,7 @@ describe('Test Base Formatter', function() {
     href.should.equal(`${obj.protocol}://${obj.host}?${obj.query}`);
   });
 
-  describe('inbound_request', function() {
+  describe('inbound_request', () => {
     before(() => {
       this.clock = sinon.useFakeTimers();
     });
@@ -53,9 +53,9 @@ describe('Test Base Formatter', function() {
       this.clock.restore();
     });
 
-    beforeEach(function() {});
+    beforeEach(() => {});
 
-    afterEach(function() {});
+    afterEach(() => {});
 
     it('color: false, date: false, type: inbound_request', () => {
       const obj = { method: 'GET', requestId: 'testRequestId', path: 'test-path', log_tag: 'inbound_request' };
@@ -82,7 +82,7 @@ describe('Test Base Formatter', function() {
     });
   });
 
-  describe('outbound_request', function() {
+  describe('outbound_request', () => {
     before(() => {
       this.clock = sinon.useFakeTimers();
     });
@@ -140,7 +140,7 @@ describe('Test Base Formatter', function() {
     });
   });
 
-  describe('outbound_response', function() {
+  describe('outbound_response', () => {
     before(() => {
       this.clock = sinon.useFakeTimers();
     });
@@ -210,7 +210,7 @@ describe('Test Base Formatter', function() {
     });
   });
 
-  describe('inbound_response', function() {
+  describe('inbound_response', () => {
     before(() => {
       this.clock = sinon.useFakeTimers();
     });

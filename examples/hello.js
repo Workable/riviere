@@ -3,7 +3,7 @@ const riviere = require('../index');
 
 const app = new Koa();
 
-app.use(riviere());
+app.use(riviere({ styles: ['extended-11', 'json'] }));
 
 app.use(function(ctx) {
   ctx.body = 'Hello World';
