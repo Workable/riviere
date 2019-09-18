@@ -1,4 +1,4 @@
-const mapOutReq = require('../../../lib/transformers/mapOutReq');
+const { mapOutReq } = require('../../../lib/transformers/transformers');
 
 describe('mapOutReq', () => {
   it('should able to get uri', () => {
