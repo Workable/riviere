@@ -33,17 +33,20 @@ describe('console', () => {
       log_tag: 'unexpected_error'
     };
     c(data);
-    this.formatObject.calledOnce.should.equal(false);
+    this.formatObject.calledOnce.should.equal(true);
   });
 
   it('should pass if log_tag is not defined and data is error and data.params.log_tag is not supported', () => {
-    const c = consoleAppender();
+    const c = consoleAppender({ styles: ['simple'] });
     const data = new Error('test-error');
     data.context = {};
     data.params = {
       log_tag: 'unsupported_tag'
     };
     c(data);
+
+    this.formatObject.calledOnce.should.equal(true);
+    this.formatObject.returned('').should.equal(true);
   });
 
   it('should pass if data.log_data is not defined', () => {
