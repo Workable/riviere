@@ -1,6 +1,6 @@
 export function riviere(options?: {
   color?: boolean,
-  styles: Array<string>,
+  styles?: Array<string>,
   adapter?: any,
   context?: (ctx: any) => any,
   errors?: {
