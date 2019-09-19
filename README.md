@@ -21,12 +21,13 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
 7. [Available Options](#Available_options)
     1. [bodyKeys](#options_body_keys)
     2. [color](#options_color)
-    3. [context](#options_context)
-    4. [errors.callback](#options_errors_callback)
-    5. [headersRegex](#options_headers_regex)
-    6. [health](#options_health)
-    7. [outbound.enabled](#options_outbound_enabled)
-    8. [traceHeaderName](#options_trace_header_name)
+    3. [styles](#options_styles)
+    4. [context](#options_context)
+    5. [errors.callback](#options_errors_callback)
+    6. [headersRegex](#options_headers_regex)
+    7. [health](#options_health)
+    8. [outbound.enabled](#options_outbound_enabled)
+    9. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -252,6 +253,23 @@ Log colored log messages. Defaults to: `true`
 ```js
 {
     color: true
+}
+```
+
+<a name="options_styles"></a>
+**styles**
+
+This option is used to format log messages with specific styles. Defaults to: `['extended']`
+If multiple options are defined one line is exported for every different style. 
+Available options are: 
+- 'simple': Prints method, path, status code and timing
+- 'extended': Same as simple followed by ' | ' and a string containing key-value pairs of object properties (can be filtered through bodyKeys)
+- 'json': All object properties as a valid JSON object
+
+*Example*:
+```js
+{
+    styles: ['simple', 'json']
 }
 ```
 
