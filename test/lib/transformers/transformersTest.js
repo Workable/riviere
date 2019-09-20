@@ -53,4 +53,39 @@ describe('mapOutReq', () => {
       'headers.x-transaction-id': 'transaction-id'
     });
   });
+
+  it('should able to post uri and get body parameters', () => {
+    const inMsg = {
+      method: 'POST',
+      body: {
+        foo: 'bar'
+      },
+      uri: {
+        protocol: 'http:',
+        hostname: 'hostname',
+        path: 'path',
+        query: 'query'
+      }
+    };
+
+    const options = {
+      bodyKeys: ['foo']
+    };
+
+    const result = mapOutReq(inMsg, undefined, options);
+    result.should.eql({
+      method: 'POST',
+      protocol: 'http',
+      host: 'hostname',
+      port: undefined,
+      path: 'path',
+      query: 'query',
+      href: undefined,
+      requestId: undefined,
+      log_tag: 'outbound_request',
+      metaBody: {
+        'body.foo': 'bar'
+      }
+    });
+  });
 });
