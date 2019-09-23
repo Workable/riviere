@@ -59,9 +59,7 @@ describe('mapOutReq', () => {
   it('should able to post uri and get body parameters', () => {
     const inMsg = {
       method: 'POST',
-      body: {
-        foo: 'bar'
-      },
+      body: '{ "foo": "bar" }',
       uri: {
         protocol: 'http:',
         hostname: 'hostname',
@@ -88,6 +86,37 @@ describe('mapOutReq', () => {
       metaBody: {
         'body.foo': 'bar'
       }
+    });
+  });
+
+  it('should able to post uri and npot add body parameters if it is not valid json', () => {
+    const inMsg = {
+      method: 'POST',
+      body: 'test not json',
+      uri: {
+        protocol: 'http:',
+        hostname: 'hostname',
+        path: 'path',
+        query: 'query'
+      }
+    };
+
+    const options = {
+      bodyKeys: ['foo']
+    };
+
+    const result = mapOutReq(inMsg, undefined, options);
+    result.should.eql({
+      method: 'POST',
+      protocol: 'http',
+      host: 'hostname',
+      port: undefined,
+      path: 'path',
+      query: 'query',
+      href: undefined,
+      requestId: undefined,
+      metaBody: {},
+      log_tag: 'outbound_request'
     });
   });
 });
