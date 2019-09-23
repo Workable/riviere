@@ -60,6 +60,9 @@ describe('mapOutReq', () => {
     const inMsg = {
       method: 'POST',
       body: '{ "foo": "bar" }',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
       uri: {
         protocol: 'http:',
         hostname: 'hostname',
@@ -93,6 +96,9 @@ describe('mapOutReq', () => {
     const inMsg = {
       method: 'POST',
       body: 'test not json',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
       uri: {
         protocol: 'http:',
         hostname: 'hostname',
