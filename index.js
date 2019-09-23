@@ -22,6 +22,7 @@ function buildRiviere(options = {}) {
       traceHeaderName,
       opts: {
         headersRegex,
+        bodyKeys: options.bodyKeys,
         ...outbound
       }
     });

@@ -1,7 +1,6 @@
 const defaultAdapter = require('../../../../lib/adapters/default');
 
 const sinon = require('sinon');
-const should = require('should');
 
 const sandbox = sinon.sandbox.create();
 

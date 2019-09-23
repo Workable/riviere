@@ -63,6 +63,7 @@ describe('#defaultAdapter', () => {
               requestId: 'ok',
               href: undefined,
               host: 'some-host',
+              metaBody: {},
               log_tag: 'outbound_request'
             });
             logger.info.args[1][0].should.eql({
@@ -188,6 +189,7 @@ describe('#defaultAdapter', () => {
         host: undefined,
         protocol: 'https',
         href: undefined,
+        metaBody: {},
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.eql({
@@ -247,6 +249,7 @@ describe('#defaultAdapter', () => {
         path: '/some?somequery=query',
         query: undefined,
         href: undefined,
+        metaBody: {},
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.containEql({
@@ -306,6 +309,7 @@ describe('#defaultAdapter', () => {
         query: undefined,
         href: undefined,
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+        metaBody: {},
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.eql({
@@ -366,6 +370,7 @@ describe('#defaultAdapter', () => {
         query: undefined,
         href: undefined,
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+        metaBody: {},
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.eql({
@@ -455,6 +460,7 @@ describe('#defaultAdapter', () => {
         path: '/some',
         query: 'some=something',
         requestId: 'ok',
+        metaBody: {},
         log_tag: 'outbound_request'
       });
     });
@@ -506,6 +512,7 @@ describe('#defaultAdapter', () => {
               query: 'some=something',
               href: undefined,
               host: 'some-host',
+              metaBody: {},
               log_tag: 'outbound_request'
             });
             logger.info.args[1][0].should.containEql({
