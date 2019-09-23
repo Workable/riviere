@@ -1,7 +1,6 @@
 const defaultAdapter = require('../../../../lib/adapters/default');
 
 const sinon = require('sinon');
-const should = require('should');
 
 const sandbox = sinon.sandbox.create();
 
@@ -66,8 +65,8 @@ describe('#defaultAdapter', () => {
         query: null,
         requestId: uuid,
         headers: {},
-        log_tag: 'outbound_response',
-        'body.skills': 'node.js'
+        log_tag: 'outbound_response'
+        //'body.skills': 'node.js'
       });
     });
 

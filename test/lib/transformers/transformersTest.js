@@ -20,6 +20,7 @@ describe('mapOutReq', () => {
       query: 'query',
       href: undefined,
       requestId: undefined,
+      metaBody: {},
       log_tag: 'outbound_request'
     });
   });
@@ -49,6 +50,7 @@ describe('mapOutReq', () => {
       query: 'query',
       href: undefined,
       requestId: undefined,
+      metaBody: {},
       log_tag: 'outbound_request',
       'headers.x-transaction-id': 'transaction-id'
     });
