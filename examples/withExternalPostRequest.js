@@ -9,7 +9,8 @@ app.use(
     outbound: {
       https: true
     },
-    bodyKeys: ['title', 'userId']
+    bodyKeys: ['title', 'userId'],
+    styles: ['simple']
   })
 );
 
