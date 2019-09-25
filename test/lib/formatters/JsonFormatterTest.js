@@ -27,8 +27,9 @@ describe('Test Json Formatter', () => {
     const json = JSON.parse(payload);
 
     json.severity.should.equal('info');
-    json.message.should.equal('Test Prefix');
-    json.time.should.equal('1970-01-01T00:00:00.000Z');
+    json.operation.id.should.equal(obj.requestId);
+    json.requestId.should.equal(obj.requestId);
+    json.httpRequest.requestUrl.should.equal(obj.path);
   });
 
   it('formatObject should return severity error if obj is typeof Error', () => {
@@ -42,6 +43,5 @@ describe('Test Json Formatter', () => {
     const json = JSON.parse(payload);
 
     json.severity.should.equal('error');
-    json.message.should.equal('Test Prefix');
   });
 });
