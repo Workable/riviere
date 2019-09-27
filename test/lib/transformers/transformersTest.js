@@ -21,6 +21,7 @@ describe('mapOutReq', () => {
       href: undefined,
       requestId: undefined,
       metaBody: {},
+      contentLength: 0,
       log_tag: 'outbound_request'
     });
   });
@@ -51,6 +52,7 @@ describe('mapOutReq', () => {
       href: undefined,
       requestId: undefined,
       metaBody: {},
+      contentLength: 0,
       log_tag: 'outbound_request',
       'headers.x-transaction-id': 'transaction-id'
     });
@@ -85,6 +87,7 @@ describe('mapOutReq', () => {
       query: 'query',
       href: undefined,
       requestId: undefined,
+      contentLength: 0,
       log_tag: 'outbound_request',
       metaBody: {
         'body.foo': 'bar'
@@ -92,7 +95,7 @@ describe('mapOutReq', () => {
     });
   });
 
-  it('should able to post uri and npot add body parameters if it is not valid json', () => {
+  it('should able to post uri and not add body parameters if it is not valid json', () => {
     const inMsg = {
       method: 'POST',
       body: 'test not json',
@@ -122,6 +125,7 @@ describe('mapOutReq', () => {
       href: undefined,
       requestId: undefined,
       metaBody: {},
+      contentLength: 0,
       log_tag: 'outbound_request'
     });
   });
