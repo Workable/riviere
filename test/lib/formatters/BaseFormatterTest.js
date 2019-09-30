@@ -44,6 +44,20 @@ describe('Test Base Formatter', () => {
     href.should.equal(`${obj.protocol}://${obj.host}?${obj.query}`);
   });
 
+  it('should return specific color if valid status is passed', () => {
+    this.baseFormatter = new BaseFormatter(false, false, '');
+    const color = this.baseFormatter.getColorByStatus(100);
+
+    color.should.equal('green');
+  });
+
+  it('should return yellow if invalid status is passed', () => {
+    this.baseFormatter = new BaseFormatter(false, false, '');
+    const color = this.baseFormatter.getColorByStatus(800);
+
+    color.should.equal('yellow');
+  });
+
   describe('inbound_request', () => {
     before(() => {
       this.clock = sinon.useFakeTimers();
@@ -101,12 +115,13 @@ describe('Test Base Formatter', () => {
         log_tag: 'outbound_request',
         status: 200,
         duration: 7,
+        contentLength: 5,
         href: 'http://www.google.com'
       };
       this.baseFormatter = new BaseFormatter(false, false, 'outbound_request');
       const prefix = this.baseFormatter.getPrefix(obj);
 
-      prefix.should.equal('[testRequestId] => GET http://www.google.com');
+      prefix.should.equal(`[${obj.requestId}] => ${obj.method} http://www.google.com ${obj.contentLength}b`);
     });
 
     it('color: true, date: false', () => {
@@ -117,6 +132,7 @@ describe('Test Base Formatter', () => {
         log_tag: 'outbound_request',
         status: 200,
         duration: 7,
+        contentLength: 5,
         href: 'http://www.google.com'
       };
       this.baseFormatter = new BaseFormatter(true, false, 'outbound_request');
@@ -124,7 +140,7 @@ describe('Test Base Formatter', () => {
 
       const method = chalk.bold('GET');
       const requestInfo = chalk.grey('[testRequestId]');
-      prefix.should.equal(`${requestInfo} => ${method} http://www.google.com`);
+      prefix.should.equal(`${requestInfo} => ${method} http://www.google.com ${obj.contentLength}b`);
     });
 
     it('color: false, date: true', () => {
@@ -135,12 +151,15 @@ describe('Test Base Formatter', () => {
         log_tag: 'outbound_request',
         status: 200,
         duration: 7,
+        contentLength: 5,
         href: 'http://www.google.com'
       };
       this.baseFormatter = new BaseFormatter(false, true, 'outbound_request');
       const prefix = this.baseFormatter.getPrefix(obj);
 
-      prefix.should.equal(`[1970-01-01T00:00:00.000Z] [testRequestId] => GET http://www.google.com`);
+      prefix.should.equal(
+        `[1970-01-01T00:00:00.000Z] [testRequestId] => GET http://www.google.com ${obj.contentLength}b`
+      );
     });
   });
 
@@ -160,12 +179,13 @@ describe('Test Base Formatter', () => {
         path: 'test-path',
         log_tag: 'outbound_response',
         status: 200,
+        contentLength: 5,
         duration: 7
       };
       this.baseFormatter = new BaseFormatter(false, false, 'outbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
-      prefix.should.equal(`[testRequestId] --> GET test-path 200 7ms`);
+      prefix.should.equal(`[${obj.requestId}] --> ${obj.method} test-path 200 7ms ${obj.contentLength}b`);
     });
 
     it('color: true, date: false', () => {
@@ -175,6 +195,7 @@ describe('Test Base Formatter', () => {
         path: 'test-path',
         log_tag: 'outbound_response',
         status: 200,
+        contentLength: 5,
         duration: 7
       };
       this.baseFormatter = new BaseFormatter(true, false, 'outbound_response');
@@ -183,7 +204,7 @@ describe('Test Base Formatter', () => {
       const method = chalk.bold('GET');
       const requestInfo = chalk.grey('[testRequestId]');
       const status = chalk[this.baseFormatter.getColorByStatus(obj.status)](obj.status);
-      prefix.should.equal(`${requestInfo} --> ${method} test-path ${status} 7ms`);
+      prefix.should.equal(`${requestInfo} --> ${method} test-path ${status} 7ms ${obj.contentLength}b`);
     });
 
     it('color: true, date: false status >= 400', () => {
@@ -193,6 +214,7 @@ describe('Test Base Formatter', () => {
         path: 'test-path',
         log_tag: 'outbound_response',
         status: 400,
+        contentLength: 5,
         duration: 7
       };
       this.baseFormatter = new BaseFormatter(true, false, 'outbound_response');
@@ -201,7 +223,7 @@ describe('Test Base Formatter', () => {
       const method = chalk.bold('GET');
       const requestInfo = chalk.grey('[testRequestId]');
       const status = chalk[this.baseFormatter.getColorByStatus(obj.status)](obj.status);
-      prefix.should.equal(`${requestInfo} --> ${method} test-path ${status} 7ms`);
+      prefix.should.equal(`${requestInfo} --> ${method} test-path ${status} 7ms ${obj.contentLength}b`);
     });
 
     it('color: false, date: true', () => {
@@ -211,12 +233,15 @@ describe('Test Base Formatter', () => {
         path: 'test-path',
         log_tag: 'outbound_response',
         status: 200,
+        contentLength: 5,
         duration: 7
       };
       this.baseFormatter = new BaseFormatter(false, true, 'outbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
-      prefix.should.equal(`[1970-01-01T00:00:00.000Z] [testRequestId] --> GET test-path 200 7ms`);
+      prefix.should.equal(
+        `[1970-01-01T00:00:00.000Z] [${obj.requestId}] --> ${obj.method} test-path 200 7ms ${obj.contentLength}b`
+      );
     });
   });
 
@@ -237,12 +262,13 @@ describe('Test Base Formatter', () => {
         log_tag: 'inbound_response',
         status: 200,
         duration: 7,
+        contentLength: 5,
         href: 'http://www.google.com'
       };
       this.baseFormatter = new BaseFormatter(false, false, 'inbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
-      prefix.should.equal(`[testRequestId] <= GET http://www.google.com 200 7ms`);
+      prefix.should.equal(`[${obj.requestId}] <= ${obj.method} http://www.google.com 200 7ms ${obj.contentLength}b`);
     });
 
     it('color: true, date: false', () => {
@@ -253,6 +279,7 @@ describe('Test Base Formatter', () => {
         log_tag: 'inbound_response',
         status: 200,
         duration: 7,
+        contentLength: 5,
         href: 'http://www.google.com'
       };
       this.baseFormatter = new BaseFormatter(true, false, 'inbound_response');
@@ -261,7 +288,7 @@ describe('Test Base Formatter', () => {
       const method = chalk.bold('GET');
       const requestInfo = chalk.grey('[testRequestId]');
       const status = chalk[this.baseFormatter.getColorByStatus(obj.status)](obj.status);
-      prefix.should.equal(`${requestInfo} <= ${method} http://www.google.com ${status} 7ms`);
+      prefix.should.equal(`${requestInfo} <= ${method} http://www.google.com ${status} 7ms ${obj.contentLength}b`);
     });
 
     it('color: true, date: false status >= 400', () => {
@@ -272,6 +299,7 @@ describe('Test Base Formatter', () => {
         log_tag: 'inbound_response',
         status: 500,
         duration: 7,
+        contentLength: 5,
         href: 'http://www.google.com'
       };
       this.baseFormatter = new BaseFormatter(true, false, 'inbound_response');
@@ -280,7 +308,7 @@ describe('Test Base Formatter', () => {
       const method = chalk.bold('GET');
       const requestInfo = chalk.grey('[testRequestId]');
       const status = chalk[this.baseFormatter.getColorByStatus(obj.status)](obj.status);
-      prefix.should.equal(`${requestInfo} <= ${method} http://www.google.com ${status} 7ms`);
+      prefix.should.equal(`${requestInfo} <= ${method} http://www.google.com ${status} 7ms ${obj.contentLength}b`);
     });
 
     it('color: false, date: true', () => {
@@ -291,12 +319,17 @@ describe('Test Base Formatter', () => {
         log_tag: 'inbound_response',
         status: 200,
         duration: 7,
+        contentLength: 5,
         href: 'http://www.google.com'
       };
       this.baseFormatter = new BaseFormatter(false, true, 'inbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
-      prefix.should.equal(`[1970-01-01T00:00:00.000Z] [testRequestId] <= GET http://www.google.com 200 7ms`);
+      prefix.should.equal(
+        `[1970-01-01T00:00:00.000Z] [${obj.requestId}] <= ${obj.method} http://www.google.com 200 7ms ${
+          obj.contentLength
+        }b`
+      );
     });
   });
 

@@ -64,6 +64,7 @@ describe('#defaultAdapter', () => {
               href: undefined,
               host: 'some-host',
               metaBody: {},
+              contentLength: 0,
               log_tag: 'outbound_request'
             });
             logger.info.args[1][0].should.eql({
@@ -75,6 +76,8 @@ describe('#defaultAdapter', () => {
               status: undefined,
               protocol: 'http',
               requestId: 'ok',
+              contentLength: 0,
+              userAgent: '',
               log_tag: 'inbound_response'
             });
           }
@@ -190,6 +193,7 @@ describe('#defaultAdapter', () => {
         protocol: 'https',
         href: undefined,
         metaBody: {},
+        contentLength: 0,
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.eql({
@@ -201,6 +205,8 @@ describe('#defaultAdapter', () => {
         duration: 0,
         query: undefined,
         requestId: 'ok',
+        contentLength: 0,
+        userAgent: '',
         log_tag: 'inbound_response'
       });
     });
@@ -310,6 +316,7 @@ describe('#defaultAdapter', () => {
         href: undefined,
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         metaBody: {},
+        contentLength: 0,
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.eql({
@@ -321,6 +328,8 @@ describe('#defaultAdapter', () => {
         query: undefined,
         protocol: 'https',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+        contentLength: 0,
+        userAgent: '',
         log_tag: 'inbound_response'
       });
     });
@@ -371,6 +380,7 @@ describe('#defaultAdapter', () => {
         href: undefined,
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         metaBody: {},
+        contentLength: 0,
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.eql({
@@ -382,6 +392,8 @@ describe('#defaultAdapter', () => {
         query: undefined,
         protocol: 'https',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+        contentLength: 0,
+        userAgent: '',
         log_tag: 'inbound_response'
       });
     });
@@ -461,6 +473,7 @@ describe('#defaultAdapter', () => {
         query: 'some=something',
         requestId: 'ok',
         metaBody: {},
+        contentLength: 0,
         log_tag: 'outbound_request'
       });
     });

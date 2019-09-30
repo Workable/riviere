@@ -40,9 +40,8 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
 - Log all the HTTP(s) requests that your server sends to any external systems and the corresponding responses.
   (`outbound_request`/`inbound_response`)
 - Log any unhandled errors that are thrown inside a requests's context.
+- Format logs in json (fully compatible with Google Stackdriver)
 
-Upcoming Features:
-- Support any logger that is able to format json objects into log messages (like log4js, winston, pino, etc ...)
 ---
 
 <a name="Example_logs"></a>

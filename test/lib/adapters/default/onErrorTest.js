@@ -46,6 +46,7 @@ describe('#defaultAdapter', () => {
         path: '/test',
         query: null,
         requestId: uuid,
+        userAgent: '',
         log_tag: 'inbound_request'
       });
       defaultAdapter.onError.call(opts, { ctx, err });

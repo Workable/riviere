@@ -53,6 +53,7 @@ describe('#defaultAdapter', () => {
         query: null,
         requestId: uuid,
         log_tag: 'inbound_request',
+        userAgent: '',
         metaBody: { 'body.skills': 'node.js' }
       });
       opts.logger.info.args[1][0].should.eql({
@@ -65,6 +66,8 @@ describe('#defaultAdapter', () => {
         query: null,
         requestId: uuid,
         headers: {},
+        userAgent: '',
+        contentLength: 0,
         log_tag: 'outbound_response'
         //'body.skills': 'node.js'
       });
@@ -105,6 +108,7 @@ describe('#defaultAdapter', () => {
         path: '/test',
         query: null,
         requestId: uuid,
+        userAgent: '',
         log_tag: 'inbound_request'
       });
       opts.logger.info.args[1][0].should.eql({
@@ -117,6 +121,8 @@ describe('#defaultAdapter', () => {
         query: null,
         requestId: uuid,
         headers: {},
+        contentLength: 0,
+        userAgent: '',
         log_tag: 'outbound_response'
       });
     });
@@ -162,6 +168,8 @@ describe('#defaultAdapter', () => {
         query: null,
         requestId: uuid,
         headers: { 'headers.Location': '/test/foo' },
+        contentLength: 0,
+        userAgent: '',
         log_tag: 'outbound_response'
       });
     });

@@ -38,6 +38,7 @@ describe('#defaultAdapter', () => {
         path: '/test',
         query: null,
         requestId: uuid,
+        userAgent: '',
         log_tag: 'inbound_request'
       });
     });
@@ -68,6 +69,7 @@ describe('#defaultAdapter', () => {
         method: 'GET',
         path: '/test',
         query: null,
+        userAgent: '',
         log_tag: 'inbound_request'
       });
     });
@@ -106,6 +108,7 @@ describe('#defaultAdapter', () => {
         metaBody: {
           'body.skills': 'ok'
         },
+        userAgent: '',
         log_tag: 'inbound_request'
       });
     });
@@ -141,6 +144,7 @@ describe('#defaultAdapter', () => {
         path: '/test',
         query: null,
         requestId: uuid,
+        userAgent: '',
         log_tag: 'inbound_request'
       });
     });
@@ -176,6 +180,7 @@ describe('#defaultAdapter', () => {
         path: '/test',
         query: null,
         requestId: uuid,
+        userAgent: '',
         log_tag: 'inbound_request'
       });
     });
@@ -273,6 +278,7 @@ describe('#defaultAdapter', () => {
         query: null,
         requestId: uuid,
         metaHeaders: { 'headers.XX-something': true },
+        userAgent: '',
         log_tag: 'inbound_request'
       });
     });
@@ -336,6 +342,7 @@ describe('#defaultAdapter', () => {
         path: '/test',
         query: null,
         requestId: uuid,
+        userAgent: '',
         log_tag: 'inbound_request'
       });
     });
@@ -370,6 +377,7 @@ describe('#defaultAdapter', () => {
         path: 'http://test.lvh.me:8080/test',
         query: null,
         requestId: uuid,
+        userAgent: '',
         log_tag: 'inbound_request'
       });
     });
