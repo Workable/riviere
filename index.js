@@ -52,7 +52,31 @@ function buildRiviere(options = {}) {
       }
     } finally {
       if (inbound.enabled) {
-        utils.safeExec(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
+        const length = ctx.response.length;
+        const body = ctx.body;
+        let counter;
+        if (ctx.calculatedContentLength === 0 && body && body.readable) {
+          ctx.body = body.pipe((counter = Counter())).on('error', ctx.onerror);
+        }
+
+        // log when the response is finished or closed,
+        // whichever happens first.
+        const res = ctx.res;
+
+        const onfinish = responseFinished.bind(null, 'finish');
+        const onclose = responseFinished.bind(null, 'close');
+
+        res.once('finish', onfinish);
+        res.once('close', onclose);
+
+        function responseFinished(event) {
+          res.removeListener('finish', onfinish);
+          res.removeListener('close', onclose);
+          ctx.calculatedContentLength = counter ? counter.length : length;
+
+          //Fire event to write log
+          utils.safeExec(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
+        }
       }
     }
   };
