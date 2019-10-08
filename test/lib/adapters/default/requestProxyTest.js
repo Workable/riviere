@@ -64,6 +64,7 @@ describe('#defaultAdapter', () => {
               href: undefined,
               host: 'some-host',
               metaBody: {},
+              metaHeaders: {},
               contentLength: 0,
               log_tag: 'outbound_request'
             });
@@ -193,6 +194,7 @@ describe('#defaultAdapter', () => {
         protocol: 'https',
         href: undefined,
         metaBody: {},
+        metaHeaders: {},
         contentLength: 0,
         log_tag: 'outbound_request'
       });
@@ -246,7 +248,7 @@ describe('#defaultAdapter', () => {
       http.request = new Proxy(http.request, requestProxy);
       http.request(incomingMessage);
       logger.info.callCount.should.eql(2);
-      logger.info.args[0][0].should.have.property('headers.test');
+      logger.info.args[0][0].metaHeaders.should.have.property('headers.test');
       logger.info.args[0][0].should.containEql({
         method: 'GET',
         protocol: 'https',
@@ -316,6 +318,7 @@ describe('#defaultAdapter', () => {
         href: undefined,
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         metaBody: {},
+        metaHeaders: {},
         contentLength: 0,
         log_tag: 'outbound_request'
       });
@@ -380,6 +383,7 @@ describe('#defaultAdapter', () => {
         href: undefined,
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         metaBody: {},
+        metaHeaders: {},
         contentLength: 0,
         log_tag: 'outbound_request'
       });
@@ -473,6 +477,7 @@ describe('#defaultAdapter', () => {
         query: 'some=something',
         requestId: 'ok',
         metaBody: {},
+        metaHeaders: {},
         contentLength: 0,
         log_tag: 'outbound_request'
       });

@@ -43,10 +43,10 @@ describe('console', () => {
     data.params = {
       log_tag: 'unsupported_tag'
     };
-    c(data);
+    c(data.params);
 
     this.formatObject.calledOnce.should.equal(true);
-    this.formatObject.returned('').should.equal(true);
+    this.formatObject.returnValues.should.eql(['']);
   });
 
   it('should pass if data.log_data is not defined', () => {

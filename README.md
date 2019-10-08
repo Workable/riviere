@@ -108,12 +108,12 @@ app.use(riviere());
 app.use(async function(ctx) {
   await rp({
     uri: 'https://www.google.com',
-    // You can include the X-Riviere-Id header
+    // You can include the x-riviere-id header
     // to trace the request's context inside which
     // the external request is made
     // This is optional but recommended for better tracing:
     headers: {
-      'X-Riviere-Id': ctx.request.headers['x-riviere-id'] // notice that this is lowercase
+      'x-riviere-id': ctx.request.headers['x-riviere-id'] // notice that this is lowercase
     }
   });
   ctx.body = 'Hello World';
@@ -155,7 +155,8 @@ const configuration = {
     },
     bodyKeys: [],
     headersRegex: new RegExp('^X-.*', 'i'),
-    traceHeaderName: 'X-Riviere-Id'
+    traceHeaderName: 'X-Riviere-Id',
+    styles: ['simple'],
 }
 ```
 
@@ -196,7 +197,8 @@ const configuration = {
     outbound: {
         enabled: true
     },
-    traceHeaderName: 'X-Request-Id'
+    traceHeaderName: 'X-Request-Id',
+    styles: ['simple', 'json']
 };
 
 app.use(riviere(configuration));
@@ -258,12 +260,12 @@ Log colored log messages. Defaults to: `true`
 <a name="options_styles"></a>
 **styles**
 
-This option is used to format log messages with specific styles. Defaults to: `['extended']`
+This option is used to format log messages with specific styles. Defaults to: `['simple']`
 If multiple options are defined one line is exported for every different style. 
 Available options are: 
-- 'simple': Prints method, path, status code and timing
-- 'extended': Same as simple followed by ' | ' and a string containing key-value pairs of object properties (can be filtered through bodyKeys)
-- 'json': All object properties as a valid JSON object
+- 'simple': Prints method, path, status code and timing followed by ' | ' and a string containing key-value pairs of object properties
+- 'extended': Same as simple but also contains key-value pairs of all properties (fully compatible with LogEntries)
+- 'json': All object properties as a valid JSON object (fully compatible with Google Stackdriver)
 
 *Example*:
 ```js

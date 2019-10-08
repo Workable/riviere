@@ -25,7 +25,7 @@ app.use(async function(ctx) {
     },
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      'X-Riviere-Id': ctx.request.headers['x-riviere-id'] // Please note header keys are lowercased
+      'x-riviere-id': ctx.request.headers['x-riviere-id'] // Please note header keys are lowercased
     },
     json: true
   };
