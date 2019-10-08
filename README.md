@@ -155,7 +155,8 @@ const configuration = {
     },
     bodyKeys: [],
     headersRegex: new RegExp('^X-.*', 'i'),
-    traceHeaderName: 'X-Riviere-Id'
+    traceHeaderName: 'X-Riviere-Id',
+    styles: ['simple'],
 }
 ```
 
@@ -258,12 +259,12 @@ Log colored log messages. Defaults to: `true`
 <a name="options_styles"></a>
 **styles**
 
-This option is used to format log messages with specific styles. Defaults to: `['extended']`
+This option is used to format log messages with specific styles. Defaults to: `['simple']`
 If multiple options are defined one line is exported for every different style. 
 Available options are: 
-- 'simple': Prints method, path, status code and timing
-- 'extended': Same as simple followed by ' | ' and a string containing key-value pairs of object properties (can be filtered through bodyKeys)
-- 'json': All object properties as a valid JSON object
+- 'simple': Prints method, path, status code and timing followed by ' | ' and a string containing key-value pairs of object properties
+- 'extended': Same as simple but also contains key-value pairs of all properties (fully compatible with LogEntries)
+- 'json': All object properties as a valid JSON object (fully compatible with Google Stackdriver)
 
 *Example*:
 ```js
