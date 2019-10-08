@@ -108,12 +108,12 @@ app.use(riviere());
 app.use(async function(ctx) {
   await rp({
     uri: 'https://www.google.com',
-    // You can include the X-Riviere-Id header
+    // You can include the x-riviere-id header
     // to trace the request's context inside which
     // the external request is made
     // This is optional but recommended for better tracing:
     headers: {
-      'X-Riviere-Id': ctx.request.headers['x-riviere-id'] // notice that this is lowercase
+      'x-riviere-id': ctx.request.headers['x-riviere-id'] // notice that this is lowercase
     }
   });
   ctx.body = 'Hello World';
@@ -197,7 +197,8 @@ const configuration = {
     outbound: {
         enabled: true
     },
-    traceHeaderName: 'X-Request-Id'
+    traceHeaderName: 'X-Request-Id',
+    styles: ['simple', 'json']
 };
 
 app.use(riviere(configuration));
