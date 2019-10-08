@@ -21,6 +21,7 @@ describe('mapOutReq', () => {
       href: undefined,
       requestId: undefined,
       metaBody: {},
+      metaHeaders: {},
       contentLength: 0,
       log_tag: 'outbound_request'
     });
@@ -52,9 +53,11 @@ describe('mapOutReq', () => {
       href: undefined,
       requestId: undefined,
       metaBody: {},
+      metaHeaders: {
+        'headers.x-transaction-id': 'transaction-id'
+      },
       contentLength: 0,
-      log_tag: 'outbound_request',
-      'headers.x-transaction-id': 'transaction-id'
+      log_tag: 'outbound_request'
     });
   });
 
@@ -89,6 +92,7 @@ describe('mapOutReq', () => {
       requestId: undefined,
       contentLength: 0,
       log_tag: 'outbound_request',
+      metaHeaders: {},
       metaBody: {
         'body.foo': 'bar'
       }
@@ -125,6 +129,7 @@ describe('mapOutReq', () => {
       href: undefined,
       requestId: undefined,
       metaBody: {},
+      metaHeaders: {},
       contentLength: 0,
       log_tag: 'outbound_request'
     });
