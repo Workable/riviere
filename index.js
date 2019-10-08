@@ -1,4 +1,5 @@
 const defaultsDeep = require('lodash/defaultsDeep');
+const Counter = require('passthrough-counter');
 const Loggable = require('./lib/loggable');
 const defaultOptions = require('./lib/options');
 const utils = require('./lib/utils');
@@ -53,23 +54,19 @@ function buildRiviere(options = {}) {
     } finally {
       if (inbound.enabled) {
         const length = ctx.response.length;
-        const body = ctx.body;
         let counter;
-        if (length === 0 && body && body.readable) {
-          ctx.body = body.pipe((counter = Counter())).on('error', ctx.onerror);
+
+        if (!length && ctx.body && ctx.body.readable) {
+          ctx.body = ctx.body.pipe((counter = Counter())).on('error', ctx.onerror);
         }
 
         const res = ctx.res;
-
-        const onfinish = responseFinished.bind(null, 'finish');
-        const onclose = responseFinished.bind(null, 'close');
-
-        res.once('finish', onfinish);
-        res.once('close', onclose);
+        res.once('finish', responseFinished);
+        res.once('close', responseFinished);
 
         function responseFinished(event) {
-          res.removeListener('finish', onfinish);
-          res.removeListener('close', onclose);
+          res.removeListener('finish', responseFinished);
+          res.removeListener('close', responseFinished);
           ctx.state.calculatedContentLength = counter ? counter.length : length;
 
           //Fire event to write log
