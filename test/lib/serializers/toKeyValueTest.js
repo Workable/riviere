@@ -33,6 +33,36 @@ describe('#toKeyValueTest', () => {
       );
     });
 
+    it('should serialize an object ignoring empty objects', () => {
+      const input = {
+        testStr: 'testStrOk',
+        foo: {},
+        testArr: [
+          {
+            testItem1: 'testItem1Ok'
+          },
+          {
+            testItem2: 'testItem2Ok'
+          }
+        ],
+        testBool: true,
+        testBoolFalse: false,
+        testSymbol: Symbol('test'),
+        testNull: null,
+        testDate: now,
+        testNum: 1
+      };
+
+      const res = serialize(input);
+      res.should.equal(
+        'testStr="testStrOk", testArr=[testItem1="testItem1Ok", ' +
+          'testItem2="testItem2Ok"], testBool=true, testBoolFalse=false, ' +
+          'testSymbol="Symbol(test)", testDate=' +
+          now.toString() +
+          ', testNum=1'
+      );
+    });
+
     it('should serialize a string', () => {
       const input = 'ok';
       const res = serialize(input);
