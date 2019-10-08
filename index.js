@@ -1,4 +1,5 @@
 const defaultsDeep = require('lodash/defaultsDeep');
+const Counter = require('passthrough-counter');
 const Loggable = require('./lib/loggable');
 const defaultOptions = require('./lib/options');
 const utils = require('./lib/utils');
@@ -34,7 +35,7 @@ function buildRiviere(options = {}) {
   }
 
   return async function riviere(ctx, next) {
-    ctx.riviereStartedAt = new Date().getTime();
+    ctx.state.riviereStartedAt = new Date().getTime();
 
     if (inbound.enabled) {
       utils.safeExec(() => loggable.emit(EVENT.INBOUND_REQUEST, { ctx }), logger);
@@ -52,7 +53,25 @@ function buildRiviere(options = {}) {
       }
     } finally {
       if (inbound.enabled) {
-        utils.safeExec(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
+        const length = ctx.response.length;
+        let counter;
+
+        if (!length && ctx.body && ctx.body.readable) {
+          ctx.body = ctx.body.pipe((counter = Counter())).on('error', ctx.onerror);
+        }
+
+        const res = ctx.res;
+        res.once('finish', responseFinished);
+        res.once('close', responseFinished);
+
+        function responseFinished(event) {
+          res.removeListener('finish', responseFinished);
+          res.removeListener('close', responseFinished);
+          ctx.state.calculatedContentLength = counter ? counter.length : length;
+
+          //Fire event to write log
+          utils.safeExec(() => loggable.emit(EVENT.OUTBOUND_RESPONSE, { ctx }), logger);
+        }
       }
     }
   };

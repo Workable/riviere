@@ -16,6 +16,7 @@ describe('#defaultAdapter', () => {
 
     it('should call this.logger.info with body options if bodyKeys are set', () => {
       const ctx = {
+        state: {},
         request: {
           method: 'POST',
           headers: {
@@ -75,6 +76,7 @@ describe('#defaultAdapter', () => {
 
     it('should call this.logger.info', () => {
       const ctx = {
+        state: {},
         request: {
           method: 'post',
           headers: {
@@ -129,6 +131,7 @@ describe('#defaultAdapter', () => {
 
     it('should log headers', () => {
       const ctx = {
+        state: {},
         request: {
           method: 'post',
           headers: {
@@ -176,6 +179,7 @@ describe('#defaultAdapter', () => {
 
     it('should handle health endpoint', () => {
       const ctx = {
+        state: {},
         request: {
           method: 'GET',
           headers: {

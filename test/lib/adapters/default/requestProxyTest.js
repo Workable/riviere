@@ -4,9 +4,14 @@ const sinon = require('sinon');
 
 const sandbox = sinon.sandbox.create();
 
-sinon.useFakeTimers(new Date(2011, 9, 1).getTime());
-
 describe('#defaultAdapter', () => {
+  let clock;
+  before(() => {
+    clock = sinon.useFakeTimers(new Date(2011, 9, 1).getTime());
+  });
+  after(() => {
+    clock.restore();
+  });
   describe('.requestProxy()', () => {
     it('should pass', () => {
       defaultAdapter.requestProxy();
