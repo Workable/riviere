@@ -14,54 +14,61 @@ describe('Test Formatter Resolver', () => {
     const formatter = formatterResolver('simple');
     formatter.should.be.instanceOf(SimpleFormatter);
     formatter.color.should.equal(false);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(false);
     formatter.requestType.should.equal('');
   });
 
   it('should return a simple formatter object for type: simple, color: true, date: false', () => {
-    const formatter = formatterResolver('simple', true, false);
+    const formatter = formatterResolver('simple', true, false, false);
     formatter.should.be.instanceOf(SimpleFormatter);
     formatter.color.should.equal(true);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(false);
     formatter.requestType.should.equal('');
   });
 
   it('should return a simple formatter object for type: simple, color: true, date: false, requestTpe: test', () => {
-    const formatter = formatterResolver('simple', true, false, 'test');
+    const formatter = formatterResolver('simple', true, false, false, 'test');
     formatter.should.be.instanceOf(SimpleFormatter);
     formatter.color.should.equal(true);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(false);
     formatter.requestType.should.equal('test');
   });
 
   it('should return a simple formatter object for type: simple, color: false, date: true', () => {
-    const formatter = formatterResolver('simple', false, true);
+    const formatter = formatterResolver('simple', false, false, true);
     formatter.should.be.instanceOf(SimpleFormatter);
     formatter.color.should.equal(false);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(true);
     formatter.requestType.should.equal('');
   });
 
   it('should return a simple formatter object for type: simple, color: false, date: true, requestTpe: test', () => {
-    const formatter = formatterResolver('simple', false, true, 'test');
+    const formatter = formatterResolver('simple', false, false, true, 'test');
     formatter.should.be.instanceOf(SimpleFormatter);
     formatter.color.should.equal(false);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(true);
     formatter.requestType.should.equal('test');
   });
 
   it('should return a simple formatter object for type: simple, color: true, date: true', () => {
-    const formatter = formatterResolver('simple', true, true);
+    const formatter = formatterResolver('simple', true, false, true);
     formatter.should.be.instanceOf(SimpleFormatter);
     formatter.color.should.equal(true);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(true);
     formatter.requestType.should.equal('');
   });
 
   it('should return a simple formatter object for type: simple, color: true, date: true, requestTpe: test', () => {
-    const formatter = formatterResolver('simple', true, true, 'test');
+    const formatter = formatterResolver('simple', true, false, true, 'test');
     formatter.should.be.instanceOf(SimpleFormatter);
     formatter.color.should.equal(true);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(true);
     formatter.requestType.should.equal('test');
   });
@@ -70,13 +77,15 @@ describe('Test Formatter Resolver', () => {
     const formatter = formatterResolver('extended');
     formatter.should.be.instanceOf(ExtendedFormatter);
     formatter.color.should.equal(false);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(false);
   });
 
   it('should return an extended formatter object for type: extended', () => {
-    const formatter = formatterResolver('extended', true, false, 'test');
+    const formatter = formatterResolver('extended', true, false, false, 'test');
     formatter.should.be.instanceOf(ExtendedFormatter);
     formatter.color.should.equal(true);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(false);
   });
 
@@ -84,6 +93,7 @@ describe('Test Formatter Resolver', () => {
     const formatter = formatterResolver('json');
     formatter.should.be.instanceOf(JsonFormatter);
     formatter.color.should.equal(false);
+    formatter.appendTag.should.equal(false);
     formatter.appendDate.should.equal(false);
   });
 });

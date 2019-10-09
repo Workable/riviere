@@ -14,7 +14,7 @@ describe('Test Base Formatter', () => {
 
   it('should return empty string in getPrefix if request type does not exist', () => {
     const obj = { method: 'GET', requestId: 'testRequestId', path: 'test-path', log_tag: 'inbound_request' };
-    this.baseFormatter = new BaseFormatter(false, false, '');
+    this.baseFormatter = new BaseFormatter(false, false, false, '');
     const prefix = this.baseFormatter.getPrefix(obj);
 
     prefix.should.equal('');
@@ -22,7 +22,7 @@ describe('Test Base Formatter', () => {
 
   it('should return href if exists in passed object', () => {
     const obj = { href: 'test-href', path: 'test-path' };
-    this.baseFormatter = new BaseFormatter(false, false, '');
+    this.baseFormatter = new BaseFormatter(false, false, false, '');
     const href = this.baseFormatter.getHrefFromRes(obj);
 
     href.should.equal(obj.href);
@@ -30,7 +30,7 @@ describe('Test Base Formatter', () => {
 
   it('should return href computed by object passed', () => {
     const obj = { path: 'test-path', protocol: 'https', host: 'workable.com/' };
-    this.baseFormatter = new BaseFormatter(false, false, '');
+    this.baseFormatter = new BaseFormatter(false, false, false, '');
     const href = this.baseFormatter.getHrefFromRes(obj);
 
     href.should.equal(`${obj.protocol}://${obj.host}${obj.path}`);
@@ -38,21 +38,21 @@ describe('Test Base Formatter', () => {
 
   it('should return href computed by object passed with query', () => {
     const obj = { query: 'test-query', protocol: 'https', host: 'workable.com/' };
-    this.baseFormatter = new BaseFormatter(false, false, '');
+    this.baseFormatter = new BaseFormatter(false, false, false, '');
     const href = this.baseFormatter.getHrefFromRes(obj);
 
     href.should.equal(`${obj.protocol}://${obj.host}?${obj.query}`);
   });
 
   it('should return specific color if valid status is passed', () => {
-    this.baseFormatter = new BaseFormatter(false, false, '');
+    this.baseFormatter = new BaseFormatter(false, false, false, '');
     const color = this.baseFormatter.getColorByStatus(100);
 
     color.should.equal('green');
   });
 
   it('should return yellow if invalid status is passed', () => {
-    this.baseFormatter = new BaseFormatter(false, false, '');
+    this.baseFormatter = new BaseFormatter(false, false, false, '');
     const color = this.baseFormatter.getColorByStatus(800);
 
     color.should.equal('yellow');
@@ -73,7 +73,7 @@ describe('Test Base Formatter', () => {
 
     it('color: false, date: false, type: inbound_request', () => {
       const obj = { method: 'GET', requestId: 'testRequestId', path: 'test-path', log_tag: 'inbound_request' };
-      this.baseFormatter = new BaseFormatter(false, false, 'inbound_request');
+      this.baseFormatter = new BaseFormatter(false, false, false, 'inbound_request');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       prefix.should.equal(`[testRequestId] <-- GET test-path`);
@@ -81,7 +81,7 @@ describe('Test Base Formatter', () => {
 
     it('color: true, date: false', () => {
       const obj = { method: 'GET', requestId: 'testRequestId', path: 'test-path', log_tag: 'inbound_request' };
-      this.baseFormatter = new BaseFormatter(true, false, 'inbound_request');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'inbound_request');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       const method = chalk.bold('GET');
@@ -91,7 +91,7 @@ describe('Test Base Formatter', () => {
 
     it('color: false, date: true', () => {
       const obj = { method: 'GET', requestId: 'testRequestId', path: 'test-path', log_tag: 'inbound_request' };
-      this.baseFormatter = new BaseFormatter(false, true, 'inbound_request');
+      this.baseFormatter = new BaseFormatter(false, false, true, 'inbound_request');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       prefix.should.equal('[1970-01-01T00:00:00.000Z] [testRequestId] <-- GET test-path');
@@ -118,7 +118,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         href: 'http://www.google.com'
       };
-      this.baseFormatter = new BaseFormatter(false, false, 'outbound_request');
+      this.baseFormatter = new BaseFormatter(false, false, false, 'outbound_request');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       prefix.should.equal(`[${obj.requestId}] => ${obj.method} http://www.google.com ${obj.contentLength}b`);
@@ -135,7 +135,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         href: 'http://www.google.com'
       };
-      this.baseFormatter = new BaseFormatter(true, false, 'outbound_request');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'outbound_request');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       const method = chalk.bold('GET');
@@ -154,7 +154,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         href: 'http://www.google.com'
       };
-      this.baseFormatter = new BaseFormatter(false, true, 'outbound_request');
+      this.baseFormatter = new BaseFormatter(false, false, true, 'outbound_request');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       prefix.should.equal(
@@ -182,7 +182,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         duration: 7
       };
-      this.baseFormatter = new BaseFormatter(false, false, 'outbound_response');
+      this.baseFormatter = new BaseFormatter(false, false, false, 'outbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       prefix.should.equal(`[${obj.requestId}] --> ${obj.method} test-path 200 7ms ${obj.contentLength}b`);
@@ -198,7 +198,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         duration: 7
       };
-      this.baseFormatter = new BaseFormatter(true, false, 'outbound_response');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'outbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       const method = chalk.bold('GET');
@@ -217,7 +217,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         duration: 7
       };
-      this.baseFormatter = new BaseFormatter(true, false, 'outbound_response');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'outbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       const method = chalk.bold('GET');
@@ -236,7 +236,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         duration: 7
       };
-      this.baseFormatter = new BaseFormatter(false, true, 'outbound_response');
+      this.baseFormatter = new BaseFormatter(false, false, true, 'outbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       prefix.should.equal(
@@ -265,7 +265,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         href: 'http://www.google.com'
       };
-      this.baseFormatter = new BaseFormatter(false, false, 'inbound_response');
+      this.baseFormatter = new BaseFormatter(false, false, false, 'inbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       prefix.should.equal(`[${obj.requestId}] <= ${obj.method} http://www.google.com 200 7ms ${obj.contentLength}b`);
@@ -282,7 +282,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         href: 'http://www.google.com'
       };
-      this.baseFormatter = new BaseFormatter(true, false, 'inbound_response');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'inbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       const method = chalk.bold('GET');
@@ -302,7 +302,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         href: 'http://www.google.com'
       };
-      this.baseFormatter = new BaseFormatter(true, false, 'inbound_response');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'inbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       const method = chalk.bold('GET');
@@ -322,7 +322,7 @@ describe('Test Base Formatter', () => {
         contentLength: 5,
         href: 'http://www.google.com'
       };
-      this.baseFormatter = new BaseFormatter(false, true, 'inbound_response');
+      this.baseFormatter = new BaseFormatter(false, false, true, 'inbound_response');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       prefix.should.equal(
@@ -349,7 +349,7 @@ describe('Test Base Formatter', () => {
         path: 'test-path',
         log_tag: 'inbound_request_health'
       };
-      this.baseFormatter = new BaseFormatter(false, false, 'inbound_request_health');
+      this.baseFormatter = new BaseFormatter(false, false, false, 'inbound_request_health');
       const prefix = this.baseFormatter.getPrefix(obj);
 
       prefix.should.equal('<- GET test-path');
@@ -362,7 +362,7 @@ describe('Test Base Formatter', () => {
         path: 'test-path',
         log_tag: 'inbound_request_health'
       };
-      this.baseFormatter = new BaseFormatter(true, false, 'inbound_request_health');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'inbound_request_health');
       const prefix = this.baseFormatter.getPrefix(obj);
       prefix.should.equal(`${chalk[colors['inbound_request_health']]('<- GET test-path')}`);
     });
@@ -374,7 +374,7 @@ describe('Test Base Formatter', () => {
         path: 'test-path',
         log_tag: 'inbound_request_health'
       };
-      this.baseFormatter = new BaseFormatter(false, true, 'inbound_request_health');
+      this.baseFormatter = new BaseFormatter(false, false, true, 'inbound_request_health');
       const prefix = this.baseFormatter.getPrefix(obj);
       prefix.should.equal('[1970-01-01T00:00:00.000Z] <- GET test-path');
     });
@@ -398,7 +398,7 @@ describe('Test Base Formatter', () => {
         status: 200,
         duration: 7
       };
-      this.baseFormatter = new BaseFormatter(false, false, 'outbound_response_health');
+      this.baseFormatter = new BaseFormatter(false, false, false, 'outbound_response_health');
       const prefix = this.baseFormatter.getPrefix(obj);
       prefix.should.equal('-> GET test-path 200 7ms');
     });
@@ -412,7 +412,7 @@ describe('Test Base Formatter', () => {
         status: 200,
         duration: 7
       };
-      this.baseFormatter = new BaseFormatter(true, false, 'outbound_response_health');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'outbound_response_health');
       const prefix = this.baseFormatter.getPrefix(obj);
       prefix.should.equal(`${chalk[colors['outbound_response_health']]('-> GET test-path 200 7ms')}`);
     });
@@ -426,7 +426,7 @@ describe('Test Base Formatter', () => {
         status: 400,
         duration: 7
       };
-      this.baseFormatter = new BaseFormatter(true, false, 'outbound_response_health');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'outbound_response_health');
       const prefix = this.baseFormatter.getPrefix(obj);
       prefix.should.equal(`${chalk[colors.err]('-> GET test-path 400 7ms')}`);
     });
@@ -440,7 +440,7 @@ describe('Test Base Formatter', () => {
         status: 200,
         duration: 7
       };
-      this.baseFormatter = new BaseFormatter(false, true, 'outbound_response_health');
+      this.baseFormatter = new BaseFormatter(false, false, true, 'outbound_response_health');
       const prefix = this.baseFormatter.getPrefix(obj);
       prefix.should.equal('[1970-01-01T00:00:00.000Z] -> GET test-path 200 7ms');
     });
@@ -464,7 +464,7 @@ describe('Test Base Formatter', () => {
         path: '/',
         query: null
       };
-      this.baseFormatter = new BaseFormatter(false, false, 'unexpected_error');
+      this.baseFormatter = new BaseFormatter(false, false, false, 'unexpected_error');
       const prefix = this.baseFormatter.getPrefix(err);
       prefix.should.startWith('[c151fe5e-c2fa-4e0e-9e38-be14d97b8817] http GET / | Error: something bad happened');
     });
@@ -478,7 +478,7 @@ describe('Test Base Formatter', () => {
         path: '/',
         query: null
       };
-      this.baseFormatter = new BaseFormatter(true, false, 'unexpected_error');
+      this.baseFormatter = new BaseFormatter(true, false, false, 'unexpected_error');
       const prefix = this.baseFormatter.getPrefix(err);
       prefix.should.startWith(chalk[colors.err]('[c151fe5e-c2fa-4e0e-9e38-be14d97b8817] http GET / |'));
     });
@@ -492,7 +492,7 @@ describe('Test Base Formatter', () => {
         path: '/',
         query: null
       };
-      this.baseFormatter = new BaseFormatter(false, true, 'unexpected_error');
+      this.baseFormatter = new BaseFormatter(false, false, true, 'unexpected_error');
       const prefix = this.baseFormatter.getPrefix(err);
       prefix.should.startWith(
         '[1970-01-01T00:00:00.000Z] [c151fe5e-c2fa-4e0e-9e38-be14d97b8817] http GET / | Error: something bad happened'

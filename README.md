@@ -28,6 +28,7 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     7. [health](#options_health)
     8. [outbound.enabled](#options_outbound_enabled)
     9. [traceHeaderName](#options_trace_header_name)
+    10. [appendTag](#options_append_tag)
 8. [License](#License)
 
 ---
@@ -395,6 +396,18 @@ you most often want to set the `riviere` `traceHeaderName` to: `X-Request-Id`
 ```js
 {
     traceHeaderName: 'X-Request-Id'
+}
+```
+
+<a name="options_append_tag"></a>
+**appendTag**
+
+Append in each log message the formatter that produced it. Defaults to: `false`
+
+*Example*:
+```js
+{
+    appendTag: true
 }
 ```
 
