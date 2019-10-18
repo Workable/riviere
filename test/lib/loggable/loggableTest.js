@@ -3,7 +3,7 @@ const should = require('should');
 
 const Loggable = require('./../../../lib/loggable');
 
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 const adapter = {
   onInboundRequest: sandbox.spy(),

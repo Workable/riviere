@@ -4,7 +4,7 @@ const should = require('should');
 const defaultAdapter = require('../../../../lib/adapters/default');
 const getOpts = require('../../../fixtures/getOpts');
 
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 const uuid = '9b4f5d20-7a31-468a-b0f8-298013cbe940';
 

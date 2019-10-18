@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const consoleAppender = require('../../../lib/appenders/console');
 const SimpleFormatter = require('../../../lib/formatters/SimpleFormatter');
 
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 describe('console', () => {
   beforeEach(() => {

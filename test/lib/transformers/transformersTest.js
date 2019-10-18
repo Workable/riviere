@@ -1,4 +1,5 @@
 const { mapOutReq } = require('../../../lib/transformers/transformers');
+const url = require('url');
 
 describe('mapOutReq', () => {
   it('should able to get uri', () => {
@@ -18,7 +19,7 @@ describe('mapOutReq', () => {
       port: undefined,
       path: 'path',
       query: 'query',
-      href: undefined,
+      href: url.format(inMsg.uri),
       requestId: undefined,
       metaBody: {},
       metaHeaders: {},
@@ -50,7 +51,7 @@ describe('mapOutReq', () => {
       port: undefined,
       path: 'path',
       query: 'query',
-      href: undefined,
+      href: url.format(inMsg.uri),
       requestId: undefined,
       metaBody: {},
       metaHeaders: {
@@ -88,7 +89,7 @@ describe('mapOutReq', () => {
       port: undefined,
       path: 'path',
       query: 'query',
-      href: undefined,
+      href: url.format(inMsg.uri),
       requestId: undefined,
       contentLength: 0,
       log_tag: 'outbound_request',
@@ -126,7 +127,7 @@ describe('mapOutReq', () => {
       port: undefined,
       path: 'path',
       query: 'query',
-      href: undefined,
+      href: url.format(inMsg.uri),
       requestId: undefined,
       metaBody: {},
       metaHeaders: {},
