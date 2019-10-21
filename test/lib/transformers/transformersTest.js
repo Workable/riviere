@@ -1,5 +1,4 @@
 const { mapOutReq } = require('../../../lib/transformers/transformers');
-const url = require('url');
 
 describe('mapOutReq', () => {
   it('should able to get uri', () => {
@@ -7,7 +6,7 @@ describe('mapOutReq', () => {
       uri: {
         protocol: 'http:',
         hostname: 'hostname',
-        path: 'path',
+        pathname: 'path',
         query: 'query'
       }
     };
@@ -19,7 +18,7 @@ describe('mapOutReq', () => {
       port: undefined,
       path: 'path',
       query: 'query',
-      href: url.format(inMsg.uri),
+      href: 'http://hostname/path',
       requestId: undefined,
       metaBody: {},
       metaHeaders: {},
@@ -33,7 +32,7 @@ describe('mapOutReq', () => {
       uri: {
         protocol: 'http:',
         hostname: 'hostname',
-        path: 'path',
+        pathname: 'path',
         query: 'query'
       },
       headers: {
@@ -51,7 +50,7 @@ describe('mapOutReq', () => {
       port: undefined,
       path: 'path',
       query: 'query',
-      href: url.format(inMsg.uri),
+      href: 'http://hostname/path',
       requestId: undefined,
       metaBody: {},
       metaHeaders: {
@@ -72,7 +71,7 @@ describe('mapOutReq', () => {
       uri: {
         protocol: 'http:',
         hostname: 'hostname',
-        path: 'path',
+        pathname: 'path',
         query: 'query'
       }
     };
@@ -89,7 +88,7 @@ describe('mapOutReq', () => {
       port: undefined,
       path: 'path',
       query: 'query',
-      href: url.format(inMsg.uri),
+      href: 'http://hostname/path',
       requestId: undefined,
       contentLength: 0,
       log_tag: 'outbound_request',
@@ -110,7 +109,7 @@ describe('mapOutReq', () => {
       uri: {
         protocol: 'http:',
         hostname: 'hostname',
-        path: 'path',
+        pathname: 'path',
         query: 'query'
       }
     };
@@ -127,7 +126,7 @@ describe('mapOutReq', () => {
       port: undefined,
       path: 'path',
       query: 'query',
-      href: url.format(inMsg.uri),
+      href: 'http://hostname/path',
       requestId: undefined,
       metaBody: {},
       metaHeaders: {},

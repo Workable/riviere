@@ -29,7 +29,7 @@ describe('#defaultAdapter', () => {
         traceHeaderName,
         level: 'info'
       });
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
         headers: {
@@ -37,6 +37,7 @@ describe('#defaultAdapter', () => {
         },
         protocol: 'http:',
         path: '/some',
+        pathname: '/some',
         query: 'some=something',
         hostname: 'some-host'
       };
@@ -64,7 +65,7 @@ describe('#defaultAdapter', () => {
               path: '/some',
               query: 'some=something',
               requestId: 'ok',
-              href: url.format(incomingMessage),
+              href: 'http://some-host:8080/some',
               host: 'some-host',
               metaBody: {},
               metaHeaders: {},
@@ -77,7 +78,7 @@ describe('#defaultAdapter', () => {
               host: 'some-host',
               duration: 0,
               query: 'some=something',
-              href: url.format(incomingMessage),
+              href: 'http://some-host:8080/some',
               status: undefined,
               protocol: 'http',
               requestId: 'ok',
@@ -89,7 +90,7 @@ describe('#defaultAdapter', () => {
         };
       };
       http.request = new Proxy(httpRequest, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(2);
     });
 
@@ -105,13 +106,14 @@ describe('#defaultAdapter', () => {
         traceHeaderName,
         level: 'info'
       });
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
         headers: {
           test: 'ok'
         },
         protocol: undefined,
+        path: '/some',
         pathname: '/some',
         query: 'some=something',
         host: 'some-host'
@@ -133,6 +135,7 @@ describe('#defaultAdapter', () => {
           port: '8080',
           headers: { test: 'ok' },
           protocol: undefined,
+          path: '/some',
           pathname: '/some',
           query: 'some=something',
           host: 'some-host'
@@ -144,7 +147,7 @@ describe('#defaultAdapter', () => {
         };
       };
       http.request = new Proxy(httpRequest, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(0);
     });
 
@@ -168,6 +171,7 @@ describe('#defaultAdapter', () => {
         },
         protocol: 'https:',
         path: '/some?somequery=query',
+        pathname: '/some?somequery=query',
         hostname: 'test-host'
       };
       const http = {
@@ -192,7 +196,7 @@ describe('#defaultAdapter', () => {
         requestId: 'ok',
         host: 'test-host',
         protocol: 'https',
-        href: url.format(options),
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         metaBody: {},
         metaHeaders: {},
         contentLength: 0,
@@ -204,7 +208,7 @@ describe('#defaultAdapter', () => {
         status: 200,
         host: 'test-host',
         protocol: 'https',
-        href: url.format(options),
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         duration: 0,
         query: undefined,
         requestId: 'ok',
@@ -233,6 +237,7 @@ describe('#defaultAdapter', () => {
         headers: {},
         protocol: 'https:',
         path: '/some?somequery=query',
+        pathname: '/some?somequery=query',
         hostname: 'test-host'
       };
       const http = {
@@ -257,7 +262,7 @@ describe('#defaultAdapter', () => {
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
-        href: url.format(options),
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         metaBody: {},
         log_tag: 'outbound_request'
       });
@@ -293,6 +298,7 @@ describe('#defaultAdapter', () => {
         },
         protocol: 'https:',
         path: '/some?somequery=query',
+        pathname: '/some?somequery=query',
         hostname: 'test-host'
       };
       const http = {
@@ -316,7 +322,7 @@ describe('#defaultAdapter', () => {
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
-        href: url.format(options),
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         metaBody: {},
         metaHeaders: {},
@@ -330,7 +336,7 @@ describe('#defaultAdapter', () => {
         status: 200,
         duration: 0,
         query: undefined,
-        href: url.format(options),
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         protocol: 'https',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         contentLength: 0,
@@ -359,6 +365,7 @@ describe('#defaultAdapter', () => {
         },
         protocol: 'https:',
         path: '/some?somequery=query',
+        pathname: '/some?somequery=query',
         host: 'test-host'
       };
       const http = {
@@ -382,7 +389,7 @@ describe('#defaultAdapter', () => {
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
-        href: url.format(options),
+        href: 'https://test-host/some%3Fsomequery=query',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         metaBody: {},
         metaHeaders: {},
@@ -394,7 +401,7 @@ describe('#defaultAdapter', () => {
         path: '/some?somequery=query',
         status: 200,
         duration: 0,
-        href: url.format(options),
+        href: 'https://test-host/some%3Fsomequery=query',
         host: 'test-host',
         query: undefined,
         protocol: 'https',
@@ -417,7 +424,7 @@ describe('#defaultAdapter', () => {
         serialize,
         traceHeaderName
       });
-      const incomingMessage = null;
+      const options = null;
       const http = {
         request: () => {
           return {
@@ -428,7 +435,7 @@ describe('#defaultAdapter', () => {
         }
       };
       http.request = new Proxy(http.request, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(0);
     });
 
@@ -453,6 +460,7 @@ describe('#defaultAdapter', () => {
         },
         protocol: 'http:',
         path: '/some',
+        pathname: '/some',
         query: 'some=something',
         hostname: 'some-host'
       };
@@ -472,7 +480,7 @@ describe('#defaultAdapter', () => {
         method: 'GET',
         protocol: 'http',
         host: 'some-host',
-        href: url.format(options),
+        href: 'http://some-host:8080/some',
         port: '8080',
         path: '/some',
         query: 'some=something',
@@ -512,6 +520,7 @@ describe('#defaultAdapter', () => {
         port: '8080',
         protocol: 'http:',
         path: '/some',
+        pathname: '/some',
         query: 'some=something',
         host: 'some-host'
       };
@@ -527,7 +536,7 @@ describe('#defaultAdapter', () => {
               port: '8080',
               path: '/some',
               query: 'some=something',
-              href: url.format(options),
+              href: 'http://some-host/some',
               host: 'some-host',
               metaBody: {},
               log_tag: 'outbound_request'
