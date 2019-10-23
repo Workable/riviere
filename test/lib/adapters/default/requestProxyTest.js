@@ -1,8 +1,8 @@
 const defaultAdapter = require('../../../../lib/adapters/default');
-
+const url = require('url');
 const sinon = require('sinon');
 
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 describe('#defaultAdapter', () => {
   let clock;
@@ -29,18 +29,17 @@ describe('#defaultAdapter', () => {
         traceHeaderName,
         level: 'info'
       });
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
         headers: {
           test: 'ok'
         },
-        url: {
-          protocol: 'http:',
-          pathname: '/some',
-          query: 'some=something',
-          host: 'some-host'
-        }
+        protocol: 'http:',
+        path: '/some',
+        pathname: '/some',
+        query: 'some=something',
+        hostname: 'some-host'
       };
       const http = {
         request: () => {
@@ -66,7 +65,7 @@ describe('#defaultAdapter', () => {
               path: '/some',
               query: 'some=something',
               requestId: 'ok',
-              href: undefined,
+              href: 'http://some-host:8080/some',
               host: 'some-host',
               metaBody: {},
               metaHeaders: {},
@@ -79,6 +78,7 @@ describe('#defaultAdapter', () => {
               host: 'some-host',
               duration: 0,
               query: 'some=something',
+              href: 'http://some-host:8080/some',
               status: undefined,
               protocol: 'http',
               requestId: 'ok',
@@ -90,7 +90,7 @@ describe('#defaultAdapter', () => {
         };
       };
       http.request = new Proxy(httpRequest, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(2);
     });
 
@@ -106,18 +106,17 @@ describe('#defaultAdapter', () => {
         traceHeaderName,
         level: 'info'
       });
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
         headers: {
           test: 'ok'
         },
-        url: {
-          protocol: undefined,
-          pathname: '/some',
-          query: 'some=something',
-          host: 'some-host'
-        }
+        protocol: undefined,
+        path: '/some',
+        pathname: '/some',
+        query: 'some=something',
+        host: 'some-host'
       };
       const http = {
         request: function() {
@@ -135,12 +134,11 @@ describe('#defaultAdapter', () => {
           method: 'GET',
           port: '8080',
           headers: { test: 'ok' },
-          url: {
-            protocol: undefined,
-            pathname: '/some',
-            query: 'some=something',
-            host: 'some-host'
-          }
+          protocol: undefined,
+          path: '/some',
+          pathname: '/some',
+          query: 'some=something',
+          host: 'some-host'
         });
         return {
           on: () => {
@@ -149,7 +147,7 @@ describe('#defaultAdapter', () => {
         };
       };
       http.request = new Proxy(httpRequest, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(0);
     });
 
@@ -165,7 +163,7 @@ describe('#defaultAdapter', () => {
         traceHeaderName,
         level: 'info'
       });
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
         headers: {
@@ -173,7 +171,8 @@ describe('#defaultAdapter', () => {
         },
         protocol: 'https:',
         path: '/some?somequery=query',
-        host: 'test-host'
+        pathname: '/some?somequery=query',
+        hostname: 'test-host'
       };
       const http = {
         request: () => {
@@ -187,7 +186,7 @@ describe('#defaultAdapter', () => {
         }
       };
       http.request = new Proxy(http.request, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(2);
       logger.info.args[0][0].should.eql({
         method: 'GET',
@@ -195,9 +194,9 @@ describe('#defaultAdapter', () => {
         path: '/some?somequery=query',
         query: undefined,
         requestId: 'ok',
-        host: undefined,
+        host: 'test-host',
         protocol: 'https',
-        href: undefined,
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         metaBody: {},
         metaHeaders: {},
         contentLength: 0,
@@ -207,8 +206,9 @@ describe('#defaultAdapter', () => {
         method: 'GET',
         path: '/some?somequery=query',
         status: 200,
-        host: undefined,
+        host: 'test-host',
         protocol: 'https',
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         duration: 0,
         query: undefined,
         requestId: 'ok',
@@ -231,13 +231,14 @@ describe('#defaultAdapter', () => {
         level: 'info',
         opts: { headersRegex: new RegExp('test', 'i') }
       });
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
         headers: {},
         protocol: 'https:',
         path: '/some?somequery=query',
-        host: 'test-host'
+        pathname: '/some?somequery=query',
+        hostname: 'test-host'
       };
       const http = {
         request: () => {
@@ -251,23 +252,23 @@ describe('#defaultAdapter', () => {
         }
       };
       http.request = new Proxy(http.request, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(2);
       logger.info.args[0][0].metaHeaders.should.have.property('headers.test');
       logger.info.args[0][0].should.containEql({
         method: 'GET',
         protocol: 'https',
-        host: undefined,
+        host: 'test-host',
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
-        href: undefined,
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         metaBody: {},
         log_tag: 'outbound_request'
       });
       logger.info.args[1][0].should.containEql({
         method: 'GET',
-        host: undefined,
+        host: 'test-host',
         path: '/some?somequery=query',
         status: 200,
         duration: 0,
@@ -289,7 +290,7 @@ describe('#defaultAdapter', () => {
         traceHeaderName,
         level: 'info'
       });
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
         headers: {
@@ -297,7 +298,8 @@ describe('#defaultAdapter', () => {
         },
         protocol: 'https:',
         path: '/some?somequery=query',
-        host: 'test-host'
+        pathname: '/some?somequery=query',
+        hostname: 'test-host'
       };
       const http = {
         request: () => {
@@ -311,16 +313,16 @@ describe('#defaultAdapter', () => {
         }
       };
       http.request = new Proxy(http.request, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(2);
       logger.info.args[0][0].should.eql({
         method: 'GET',
         protocol: 'https',
-        host: undefined,
+        host: 'test-host',
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
-        href: undefined,
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         metaBody: {},
         metaHeaders: {},
@@ -329,11 +331,12 @@ describe('#defaultAdapter', () => {
       });
       logger.info.args[1][0].should.eql({
         method: 'GET',
-        host: undefined,
+        host: 'test-host',
         path: '/some?somequery=query',
         status: 200,
         duration: 0,
         query: undefined,
+        href: 'https://test-host:8080/some%3Fsomequery=query',
         protocol: 'https',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         contentLength: 0,
@@ -354,7 +357,7 @@ describe('#defaultAdapter', () => {
         serialize,
         level: 'info'
       });
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
         headers: {
@@ -362,6 +365,7 @@ describe('#defaultAdapter', () => {
         },
         protocol: 'https:',
         path: '/some?somequery=query',
+        pathname: '/some?somequery=query',
         host: 'test-host'
       };
       const http = {
@@ -376,16 +380,16 @@ describe('#defaultAdapter', () => {
         }
       };
       http.request = new Proxy(http.request, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(2);
       logger.info.args[0][0].should.eql({
         method: 'GET',
         protocol: 'https',
-        host: undefined,
+        host: 'test-host',
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
-        href: undefined,
+        href: 'https://test-host/some%3Fsomequery=query',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         metaBody: {},
         metaHeaders: {},
@@ -397,7 +401,8 @@ describe('#defaultAdapter', () => {
         path: '/some?somequery=query',
         status: 200,
         duration: 0,
-        host: undefined,
+        href: 'https://test-host/some%3Fsomequery=query',
+        host: 'test-host',
         query: undefined,
         protocol: 'https',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
@@ -419,7 +424,7 @@ describe('#defaultAdapter', () => {
         serialize,
         traceHeaderName
       });
-      const incomingMessage = null;
+      const options = null;
       const http = {
         request: () => {
           return {
@@ -430,7 +435,7 @@ describe('#defaultAdapter', () => {
         }
       };
       http.request = new Proxy(http.request, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(0);
     });
 
@@ -447,18 +452,17 @@ describe('#defaultAdapter', () => {
         traceHeaderName,
         level: 'info'
       });
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
         headers: {
           test: 'ok'
         },
-        url: {
-          protocol: 'http:',
-          pathname: '/some',
-          query: 'some=something',
-          host: 'some-host'
-        }
+        protocol: 'http:',
+        path: '/some',
+        pathname: '/some',
+        query: 'some=something',
+        hostname: 'some-host'
       };
       const http = {
         request: () => {
@@ -470,13 +474,13 @@ describe('#defaultAdapter', () => {
         }
       };
       http.request = new Proxy(http.request, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
       logger.info.callCount.should.eql(1);
       logger.info.args[0][0].should.eql({
         method: 'GET',
         protocol: 'http',
         host: 'some-host',
-        href: undefined,
+        href: 'http://some-host:8080/some',
         port: '8080',
         path: '/some',
         query: 'some=something',
@@ -511,15 +515,14 @@ describe('#defaultAdapter', () => {
           };
         }
       };
-      const incomingMessage = {
+      const options = {
         method: 'GET',
         port: '8080',
-        url: {
-          protocol: 'http:',
-          pathname: '/some',
-          query: 'some=something',
-          host: 'some-host'
-        }
+        protocol: 'http:',
+        path: '/some',
+        pathname: '/some',
+        query: 'some=something',
+        host: 'some-host'
       };
       const httpRequest = () => {
         return {
@@ -533,7 +536,7 @@ describe('#defaultAdapter', () => {
               port: '8080',
               path: '/some',
               query: 'some=something',
-              href: undefined,
+              href: 'http://some-host/some',
               host: 'some-host',
               metaBody: {},
               log_tag: 'outbound_request'
@@ -552,7 +555,7 @@ describe('#defaultAdapter', () => {
         };
       };
       http.request = new Proxy(httpRequest, requestProxy);
-      http.request(incomingMessage);
+      http.request(options);
     });
   });
 });

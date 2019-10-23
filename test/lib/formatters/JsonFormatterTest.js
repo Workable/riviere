@@ -1,6 +1,6 @@
 const JsonFormatter = require('../../../lib/formatters/JsonFormatter');
 const sinon = require('sinon');
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 describe('Test Json Formatter', () => {
   before(() => {
@@ -36,7 +36,7 @@ describe('Test Json Formatter', () => {
     json['logging.googleapis.com/operation'].id.should.equal(obj.requestId);
     json.requestId.should.equal(obj.requestId);
     json.httpRequest.requestUrl.should.equal(obj.path);
-    json.httpRequest.latency.should.equal('50s');
+    json.httpRequest.latency.should.equal('50ms');
   });
 
   it('formatObject should return 0 duration if not defined', () => {
@@ -49,7 +49,7 @@ describe('Test Json Formatter', () => {
     json['logging.googleapis.com/operation'].id.should.equal(obj.requestId);
     json.requestId.should.equal(obj.requestId);
     json.httpRequest.requestUrl.should.equal(obj.path);
-    json.httpRequest.latency.should.equal('0s');
+    json.httpRequest.latency.should.equal('0ms');
   });
 
   it('formatObject should return severity error if obj is typeof Error', () => {

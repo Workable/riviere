@@ -1,6 +1,6 @@
 const SimpleFormatter = require('../../../lib/formatters/SimpleFormatter');
 const sinon = require('sinon');
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 describe('Test Simple Formatter', () => {
   beforeEach(() => {

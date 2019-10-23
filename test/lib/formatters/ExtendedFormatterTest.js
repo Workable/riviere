@@ -1,6 +1,6 @@
 const ExtendedFormatter = require('../../../lib/formatters/ExtendedFormatter');
 const sinon = require('sinon');
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 describe('Test Extended Formatter', () => {
   beforeEach(() => {

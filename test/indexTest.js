@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const { Readable, Writable } = require('stream');
 
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 const riviere = require('./../index');
 const adapter = require('./../lib/adapters/default');

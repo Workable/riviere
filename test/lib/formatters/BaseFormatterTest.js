@@ -20,30 +20,6 @@ describe('Test Base Formatter', () => {
     prefix.should.equal('');
   });
 
-  it('should return href if exists in passed object', () => {
-    const obj = { href: 'test-href', path: 'test-path' };
-    this.baseFormatter = new BaseFormatter(false, false, '');
-    const href = this.baseFormatter.getHrefFromRes(obj);
-
-    href.should.equal(obj.href);
-  });
-
-  it('should return href computed by object passed', () => {
-    const obj = { path: 'test-path', protocol: 'https', host: 'workable.com/' };
-    this.baseFormatter = new BaseFormatter(false, false, '');
-    const href = this.baseFormatter.getHrefFromRes(obj);
-
-    href.should.equal(`${obj.protocol}://${obj.host}${obj.path}`);
-  });
-
-  it('should return href computed by object passed with query', () => {
-    const obj = { query: 'test-query', protocol: 'https', host: 'workable.com/' };
-    this.baseFormatter = new BaseFormatter(false, false, '');
-    const href = this.baseFormatter.getHrefFromRes(obj);
-
-    href.should.equal(`${obj.protocol}://${obj.host}?${obj.query}`);
-  });
-
   it('should return specific color if valid status is passed', () => {
     this.baseFormatter = new BaseFormatter(false, false, '');
     const color = this.baseFormatter.getColorByStatus(100);

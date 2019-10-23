@@ -2,7 +2,7 @@ const defaultAdapter = require('../../../../lib/adapters/default');
 
 const sinon = require('sinon');
 
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 const getOpts = require('../../../fixtures/getOpts');
 
