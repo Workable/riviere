@@ -36,7 +36,7 @@ describe('Test Json Formatter', () => {
     json['logging.googleapis.com/operation'].id.should.equal(obj.requestId);
     json.requestId.should.equal(obj.requestId);
     json.httpRequest.requestUrl.should.equal(obj.path);
-    json.httpRequest.latency.should.equal('50ms');
+    json.httpRequest.latency.should.equal('0.050000s');
   });
 
   it('formatObject should return 0 duration if not defined', () => {
@@ -49,7 +49,7 @@ describe('Test Json Formatter', () => {
     json['logging.googleapis.com/operation'].id.should.equal(obj.requestId);
     json.requestId.should.equal(obj.requestId);
     json.httpRequest.requestUrl.should.equal(obj.path);
-    json.httpRequest.latency.should.equal('0ms');
+    json.httpRequest.latency.should.equal('0s');
   });
 
   it('formatObject should return severity error if obj is typeof Error', () => {
