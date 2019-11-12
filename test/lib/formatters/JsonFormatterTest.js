@@ -40,7 +40,12 @@ describe('Test Json Formatter', () => {
   });
 
   it('formatObject should return 0 duration if not defined', () => {
-    const obj = { method: 'GET', requestId: 'testRequestId', path: 'test-path', log_tag: 'inbound_request' };
+    const obj = {
+      method: 'GET',
+      requestId: 'testRequestId',
+      path: 'test-path',
+      log_tag: 'inbound_request'
+    };
     const payload = this.jsonFormatter.formatObject(obj);
 
     const json = JSON.parse(payload);
@@ -50,6 +55,26 @@ describe('Test Json Formatter', () => {
     json.requestId.should.equal(obj.requestId);
     json.httpRequest.requestUrl.should.equal(obj.path);
     json.httpRequest.latency.should.equal('0s');
+  });
+
+  it('formatObject should should return as top level info metaBodyand and metaHeaders if defined', () => {
+    const obj = {
+      method: 'GET',
+      requestId: 'testRequestId',
+      path: 'test-path',
+      log_tag: 'inbound_request',
+      metaBody: { 'body.attr_id': '1' },
+      metaHeaders: { 'headers.x-custom-request': 'aloha' }
+    };
+    const payload = this.jsonFormatter.formatObject(obj);
+
+    const json = JSON.parse(payload);
+    json.severity.should.equal('info');
+    json['logging.googleapis.com/operation'].id.should.equal(obj.requestId);
+    json.requestId.should.equal(obj.requestId);
+    json.httpRequest.requestUrl.should.equal(obj.path);
+    json['body.attr_id'].should.equal('1');
+    json['headers.x-custom-request'].should.equal('aloha');
   });
 
   it('formatObject should return severity error if obj is typeof Error', () => {
