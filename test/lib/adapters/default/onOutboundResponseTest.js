@@ -20,7 +20,8 @@ describe('#defaultAdapter', () => {
         request: {
           method: 'POST',
           headers: {
-            test_user_id_header: 'test-user-id'
+            test_user_id_header: 'test-user-id',
+            Location: '/test/foo'
           },
           body: {
             skills: 'node.js'
@@ -55,7 +56,10 @@ describe('#defaultAdapter', () => {
         requestId: uuid,
         log_tag: 'inbound_request',
         userAgent: '',
-        metaBody: { 'body.skills': 'node.js' }
+        metaBody: { 'body.skills': 'node.js' },
+        metaHeaders: {
+          'headers.Location': '/test/foo'
+        }
       });
       opts.logger.info.args[1][0].should.eql({
         status: undefined,
@@ -67,6 +71,12 @@ describe('#defaultAdapter', () => {
         query: null,
         requestId: uuid,
         headers: {},
+        metaBody: {
+          'request.body.skills': 'node.js'
+        },
+        metaHeaders: {
+          'request.headers.Location': '/test/foo'
+        },
         userAgent: '',
         contentLength: 0,
         log_tag: 'outbound_response'
