@@ -12,6 +12,10 @@ export function riviere(options?: {
     error: any
   },
   inbound?: {
+    enabled: boolean,
+    request?: {
+      enabled: boolean
+    },
     level: string
   },
   outbound?: {
