@@ -37,7 +37,7 @@ function buildRiviere(options = {}) {
   return async function riviere(ctx, next) {
     ctx.state.riviereStartedAt = new Date().getTime();
 
-    if (inbound.enabled) {
+    if (inbound.enabled && inbound.request.enabled) {
       utils.safeExec(() => loggable.emit(EVENT.INBOUND_REQUEST, { ctx }), logger);
     }
 

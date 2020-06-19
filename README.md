@@ -19,15 +19,18 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
 5. [Usage](#Usage)
 6. [Configuration](#Configuration)
 7. [Available Options](#Available_options)
-    1. [bodyKeys](#options_body_keys)
-    2. [color](#options_color)
-    3. [styles](#options_styles)
-    4. [context](#options_context)
-    5. [errors.callback](#options_errors_callback)
-    6. [headersRegex](#options_headers_regex)
-    7. [health](#options_health)
-    8. [outbound.enabled](#options_outbound_enabled)
-    9. [traceHeaderName](#options_trace_header_name)
+    1. [inbound.enabled](#options_inbound_enabled)
+    2. [inbound.includeHost](#options_inbound_includeHost)
+    3. [inbound.request.enabled](#options_inbound_request_enabled)
+    4. [bodyKeys](#options_body_keys)
+    5. [color](#options_color)
+    6. [styles](#options_styles)
+    7. [context](#options_context)
+    8. [errors.callback](#options_errors_callback)
+    9. [headersRegex](#options_headers_regex)
+    10. [health](#options_health)
+    11. [outbound.enabled](#options_outbound_enabled)
+    12. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -149,7 +152,10 @@ const configuration = {
     health: [],
     inbound: {
         enabled: true,
-    }
+        request: {
+            enabled: true        
+        }
+    },
     outbound: {
         enabled: true
     },
@@ -218,6 +224,11 @@ The supported key-value options, for the configuration object are described belo
 **inbound.enabled**
 
 Enable inbound HTTP traffic logging. Defaults to `true`.
+
+<a name="options_inbound_request_enabled"></a>
+**inbound.request.enabled**
+
+Enable inbound_request HTTP traffic logging. Defaults to `true`.
 
 <a name="options_inbound_includeHost"></a>
 **inbound.includeHost**
