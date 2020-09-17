@@ -23,14 +23,15 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     2. [inbound.includeHost](#options_inbound_includeHost)
     3. [inbound.request.enabled](#options_inbound_request_enabled)
     4. [bodyKeys](#options_body_keys)
-    5. [color](#options_color)
-    6. [styles](#options_styles)
-    7. [context](#options_context)
-    8. [errors.callback](#options_errors_callback)
-    9. [headersRegex](#options_headers_regex)
-    10. [health](#options_health)
-    11. [outbound.enabled](#options_outbound_enabled)
-    12. [traceHeaderName](#options_trace_header_name)
+    5. [bodyKeysRegex](#options_body_keys_regex)
+    6. [color](#options_color)
+    7. [styles](#options_styles)
+    8. [context](#options_context)
+    9. [errors.callback](#options_errors_callback)
+    10. [headersRegex](#options_headers_regex)
+    11. [health](#options_health)
+    12. [outbound.enabled](#options_outbound_enabled)
+    13. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -153,13 +154,14 @@ const configuration = {
     inbound: {
         enabled: true,
         request: {
-            enabled: true        
+            enabled: true
         }
     },
     outbound: {
         enabled: true
     },
     bodyKeys: [],
+    bodyKeysRegex: undefined,
     headersRegex: new RegExp('^X-.*', 'i'),
     traceHeaderName: 'X-Riviere-Id',
     styles: ['simple'],
@@ -256,6 +258,26 @@ before registering the `riviere` middleware.
 }
 ```
 
+<a name="options_body_keys_regex"></a>
+**bodyKeysRegex**
+
+This option can be used to log specific values from the `JSON` body of the `inbound` `POST` requests.
+Defaults to undefined.
+To use this option, the `POST` request's body should be a valid `JSON`.
+Most often this mean that you should register the `Koa` `bodyParser` middleware
+(https://www.npmjs.com/package/body-parser) (or something equivalent),
+before registering the `riviere` middleware.
+
+This option will override `bodyKeys`
+
+*Example*:
+
+```js
+{
+    bodyKeysRegex: new RegExp('.*');
+}
+```
+
 <a name="options_color"></a>
 **color**
 
@@ -272,8 +294,8 @@ Log colored log messages. Defaults to: `true`
 **styles**
 
 This option is used to format log messages with specific styles. Defaults to: `['simple']`
-If multiple options are defined one line is exported for every different style. 
-Available options are: 
+If multiple options are defined one line is exported for every different style.
+Available options are:
 - 'simple': Prints method, path, status code and timing followed by ' | ' and a string containing key-value pairs of object properties
 - 'extended': Same as simple but also contains key-value pairs of all properties (fully compatible with LogEntries)
 - 'json': All object properties as a valid JSON object (fully compatible with Google Stackdriver)

@@ -24,6 +24,7 @@ function buildRiviere(options = {}) {
       opts: {
         headersRegex,
         bodyKeys: options.bodyKeys,
+        bodyKeysRegex: options.bodyKeysRegex,
         ...outbound
       }
     });

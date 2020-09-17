@@ -24,6 +24,7 @@ export function riviere(options?: {
     https?: boolean
   },
   bodyKeys?: Array<string>,
+  bodyKeysRegex?: RegExp,
   headersRegex?: RegExp,
   traceHeaderName?: string,
   forceIds?: boolean
