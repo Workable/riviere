@@ -254,7 +254,7 @@ describe('#defaultAdapter', () => {
       http.request = new Proxy(http.request, requestProxy);
       http.request(options);
       logger.info.callCount.should.eql(2);
-      logger.info.args[0][0].metaHeaders.should.have.property('headers.test');
+      logger.info.args[0][0].metaHeaders.headers.should.have.property('test');
       logger.info.args[0][0].should.containEql({
         method: 'GET',
         protocol: 'https',
