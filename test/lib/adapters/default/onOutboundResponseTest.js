@@ -56,9 +56,9 @@ describe('#defaultAdapter', () => {
         requestId: uuid,
         log_tag: 'inbound_request',
         userAgent: '',
-        metaBody: { 'body.skills': 'node.js' },
+        metaBody: { body: { skills: 'node.js' } },
         metaHeaders: {
-          'headers.Location': '/test/foo'
+          headers: { Location: '/test/foo' }
         }
       });
       opts.logger.info.args[1][0].should.eql({
@@ -72,10 +72,10 @@ describe('#defaultAdapter', () => {
         requestId: uuid,
         headers: {},
         metaBody: {
-          'request.body.skills': 'node.js'
+          request: { body: { skills: 'node.js' } }
         },
         metaHeaders: {
-          'request.headers.Location': '/test/foo'
+          request: { headers: { Location: '/test/foo' } }
         },
         userAgent: '',
         contentLength: 0,
@@ -180,7 +180,7 @@ describe('#defaultAdapter', () => {
         path: '/test',
         query: null,
         requestId: uuid,
-        headers: { 'headers.Location': '/test/foo' },
+        headers: { headers: { Location: '/test/foo' } },
         contentLength: 0,
         userAgent: '',
         log_tag: 'outbound_response'

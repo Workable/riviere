@@ -106,7 +106,7 @@ describe('#defaultAdapter', () => {
         query: null,
         requestId: uuid,
         metaBody: {
-          'body.skills': 'ok'
+          body: { skills: 'ok' }
         },
         userAgent: '',
         log_tag: 'inbound_request'
@@ -277,7 +277,7 @@ describe('#defaultAdapter', () => {
         path: '/test',
         query: null,
         requestId: uuid,
-        metaHeaders: { 'headers.XX-something': true },
+        metaHeaders: { headers: { 'XX-something': true } },
         userAgent: '',
         log_tag: 'inbound_request'
       });

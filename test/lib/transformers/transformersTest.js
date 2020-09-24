@@ -54,7 +54,7 @@ describe('mapOutReq', () => {
       requestId: undefined,
       metaBody: {},
       metaHeaders: {
-        'headers.x-transaction-id': 'transaction-id'
+        headers: { 'x-transaction-id': 'transaction-id' }
       },
       contentLength: 0,
       log_tag: 'outbound_request'
@@ -94,7 +94,7 @@ describe('mapOutReq', () => {
       log_tag: 'outbound_request',
       metaHeaders: {},
       metaBody: {
-        'body.foo': 'bar'
+        body: { foo: 'bar' }
       }
     });
   });
@@ -132,8 +132,10 @@ describe('mapOutReq', () => {
       log_tag: 'outbound_request',
       metaHeaders: {},
       metaBody: {
-        'body.banana1': 'apple1',
-        'body.banana2': 'apple2'
+        body: {
+          banana1: 'apple1',
+          banana2: 'apple2'
+        }
       }
     });
   });

@@ -39,6 +39,31 @@ describe('Test Json Formatter', () => {
     json.httpRequest.latency.should.equal('0.050000s');
   });
 
+  it('formatObject should return header and body keys as single object', () => {
+    const obj = {
+      method: 'GET',
+      requestId: 'testRequestId',
+      path: 'test-path',
+      log_tag: 'inbound_request',
+      duration: 50,
+      metaBody: { request: { body: { company: 'workable' } } },
+      metaHeaders: { request: { headers: { 'x-request-id': '123456' } } }
+    };
+    const payload = this.jsonFormatter.formatObject(obj);
+
+    const json = JSON.parse(payload);
+
+    json.severity.should.equal('info');
+    json['logging.googleapis.com/operation'].id.should.equal(obj.requestId);
+    json.requestId.should.equal(obj.requestId);
+    json.httpRequest.requestUrl.should.equal(obj.path);
+    json.httpRequest.latency.should.equal('0.050000s');
+    json.request.should.eql({
+      body: { company: 'workable' },
+      headers: { 'x-request-id': '123456' }
+    });
+  });
+
   it('formatObject should return 0 duration if not defined', () => {
     const obj = {
       method: 'GET',
