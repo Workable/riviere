@@ -22,16 +22,18 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     1. [inbound.enabled](#options_inbound_enabled)
     2. [inbound.includeHost](#options_inbound_includeHost)
     3. [inbound.request.enabled](#options_inbound_request_enabled)
-    4. [bodyKeys](#options_body_keys)
-    5. [bodyKeysRegex](#options_body_keys_regex)
-    6. [color](#options_color)
-    7. [styles](#options_styles)
-    8. [context](#options_context)
-    9. [errors.callback](#options_errors_callback)
-    10. [headersRegex](#options_headers_regex)
-    11. [health](#options_health)
-    12. [outbound.enabled](#options_outbound_enabled)
-    13. [traceHeaderName](#options_trace_header_name)
+    4. [inbound.maxBodyValueChars](#options_inbound_max_body_value_chars)
+    5. [bodyKeys](#options_body_keys)
+    6. [bodyKeysRegex](#options_body_keys_regex)
+    7. [color](#options_color)
+    8. [styles](#options_styles)
+    9. [context](#options_context)
+    10. [errors.callback](#options_errors_callback)
+    11. [headersRegex](#options_headers_regex)
+    12. [health](#options_health)
+    13. [outbound.enabled](#options_outbound_enabled)
+    14. [outbound.maxBodyValueChars](#options_outbound_max_body_value_chars)
+    15. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -155,10 +157,12 @@ const configuration = {
         enabled: true,
         request: {
             enabled: true
-        }
+        },
+        maxBodyValueChars: undefined
     },
     outbound: {
-        enabled: true
+        enabled: true,
+        maxBodyValueChars: undefined
     },
     bodyKeys: [],
     bodyKeysRegex: undefined,
@@ -236,6 +240,22 @@ Enable inbound_request HTTP traffic logging. Defaults to `true`.
 **inbound.includeHost**
 
 Log full path, including host on inbound requests. Defaults to `false`.
+
+<a name="options_inbound_max_body_value_chars"></a>
+**inbound.maxBodyValueChars**
+
+This option can be used to truncate values `JSON` body of the `inbound` `POST` requests to a specified length. Defaults to undefined.
+To use this option, the `POST` request's body should be a valid `JSON`.
+
+*Example*:
+
+```js
+{
+    inbound: {
+        maxBodyValueChars: 1024
+    }
+}
+```
 
 <a name="options_body_keys"></a>
 **bodyKeys**
@@ -409,6 +429,22 @@ Enable outbound HTTP traffic logs. Defaults to `true`.
 {
     outbound: {
         enabled: true
+    }
+}
+```
+
+<a name="options_inbound_max_body_value_chars"></a>
+**outbound.maxBodyValueChars**
+
+This option can be used to truncate values `JSON` body of the `outbound` `POST` requests to a specified length. Defaults to undefined.
+To use this option, the `POST` request's body should be a valid `JSON`.
+
+*Example*:
+
+```js
+{
+    outbound: {
+        maxBodyValueChars: 1024
     }
 }
 ```
