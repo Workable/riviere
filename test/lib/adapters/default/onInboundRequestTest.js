@@ -113,7 +113,7 @@ describe('#defaultAdapter', () => {
       });
     });
 
-    it('should pass when POST && this.bodyKeys && this.bodyValuesMaxLength', () => {
+    it('should pass when POST && this.bodyKeys && this.inbound.maxBodyValueChars', () => {
       const ctx = {
         request: {
           method: 'POST',
@@ -135,7 +135,7 @@ describe('#defaultAdapter', () => {
         originalUrl: '/test'
       };
       const opts = getOpts(sandbox);
-      opts.bodyValuesMaxLength = 30;
+      opts.inbound.maxBodyValueChars = 30;
       defaultAdapter.onInboundRequest.call(opts, { ctx });
       opts.logger.info.calledOnce.should.equal(true);
       opts.logger.info.args[0][0].should.eql({

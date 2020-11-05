@@ -22,9 +22,9 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     1. [inbound.enabled](#options_inbound_enabled)
     2. [inbound.includeHost](#options_inbound_includeHost)
     3. [inbound.request.enabled](#options_inbound_request_enabled)
-    4. [bodyKeys](#options_body_keys)
-    5. [bodyKeysRegex](#options_body_keys_regex)
-    6. [bodyValuesMaxLength] (#options_body_values_max_length)
+    4. [inbound.maxBodyValueChars](#options_inbound_max_body_value_chars)
+    5. [bodyKeys](#options_body_keys)
+    6. [bodyKeysRegex](#options_body_keys_regex)
     7. [color](#options_color)
     8. [styles](#options_styles)
     9. [context](#options_context)
@@ -32,7 +32,8 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     11. [headersRegex](#options_headers_regex)
     12. [health](#options_health)
     13. [outbound.enabled](#options_outbound_enabled)
-    14. [traceHeaderName](#options_trace_header_name)
+    14. [outbound.maxBodyValueChars](#options_outbound_max_body_value_chars)
+    15. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -156,14 +157,15 @@ const configuration = {
         enabled: true,
         request: {
             enabled: true
-        }
+        },
+        maxBodyValueChars: undefined
     },
     outbound: {
-        enabled: true
+        enabled: true,
+        maxBodyValueChars: undefined
     },
     bodyKeys: [],
     bodyKeysRegex: undefined,
-    bodyValuesMaxLength: undefined,
     headersRegex: new RegExp('^X-.*', 'i'),
     traceHeaderName: 'X-Riviere-Id',
     styles: ['simple'],
@@ -239,6 +241,22 @@ Enable inbound_request HTTP traffic logging. Defaults to `true`.
 
 Log full path, including host on inbound requests. Defaults to `false`.
 
+<a name="options_inbound_max_body_value_chars"></a>
+**inbound.maxBodyValueChars**
+
+This option can be used to truncate values `JSON` body of the `inbound` `POST` requests to a specified length. Defaults to undefined.
+To use this option, the `POST` request's body should be a valid `JSON`.
+
+*Example*:
+
+```js
+{
+    inbound: {
+        maxBodyValueChars: 1024
+    }
+}
+```
+
 <a name="options_body_keys"></a>
 **bodyKeys**
 
@@ -277,26 +295,6 @@ This option will override `bodyKeys`
 ```js
 {
     bodyKeysRegex: new RegExp('.*');
-}
-```
-
-<a name="options_body_values_max_length"></a>
-**bodyValuesMaxLength**
-
-This option can be used to truncate values `JSON` body of the `inbound` `POST` requests to a specified length.
-Defaults to undefined.
-To use this option, the `POST` request's body should be a valid `JSON`.
-Most often this mean that you should register the `Koa` `bodyParser` middleware
-(https://www.npmjs.com/package/body-parser) (or something equivalent),
-before registering the `riviere` middleware.
-
-This option is usefull when you're logging huge entries of the body payload and there is a specific limit on your logging viewer which result on a broken JSON object. (e.g. Stackdriver has a limit of 256KB per log entry [link](https://cloud.google.com/logging/quotas))
-
-*Example*:
-
-```js
-{
-    bodyValuesMaxLength: 1024 * 1024;
 }
 ```
 
@@ -431,6 +429,22 @@ Enable outbound HTTP traffic logs. Defaults to `true`.
 {
     outbound: {
         enabled: true
+    }
+}
+```
+
+<a name="options_inbound_max_body_value_chars"></a>
+**outbound.maxBodyValueChars**
+
+This option can be used to truncate values `JSON` body of the `outbound` `POST` requests to a specified length. Defaults to undefined.
+To use this option, the `POST` request's body should be a valid `JSON`.
+
+*Example*:
+
+```js
+{
+    outbound: {
+        maxBodyValueChars: 1024
     }
 }
 ```

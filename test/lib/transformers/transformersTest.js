@@ -140,7 +140,7 @@ describe('mapOutReq', () => {
     });
   });
 
-  it('should able to post uri and get truncated body parameters with bodyValuesMaxLength', () => {
+  it('should able to post uri and get truncated body parameters with maxBodyValueChars', () => {
     const inMsg = {
       method: 'POST',
       body: '{ "banana1": "a very very very very very very very very long text", "banana2": "apple2" }',
@@ -157,7 +157,7 @@ describe('mapOutReq', () => {
 
     const options = {
       bodyKeysRegex: new RegExp('^banana\\d+', 'i'),
-      bodyValuesMaxLength: 10
+      maxBodyValueChars: 10
     };
 
     const result = mapOutReq(inMsg, undefined, options);

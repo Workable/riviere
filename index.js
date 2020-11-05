@@ -25,7 +25,6 @@ function buildRiviere(options = {}) {
         headersRegex,
         bodyKeys: options.bodyKeys,
         bodyKeysRegex: options.bodyKeysRegex,
-        bodyValuesMaxLength: options.bodyValuesMaxLength,
         ...outbound
       }
     });

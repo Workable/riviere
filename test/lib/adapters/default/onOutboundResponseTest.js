@@ -84,7 +84,7 @@ describe('#defaultAdapter', () => {
       });
     });
 
-    it('should call this.logger.info with body options if bodyKeys and bodyValuesMaxLength are set', () => {
+    it('should call this.logger.info with body options if bodyKeys and outbound.maxBodyValueChars are set', () => {
       const ctx = {
         state: {},
         request: {
@@ -124,7 +124,8 @@ describe('#defaultAdapter', () => {
       const opts = getOpts(sandbox);
       opts.headersRegex = new RegExp('location', 'i');
       opts.bodyKeysRegex = new RegExp('.*');
-      opts.bodyValuesMaxLength = 20;
+      opts.inbound.maxBodyValueChars = 20;
+      opts.outbound.maxBodyValueChars = 20;
       defaultAdapter.onInboundRequest.call(opts, { ctx });
       defaultAdapter.onOutboundResponse.call(opts, { ctx });
       opts.logger.info.callCount.should.equal(2);

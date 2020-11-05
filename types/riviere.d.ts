@@ -16,16 +16,17 @@ export function riviere(options?: {
     request?: {
       enabled: boolean
     },
-    level: string
+    level: string,
+    maxBodyValueChars?: number
   },
   outbound?: {
     enabled: boolean,
     level: string,
-    https?: boolean
+    https?: boolean,
+    maxBodyValueChars?: number
   },
   bodyKeys?: Array<string>,
   bodyKeysRegex?: RegExp,
-  bodyValuesMaxLength?: number,
   headersRegex?: RegExp,
   traceHeaderName?: string,
   forceIds?: boolean
