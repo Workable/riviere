@@ -24,14 +24,15 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     3. [inbound.request.enabled](#options_inbound_request_enabled)
     4. [bodyKeys](#options_body_keys)
     5. [bodyKeysRegex](#options_body_keys_regex)
-    6. [color](#options_color)
-    7. [styles](#options_styles)
-    8. [context](#options_context)
-    9. [errors.callback](#options_errors_callback)
-    10. [headersRegex](#options_headers_regex)
-    11. [health](#options_health)
-    12. [outbound.enabled](#options_outbound_enabled)
-    13. [traceHeaderName](#options_trace_header_name)
+    6. [bodyValuesMaxLength] (#options_body_values_max_length)
+    7. [color](#options_color)
+    8. [styles](#options_styles)
+    9. [context](#options_context)
+    10. [errors.callback](#options_errors_callback)
+    11. [headersRegex](#options_headers_regex)
+    12. [health](#options_health)
+    13. [outbound.enabled](#options_outbound_enabled)
+    14. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -162,6 +163,7 @@ const configuration = {
     },
     bodyKeys: [],
     bodyKeysRegex: undefined,
+    bodyValuesMaxLength: undefined,
     headersRegex: new RegExp('^X-.*', 'i'),
     traceHeaderName: 'X-Riviere-Id',
     styles: ['simple'],
@@ -275,6 +277,26 @@ This option will override `bodyKeys`
 ```js
 {
     bodyKeysRegex: new RegExp('.*');
+}
+```
+
+<a name="options_body_values_max_length"></a>
+**bodyValuesMaxLength**
+
+This option can be used to truncate values `JSON` body of the `inbound` `POST` requests to a specified length.
+Defaults to undefined.
+To use this option, the `POST` request's body should be a valid `JSON`.
+Most often this mean that you should register the `Koa` `bodyParser` middleware
+(https://www.npmjs.com/package/body-parser) (or something equivalent),
+before registering the `riviere` middleware.
+
+This option is usefull when you're logging huge entries of the body payload and there is a specific limit on your logging viewer which result on a broken JSON object. (e.g. Stackdriver has a limit of 256KB per log entry [link](https://cloud.google.com/logging/quotas))
+
+*Example*:
+
+```js
+{
+    bodyValuesMaxLength: 1024 * 1024;
 }
 ```
 

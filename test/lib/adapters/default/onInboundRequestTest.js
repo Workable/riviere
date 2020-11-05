@@ -113,6 +113,46 @@ describe('#defaultAdapter', () => {
       });
     });
 
+    it('should pass when POST && this.bodyKeys && this.bodyValuesMaxLength', () => {
+      const ctx = {
+        request: {
+          method: 'POST',
+          headers: {
+            test_user_id_header: 'test-user-id'
+          },
+          body: {
+            skills: 'A very very very very very very very very very very very very very very very very long log line'
+          },
+          req: {
+            url: '/test'
+          }
+        },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
+        originalUrl: '/test'
+      };
+      const opts = getOpts(sandbox);
+      opts.bodyValuesMaxLength = 30;
+      defaultAdapter.onInboundRequest.call(opts, { ctx });
+      opts.logger.info.calledOnce.should.equal(true);
+      opts.logger.info.args[0][0].should.eql({
+        userId: 'test-user-id',
+        protocol: undefined,
+        method: 'POST',
+        path: '/test',
+        query: null,
+        requestId: uuid,
+        metaBody: {
+          body: { skills: 'A very very very very very ver[Trimmed by riviere]' }
+        },
+        userAgent: '',
+        log_tag: 'inbound_request'
+      });
+    });
+
     it('should pass when POST && this.bodyKeys no picked keys', () => {
       const ctx = {
         request: {

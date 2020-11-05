@@ -140,6 +140,48 @@ describe('mapOutReq', () => {
     });
   });
 
+  it('should able to post uri and get truncated body parameters with bodyValuesMaxLength', () => {
+    const inMsg = {
+      method: 'POST',
+      body: '{ "banana1": "a very very very very very very very very long text", "banana2": "apple2" }',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      uri: {
+        protocol: 'http:',
+        hostname: 'hostname',
+        pathname: 'path',
+        query: 'query'
+      }
+    };
+
+    const options = {
+      bodyKeysRegex: new RegExp('^banana\\d+', 'i'),
+      bodyValuesMaxLength: 10
+    };
+
+    const result = mapOutReq(inMsg, undefined, options);
+    result.should.eql({
+      method: 'POST',
+      protocol: 'http',
+      host: 'hostname',
+      port: undefined,
+      path: 'path',
+      query: 'query',
+      href: 'http://hostname/path',
+      requestId: undefined,
+      contentLength: 0,
+      log_tag: 'outbound_request',
+      metaHeaders: {},
+      metaBody: {
+        body: {
+          banana1: 'a very ver[Trimmed by riviere]',
+          banana2: 'apple2'
+        }
+      }
+    });
+  });
+
   it('should able to post uri and not add body parameters if it is not valid json', () => {
     const inMsg = {
       method: 'POST',

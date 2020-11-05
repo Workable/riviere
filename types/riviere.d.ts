@@ -25,6 +25,7 @@ export function riviere(options?: {
   },
   bodyKeys?: Array<string>,
   bodyKeysRegex?: RegExp,
+  bodyValuesMaxLength?: number,
   headersRegex?: RegExp,
   traceHeaderName?: string,
   forceIds?: boolean

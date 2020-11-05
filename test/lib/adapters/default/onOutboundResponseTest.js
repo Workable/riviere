@@ -84,6 +84,113 @@ describe('#defaultAdapter', () => {
       });
     });
 
+    it('should call this.logger.info with body options if bodyKeys and bodyValuesMaxLength are set', () => {
+      const ctx = {
+        state: {},
+        request: {
+          method: 'POST',
+          headers: {
+            test_user_id_header: 'test-user-id',
+            Location: '/test/foo'
+          },
+          body: {
+            skills: [
+              { value: 'A very very very very very very very very very very very very very very very long log line' }
+            ],
+            a: {
+              deep: {
+                object: {
+                  value: 'A very very very very very very very very very very very very very very very long log line'
+                }
+              }
+            }
+          },
+          req: {
+            url: '/test'
+          }
+        },
+        req: {
+          url: '/test',
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
+        originalUrl: '/test',
+        response: {
+          headers: {},
+          status: 200
+        }
+      };
+      const opts = getOpts(sandbox);
+      opts.headersRegex = new RegExp('location', 'i');
+      opts.bodyKeysRegex = new RegExp('.*');
+      opts.bodyValuesMaxLength = 20;
+      defaultAdapter.onInboundRequest.call(opts, { ctx });
+      defaultAdapter.onOutboundResponse.call(opts, { ctx });
+      opts.logger.info.callCount.should.equal(2);
+      opts.logger.info.args[0][0].should.eql({
+        userId: 'test-user-id',
+        protocol: undefined,
+        method: 'POST',
+        path: '/test',
+        query: null,
+        requestId: uuid,
+        log_tag: 'inbound_request',
+        userAgent: '',
+        metaBody: {
+          body: {
+            a: {
+              deep: {
+                object: {
+                  value: 'A very very very ver[Trimmed by riviere]'
+                }
+              }
+            },
+            skills: {
+              0: { value: 'A very very very ver[Trimmed by riviere]' }
+            }
+          }
+        },
+        metaHeaders: {
+          headers: { Location: '/test/foo' }
+        }
+      });
+      opts.logger.info.args[1][0].should.eql({
+        status: undefined,
+        duration: NaN,
+        userId: 'test-user-id',
+        protocol: undefined,
+        method: 'POST',
+        path: '/test',
+        query: null,
+        requestId: uuid,
+        headers: {},
+        metaBody: {
+          request: {
+            body: {
+              a: {
+                deep: {
+                  object: {
+                    value: 'A very very very ver[Trimmed by riviere]'
+                  }
+                }
+              },
+              skills: {
+                0: { value: 'A very very very ver[Trimmed by riviere]' }
+              }
+            }
+          }
+        },
+        metaHeaders: {
+          request: { headers: { Location: '/test/foo' } }
+        },
+        userAgent: '',
+        contentLength: 0,
+        log_tag: 'outbound_response'
+        //'body.skills': 'node.js'
+      });
+    });
+
     it('should call this.logger.info', () => {
       const ctx = {
         state: {},
