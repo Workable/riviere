@@ -33,7 +33,8 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     12. [health](#options_health)
     13. [outbound.enabled](#options_outbound_enabled)
     14. [outbound.maxBodyValueChars](#options_outbound_max_body_value_chars)
-    15. [traceHeaderName](#options_trace_header_name)
+    15. [outbound.blacklistedPaths](#options_outbound_blacklisted_paths)
+    16. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -433,7 +434,7 @@ Enable outbound HTTP traffic logs. Defaults to `true`.
 }
 ```
 
-<a name="options_inbound_max_body_value_chars"></a>
+<a name="options_outbound_max_body_value_chars"></a>
 **outbound.maxBodyValueChars**
 
 This option can be used to truncate values `JSON` body of the `outbound` `POST` requests to a specified length. Defaults to undefined.
@@ -445,6 +446,22 @@ To use this option, the `POST` request's body should be a valid `JSON`.
 {
     outbound: {
         maxBodyValueChars: 1024
+    }
+}
+```
+
+<a name="options_outbound_blacklisted_paths"></a>
+**outbound.blacklistedPaths**
+
+This option can be used to prevent specific outbound paths to be logged.
+Defaults to [].
+
+*Example*:
+
+```js
+{
+    outbound: {
+        blacklistedPaths: ['/health']
     }
 }
 ```
