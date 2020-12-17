@@ -163,7 +163,7 @@ describe('#defaultAdapter', () => {
         traceHeaderName,
         level: 'info',
         opts: {
-          blacklistedPaths: ['/v4.0/traces']
+          blacklistedPathRegex: new RegExp('^/v4.0/traces$')
         }
       });
       const options = {
