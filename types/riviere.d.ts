@@ -23,7 +23,8 @@ export function riviere(options?: {
     enabled: boolean,
     level: string,
     https?: boolean,
-    maxBodyValueChars?: number
+    maxBodyValueChars?: number,
+    blacklistedPathRegex?: RegExp
   },
   bodyKeys?: Array<string>,
   bodyKeysRegex?: RegExp,
