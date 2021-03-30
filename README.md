@@ -32,9 +32,10 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     11. [headersRegex](#options_headers_regex)
     12. [health](#options_health)
     13. [outbound.enabled](#options_outbound_enabled)
-    14. [outbound.maxBodyValueChars](#options_outbound_max_body_value_chars)
-    15. [outbound.blacklistedPathRegex](#options_outbound_blacklisted_path_regex)
-    16. [traceHeaderName](#options_trace_header_name)
+    14. [outbound.request.enabled](#options_outbound_request_enabled)
+    15. [outbound.maxBodyValueChars](#options_outbound_max_body_value_chars)
+    16. [outbound.blacklistedPathRegex](#options_outbound_blacklisted_path_regex)
+    17. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -163,6 +164,9 @@ const configuration = {
     },
     outbound: {
         enabled: true,
+        request: {
+            enabled: true
+        },
         maxBodyValueChars: undefined
     },
     bodyKeys: [],
@@ -433,6 +437,11 @@ Enable outbound HTTP traffic logs. Defaults to `true`.
     }
 }
 ```
+
+<a name="options_outbound_request_enabled"></a>
+**outbound.request.enabled**
+
+Enable outbound_request HTTP traffic logging. Defaults to `true`.
 
 <a name="options_outbound_max_body_value_chars"></a>
 **outbound.maxBodyValueChars**

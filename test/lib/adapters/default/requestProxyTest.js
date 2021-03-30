@@ -27,7 +27,12 @@ describe('#defaultAdapter', () => {
         logger,
         serialize,
         traceHeaderName,
-        level: 'info'
+        level: 'info',
+        opts: {
+          request: {
+            enabled: true
+          }
+        }
       });
       const options = {
         method: 'GET',
@@ -104,7 +109,12 @@ describe('#defaultAdapter', () => {
         logger,
         serialize,
         traceHeaderName,
-        level: 'info'
+        level: 'info',
+        opts: {
+          request: {
+            enabled: true
+          }
+        }
       });
       const options = {
         method: 'GET',
@@ -163,7 +173,10 @@ describe('#defaultAdapter', () => {
         traceHeaderName,
         level: 'info',
         opts: {
-          blacklistedPathRegex: new RegExp('^/v4.0/traces$')
+          blacklistedPathRegex: new RegExp('^/v4.0/traces$'),
+          request: {
+            enabled: true
+          }
         }
       });
       const options = {
@@ -203,7 +216,12 @@ describe('#defaultAdapter', () => {
         logger,
         serialize,
         traceHeaderName,
-        level: 'info'
+        level: 'info',
+        opts: {
+          request: {
+            enabled: true
+          }
+        }
       });
       const options = {
         method: 'GET',
@@ -271,7 +289,12 @@ describe('#defaultAdapter', () => {
         serialize,
         traceHeaderName,
         level: 'info',
-        opts: { headersRegex: new RegExp('test', 'i') }
+        opts: {
+          headersRegex: new RegExp('test', 'i'),
+          request: {
+            enabled: true
+          }
+        }
       });
       const options = {
         method: 'GET',
@@ -330,7 +353,12 @@ describe('#defaultAdapter', () => {
         logger,
         serialize,
         traceHeaderName,
-        level: 'info'
+        level: 'info',
+        opts: {
+          request: {
+            enabled: true
+          }
+        }
       });
       const options = {
         method: 'GET',
@@ -397,7 +425,12 @@ describe('#defaultAdapter', () => {
         logger,
         traceHeaderName,
         serialize,
-        level: 'info'
+        level: 'info',
+        opts: {
+          request: {
+            enabled: true
+          }
+        }
       });
       const options = {
         method: 'GET',
@@ -464,7 +497,12 @@ describe('#defaultAdapter', () => {
       const requestProxy = defaultAdapter.requestProxy({
         logger,
         serialize,
-        traceHeaderName
+        traceHeaderName,
+        opts: {
+          request: {
+            enabled: true
+          }
+        }
       });
       const options = null;
       const http = {
@@ -492,7 +530,12 @@ describe('#defaultAdapter', () => {
         logger,
         serialize,
         traceHeaderName,
-        level: 'info'
+        level: 'info',
+        opts: {
+          request: {
+            enabled: true
+          }
+        }
       });
       const options = {
         method: 'GET',
@@ -544,7 +587,12 @@ describe('#defaultAdapter', () => {
         logger,
         serialize,
         traceHeaderName,
-        level: 'info'
+        level: 'info',
+        opts: {
+          request: {
+            enabled: true
+          }
+        }
       });
       const http = {
         request: () => {
@@ -598,6 +646,74 @@ describe('#defaultAdapter', () => {
       };
       http.request = new Proxy(httpRequest, requestProxy);
       http.request(options);
+    });
+
+    it('should pass and log only outbound if request.enabled=false', () => {
+      const logger = {
+        info: sandbox.spy()
+      };
+      const serialize = a => a;
+      const traceHeaderName = 'test';
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        serialize,
+        traceHeaderName,
+        level: 'info',
+        opts: {
+          request: {
+            enabled: false
+          }
+        }
+      });
+      const options = {
+        method: 'GET',
+        port: '8080',
+        headers: {
+          test: 'ok'
+        },
+        protocol: 'http:',
+        path: '/some',
+        pathname: '/some',
+        query: 'some=something',
+        hostname: 'some-host'
+      };
+      const http = {
+        request: () => {
+          return {
+            on: (event, fn) => {
+              fn({
+                statusCode: 200
+              });
+            }
+          };
+        }
+      };
+      const httpRequest = () => {
+        return {
+          on: (on, cb) => {
+            const res = {};
+            cb(res);
+            logger.info.callCount.should.equal(1);
+            logger.info.args[0][0].should.eql({
+              method: 'GET',
+              path: '/some',
+              host: 'some-host',
+              duration: 0,
+              query: 'some=something',
+              href: 'http://some-host:8080/some',
+              status: undefined,
+              protocol: 'http',
+              requestId: 'ok',
+              contentLength: 0,
+              userAgent: '',
+              log_tag: 'inbound_response'
+            });
+          }
+        };
+      };
+      http.request = new Proxy(httpRequest, requestProxy);
+      http.request(options);
+      logger.info.callCount.should.eql(1);
     });
   });
 });
