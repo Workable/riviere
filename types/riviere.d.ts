@@ -6,7 +6,7 @@ export function riviere(options?: {
   errors?: {
     callback: (ctx: any, error: Error) => any
   },
-  health?: Array<{path: string; method: string; }>,
+  health?: Array<{ path: string; method: string; }>,
   logger?: {
     info: any,
     error: any
@@ -28,6 +28,7 @@ export function riviere(options?: {
   },
   bodyKeys?: Array<string>,
   bodyKeysRegex?: RegExp,
+  bodyKeysCallback?: (body: any, ctx?: any) => any,
   headersRegex?: RegExp,
   traceHeaderName?: string,
   forceIds?: boolean
