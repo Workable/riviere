@@ -95,7 +95,7 @@ describe('riviere', () => {
     };
     const next = () => {};
     await middleware(ctx, next);
-    writable.end();
+    await new Promise(r => writable.end(r));
     ctx.state.calculatedContentLength.should.equal(10);
   });
 

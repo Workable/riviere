@@ -25,17 +25,18 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     4. [inbound.maxBodyValueChars](#options_inbound_max_body_value_chars)
     5. [bodyKeys](#options_body_keys)
     6. [bodyKeysRegex](#options_body_keys_regex)
-    7. [color](#options_color)
-    8. [styles](#options_styles)
-    9. [context](#options_context)
-    10. [errors.callback](#options_errors_callback)
-    11. [headersRegex](#options_headers_regex)
-    12. [health](#options_health)
-    13. [outbound.enabled](#options_outbound_enabled)
-    14. [outbound.request.enabled](#options_outbound_request_enabled)
-    15. [outbound.maxBodyValueChars](#options_outbound_max_body_value_chars)
-    16. [outbound.blacklistedPathRegex](#options_outbound_blacklisted_path_regex)
-    17. [traceHeaderName](#options_trace_header_name)
+    7. [bodyKeysCallback](#options_body_keys_callback)
+    8. [color](#options_color)
+    9. [styles](#options_styles)
+    10. [context](#options_context)
+    11. [errors.callback](#options_errors_callback)
+    12. [headersRegex](#options_headers_regex)
+    13. [health](#options_health)
+    14. [outbound.enabled](#options_outbound_enabled)
+    15. [outbound.request.enabled](#options_outbound_request_enabled)
+    16. [outbound.maxBodyValueChars](#options_outbound_max_body_value_chars)
+    17. [outbound.blacklistedPathRegex](#options_outbound_blacklisted_path_regex)
+    18. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -171,6 +172,7 @@ const configuration = {
     },
     bodyKeys: [],
     bodyKeysRegex: undefined,
+    bodyKeysCallback: (body: any, ctx?: KoaContext) => ({}),
     headersRegex: new RegExp('^X-.*', 'i'),
     traceHeaderName: 'X-Riviere-Id',
     styles: ['simple'],
@@ -265,9 +267,9 @@ To use this option, the `POST` request's body should be a valid `JSON`.
 <a name="options_body_keys"></a>
 **bodyKeys**
 
-This option can be used to log specific values from the `JSON` body of the `inbound` `POST` requests.
+This option can be used to log specific values from the `JSON` body of the `inbound` `POST`, `PUT` & `PATCH` requests.
 Defaults to empty Array `[]`.
-To use this option, the `POST` request's body should be a valid `JSON`.
+To use this option, the request's body should be a valid `JSON`.
 Most often this mean that you should register the `Koa` `bodyParser` middleware
 (https://www.npmjs.com/package/body-parser) (or something equivalent),
 before registering the `riviere` middleware.
@@ -286,9 +288,9 @@ before registering the `riviere` middleware.
 <a name="options_body_keys_regex"></a>
 **bodyKeysRegex**
 
-This option can be used to log specific values from the `JSON` body of the `inbound` `POST` requests.
+This option can be used to log specific values from the `JSON` body of the `inbound` `POST`, `PUT` & `PATCH` requests.
 Defaults to undefined.
-To use this option, the `POST` request's body should be a valid `JSON`.
+To use this option, the request's body should be a valid `JSON`.
 Most often this mean that you should register the `Koa` `bodyParser` middleware
 (https://www.npmjs.com/package/body-parser) (or something equivalent),
 before registering the `riviere` middleware.
@@ -300,6 +302,32 @@ This option will override `bodyKeys`
 ```js
 {
     bodyKeysRegex: new RegExp('.*');
+}
+```
+
+<a name="options_body_keys_callback"></a>
+**bodyKeysCallback**
+
+This option can be used to let you choose which fields should be logged on `inbound` `POST`, `PUT` & `PATCH` requests.
+Defaults to undefined.
+To use this option, the request's body should be a valid `JSON`.
+Most often this mean that you should register the `Koa` `bodyParser` middleware
+(https://www.npmjs.com/package/body-parser) (or something equivalent),
+before registering the `riviere` middleware.
+
+This option will override `bodyKeys` and `bodyKeysRegex`
+
+*Example*:
+
+```js
+{
+    bodyKeysCallback: (body: any, ctx?: KoaContext) => {
+        if (!ctx) return body;
+        return {
+            ...body,
+            fields: body.fields.filter(f => !f._obfuscated)
+        }
+    };
 }
 ```
 

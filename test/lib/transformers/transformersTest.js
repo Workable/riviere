@@ -140,6 +140,62 @@ describe('mapOutReq', () => {
     });
   });
 
+  it('should able to post uri and get body parameters with bodyKeysCallback', () => {
+    const inMsg = {
+      method: 'POST',
+      body: JSON.stringify({
+        fields: [
+          { id: 1, label: 'Greeting', value: 'Hello' },
+          { id: 2, label: 'Password', value: '***', _obfuscated: true }
+        ]
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      uri: {
+        protocol: 'http:',
+        hostname: 'hostname',
+        pathname: 'path',
+        query: 'query'
+      }
+    };
+
+    const options = {
+      bodyKeysCallback: (body, ctx) => {
+        return {
+          ...body,
+          fields: body.fields.map(f => {
+            if (f._obfuscated) return { ...f, value: '***' };
+            return f;
+          })
+        };
+      }
+    };
+
+    const result = mapOutReq(inMsg, undefined, options);
+    result.should.eql({
+      method: 'POST',
+      protocol: 'http',
+      host: 'hostname',
+      port: undefined,
+      path: 'path',
+      query: 'query',
+      href: 'http://hostname/path',
+      requestId: undefined,
+      contentLength: 0,
+      log_tag: 'outbound_request',
+      metaHeaders: {},
+      metaBody: {
+        body: {
+          fields: [
+            { id: 1, label: 'Greeting', value: 'Hello' },
+            { id: 2, label: 'Password', value: '***', _obfuscated: true }
+          ]
+        }
+      }
+    });
+  });
+
   it('should able to post uri and get truncated body parameters with maxBodyValueChars', () => {
     const inMsg = {
       method: 'POST',
