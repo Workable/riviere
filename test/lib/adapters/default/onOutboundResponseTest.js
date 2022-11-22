@@ -147,9 +147,7 @@ describe('#defaultAdapter', () => {
                 }
               }
             },
-            skills: {
-              0: { value: 'A very very very ver[Trimmed by riviere]' }
-            }
+            skills: [{ value: 'A very very very ver[Trimmed by riviere]' }]
           }
         },
         metaHeaders: {
@@ -176,9 +174,106 @@ describe('#defaultAdapter', () => {
                   }
                 }
               },
-              skills: {
-                0: { value: 'A very very very ver[Trimmed by riviere]' }
-              }
+              skills: [{ value: 'A very very very ver[Trimmed by riviere]' }]
+            }
+          }
+        },
+        metaHeaders: {
+          request: { headers: { Location: '/test/foo' } }
+        },
+        userAgent: '',
+        contentLength: 0,
+        log_tag: 'outbound_response'
+        //'body.skills': 'node.js'
+      });
+    });
+
+    it('should call this.logger.info with body options if bodyKeysCallback is set', () => {
+      const ctx = {
+        state: {},
+        request: {
+          method: 'POST',
+          headers: {
+            test_user_id_header: 'test-user-id',
+            Location: '/test/foo'
+          },
+          body: {
+            fields: [
+              { id: 1, label: 'Greeting', value: 'Hello' },
+              { id: 2, label: 'Password', value: '12345678', _obfuscated: true }
+            ]
+          },
+          req: {
+            url: '/test'
+          }
+        },
+        req: {
+          url: '/test',
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
+        originalUrl: '/test',
+        response: {
+          headers: {},
+          status: 200
+        }
+      };
+      const opts = getOpts(sandbox);
+      opts.headersRegex = new RegExp('location', 'i');
+      opts.bodyKeysRegex = new RegExp('.*');
+      opts.bodyKeysCallback = (body, ctx) => {
+        return {
+          ...body,
+          fields: body.fields.map(f => {
+            if (f._obfuscated) return { ...f, value: '***' };
+            return f;
+          })
+        };
+      };
+      opts.inbound.maxBodyValueChars = 20;
+      opts.outbound.maxBodyValueChars = 20;
+      defaultAdapter.onInboundRequest.call(opts, { ctx });
+      defaultAdapter.onOutboundResponse.call(opts, { ctx });
+      opts.logger.info.callCount.should.equal(2);
+      opts.logger.info.args[0][0].should.eql({
+        userId: 'test-user-id',
+        protocol: undefined,
+        method: 'POST',
+        path: '/test',
+        query: null,
+        requestId: uuid,
+        log_tag: 'inbound_request',
+        userAgent: '',
+        metaBody: {
+          body: {
+            fields: [
+              { id: 1, label: 'Greeting', value: 'Hello' },
+              { id: 2, label: 'Password', value: '***', _obfuscated: true }
+            ]
+          }
+        },
+        metaHeaders: {
+          headers: { Location: '/test/foo' }
+        }
+      });
+      opts.logger.info.args[1][0].should.eql({
+        status: undefined,
+        duration: NaN,
+        userId: 'test-user-id',
+        protocol: undefined,
+        method: 'POST',
+        path: '/test',
+        query: null,
+        requestId: uuid,
+        headers: {},
+        metaBody: {
+          request: {
+            body: {
+              fields: [
+                { id: 1, label: 'Greeting', value: 'Hello' },
+                { id: 2, label: 'Password', value: '***', _obfuscated: true }
+              ]
             }
           }
         },
