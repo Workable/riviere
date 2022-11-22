@@ -95,12 +95,8 @@ describe('riviere', () => {
     };
     const next = () => {};
     await middleware(ctx, next);
-    await new Promise(r =>
-      writable.end(() => {
-        ctx.state.calculatedContentLength.should.equal(10);
-        r();
-      })
-    );
+    await new Promise(r => writable.end(r));
+    ctx.state.calculatedContentLength.should.equal(10);
   });
 
   it('should calculate content length of outbound response body', async function() {
