@@ -1,5 +1,4 @@
 const defaultAdapter = require('../../../../lib/adapters/default');
-const url = require('url');
 const sinon = require('sinon');
 
 const sandbox = sinon.createSandbox();
@@ -89,7 +88,8 @@ describe('#defaultAdapter', () => {
               requestId: 'ok',
               contentLength: 0,
               userAgent: '',
-              log_tag: 'inbound_response'
+              log_tag: 'inbound_response',
+              metaHeaders: { request: {} }
             });
           }
         };
@@ -274,7 +274,8 @@ describe('#defaultAdapter', () => {
         requestId: 'ok',
         contentLength: 0,
         userAgent: '',
-        log_tag: 'inbound_response'
+        log_tag: 'inbound_response',
+        metaHeaders: { request: {} }
       });
     });
 
@@ -320,6 +321,7 @@ describe('#defaultAdapter', () => {
       http.request(options);
       logger.info.callCount.should.eql(2);
       logger.info.args[0][0].metaHeaders.headers.should.have.property('test');
+      logger.info.args[1][0].metaHeaders.request.headers.should.have.property('test');
       logger.info.args[0][0].should.containEql({
         method: 'GET',
         protocol: 'https',
@@ -411,7 +413,8 @@ describe('#defaultAdapter', () => {
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         contentLength: 0,
         userAgent: '',
-        log_tag: 'inbound_response'
+        log_tag: 'inbound_response',
+        metaHeaders: { request: {} }
       });
     });
 
@@ -483,7 +486,10 @@ describe('#defaultAdapter', () => {
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
         contentLength: 0,
         userAgent: '',
-        log_tag: 'inbound_response'
+        log_tag: 'inbound_response',
+        metaHeaders: {
+          request: {}
+        }
       });
     });
 
@@ -706,7 +712,10 @@ describe('#defaultAdapter', () => {
               requestId: 'ok',
               contentLength: 0,
               userAgent: '',
-              log_tag: 'inbound_response'
+              log_tag: 'inbound_response',
+              metaHeaders: {
+                request: {}
+              }
             });
           }
         };

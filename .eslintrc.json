@@ -1,21 +1,17 @@
 {
-  "extends": [
-    "workable-node",
-    "prettier"
-  ],
+  "extends": ["workable-node", "prettier"],
   "parserOptions": {
-    "ecmaVersion": 2017
+    "ecmaVersion": 2019
   },
-  "plugins": [
-    "prettier"
-  ],
+  "plugins": ["prettier"],
   "rules": {
     "operator-linebreak": "off",
     "security/detect-object-injection": "off",
     "max-len": [
       "error",
       {
-        "code": 120, "ignoreUrls": true
+        "code": 120,
+        "ignoreUrls": true
       }
     ]
   }
