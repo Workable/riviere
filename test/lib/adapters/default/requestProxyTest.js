@@ -89,6 +89,7 @@ describe('#defaultAdapter', () => {
               contentLength: 0,
               userAgent: '',
               log_tag: 'inbound_response',
+              headers: {},
               metaHeaders: { request: {} }
             });
           }
@@ -275,6 +276,7 @@ describe('#defaultAdapter', () => {
         contentLength: 0,
         userAgent: '',
         log_tag: 'inbound_response',
+        headers: {},
         metaHeaders: { request: {} }
       });
     });
@@ -311,7 +313,8 @@ describe('#defaultAdapter', () => {
           return {
             on: (event, fn) => {
               fn({
-                statusCode: 200
+                statusCode: 200,
+                headers: {}
               });
             }
           };
@@ -414,6 +417,7 @@ describe('#defaultAdapter', () => {
         contentLength: 0,
         userAgent: '',
         log_tag: 'inbound_response',
+        headers: {},
         metaHeaders: { request: {} }
       });
     });
@@ -487,6 +491,7 @@ describe('#defaultAdapter', () => {
         contentLength: 0,
         userAgent: '',
         log_tag: 'inbound_response',
+        headers: {},
         metaHeaders: {
           request: {}
         }
@@ -713,6 +718,7 @@ describe('#defaultAdapter', () => {
               contentLength: 0,
               userAgent: '',
               log_tag: 'inbound_response',
+              headers: {},
               metaHeaders: {
                 request: {}
               }
