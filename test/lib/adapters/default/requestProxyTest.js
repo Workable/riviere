@@ -30,7 +30,8 @@ describe('#defaultAdapter', () => {
         opts: {
           request: {
             enabled: true
-          }
+          },
+          headersRegex: new RegExp('^X-.*', 'i')
         }
       });
       const options = {
@@ -59,7 +60,7 @@ describe('#defaultAdapter', () => {
       const httpRequest = () => {
         return {
           on: (on, cb) => {
-            const res = {};
+            const res = { headers: { 'x-foo': 'foo' } };
             cb(res);
             logger.info.callCount.should.equal(2);
             logger.info.args[0][0].should.eql({
@@ -89,8 +90,7 @@ describe('#defaultAdapter', () => {
               contentLength: 0,
               userAgent: '',
               log_tag: 'inbound_response',
-              headers: {},
-              metaHeaders: { request: {} }
+              metaHeaders: { request: {}, headers: { 'x-foo': 'foo' } }
             });
           }
         };
@@ -276,7 +276,6 @@ describe('#defaultAdapter', () => {
         contentLength: 0,
         userAgent: '',
         log_tag: 'inbound_response',
-        headers: {},
         metaHeaders: { request: {} }
       });
     });
@@ -417,7 +416,6 @@ describe('#defaultAdapter', () => {
         contentLength: 0,
         userAgent: '',
         log_tag: 'inbound_response',
-        headers: {},
         metaHeaders: { request: {} }
       });
     });
@@ -491,7 +489,6 @@ describe('#defaultAdapter', () => {
         contentLength: 0,
         userAgent: '',
         log_tag: 'inbound_response',
-        headers: {},
         metaHeaders: {
           request: {}
         }
@@ -718,7 +715,6 @@ describe('#defaultAdapter', () => {
               contentLength: 0,
               userAgent: '',
               log_tag: 'inbound_response',
-              headers: {},
               metaHeaders: {
                 request: {}
               }
