@@ -387,6 +387,81 @@ describe('#defaultAdapter', () => {
       });
     });
 
+    it('should log headers mutated by the headerValueCallback', () => {
+      const opts = {
+        context: () => {
+          return {
+            test: true,
+            bodyKeys: ['testKayA']
+          };
+        },
+        logger: {
+          info: sandbox.spy()
+        },
+        constructor: {
+          EVENT: {
+            INBOUND_REQUEST_EVENT: 'INBOUND_REQUEST_EVENT'
+          }
+        },
+        bodyKeys: ['testKeyA'],
+        headerValueCallback: function(key, value) {
+          const regex = /id_token=[\w-]+\.[\w-]+\.[\w-]+/i;
+          return value.replace(regex, 'id_token=***');
+        },
+        headersRegex: new RegExp('XX-.*'),
+        serialize: msg => msg,
+        inbound: {
+          level: 'info'
+        },
+        traceHeaderName: 'x-ap-id',
+        sync: true
+      };
+      const ctx = {
+        request: {
+          method: 'post',
+          body: {
+            testKeyA: true
+          },
+          headers: {
+            'XX-something':
+              'https://site.com/path#id_token=xxx.xxx.xxx-xx&state=somestate&session_state=somesessionstate',
+            other: false,
+            'XX-something-else': 'random value',
+            'XX-something-different': 'id_token=some.token.tohide id_token=sometokentoshow'
+          },
+          req: {
+            url: '/test'
+          }
+        },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
+        originalUrl: '/test'
+      };
+      defaultAdapter.onInboundRequest.call(opts, { ctx });
+      opts.logger.info.calledOnce.should.equal(true);
+      opts.logger.info.args[0][0].should.eql({
+        test: true,
+        bodyKeys: ['testKayA'],
+        protocol: undefined,
+        method: 'POST',
+        path: '/test',
+        query: null,
+        requestId: uuid,
+        metaHeaders: {
+          headers: {
+            'XX-something': 'https://site.com/path#id_token=***&state=somestate&session_state=somesessionstate',
+            'XX-something-else': 'random value',
+            'XX-something-different': 'id_token=*** id_token=sometokentoshow'
+          }
+        },
+        userAgent: '',
+        log_tag: 'inbound_request'
+      });
+    });
+
     it('should log full path when configured', () => {
       const ctx = {
         request: {

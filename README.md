@@ -31,12 +31,13 @@ Use `riviere` if you want an easy way to log all the HTTP traffic for your serve
     10. [context](#options_context)
     11. [errors.callback](#options_errors_callback)
     12. [headersRegex](#options_headers_regex)
-    13. [health](#options_health)
-    14. [outbound.enabled](#options_outbound_enabled)
-    15. [outbound.request.enabled](#options_outbound_request_enabled)
-    16. [outbound.maxBodyValueChars](#options_outbound_max_body_value_chars)
-    17. [outbound.blacklistedPathRegex](#options_outbound_blacklisted_path_regex)
-    18. [traceHeaderName](#options_trace_header_name)
+    13. [headerValueCallback](#options_header_value_callback)
+    14. [health](#options_health)
+    15. [outbound.enabled](#options_outbound_enabled)
+    16. [outbound.request.enabled](#options_outbound_request_enabled)
+    17. [outbound.maxBodyValueChars](#options_outbound_max_body_value_chars)
+    18. [outbound.blacklistedPathRegex](#options_outbound_blacklisted_path_regex)
+    19. [traceHeaderName](#options_trace_header_name)
 8. [License](#License)
 
 ---
@@ -424,6 +425,27 @@ All the inbound request's headers starting with "X-" will be logged by default.
 ```js
 {
     headersRegex: new RegExp('X-.+', 'i')
+}
+```
+
+<a name="options_header_value_callback"></a>
+**headerValueCallback**
+
+This option can be used to let you modify or change part or the whole value of a header. 
+This function will be applied to all headers that are passed based on the `headersRegex`. 
+This function takes two argument, the `key` (i.e. the header name) and the `value` (i.e. the header value) and returns the new value of the header.
+This function is very useful in cases where is mandatory to hide or remove sensitive data that is part of the header value.
+Defaults to undefined. In case of undefined then the header value will remain as is.
+
+*Example*:
+In this example we hide some sensitive `id_token` value.
+
+```js
+{
+    headerValueCallback: (key, value) {
+        const regex = /id_token=[\w-]+\.[\w-]+\.[\w-]+/i;
+        return value.replace(regex, 'id_token=***');
+    };
 }
 ```
 

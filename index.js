@@ -9,7 +9,7 @@ const httpsProxy = require('./lib/proxies/https').proxy;
 const { EVENT } = Loggable;
 
 function buildRiviere(options = {}) {
-  const { errors = {}, logger, inbound, outbound, traceHeaderName, headersRegex } = defaultsDeep(
+  const { errors = {}, logger, inbound, outbound, traceHeaderName, headersRegex, headerValueCallback } = defaultsDeep(
     options,
     defaultOptions(options)
   );
@@ -26,6 +26,7 @@ function buildRiviere(options = {}) {
         bodyKeys: options.bodyKeys,
         bodyKeysRegex: options.bodyKeysRegex,
         bodyKeysCallback: options.bodyKeysCallback,
+        headerValueCallback,
         ...outbound
       }
     });
