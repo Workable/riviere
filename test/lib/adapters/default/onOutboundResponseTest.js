@@ -390,6 +390,58 @@ describe('#defaultAdapter', () => {
       });
     });
 
+    it('should log headers mutated from the headerValueCallback', () => {
+      const ctx = {
+        state: {},
+        request: {
+          method: 'post',
+          headers: {
+            test_user_id_header: 'test-user-id'
+          },
+          req: {
+            url: '/test'
+          }
+        },
+        req: {
+          url: '/test',
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
+        originalUrl: '/test',
+        response: {
+          status: 200,
+          headers: {
+            Location: '/test/foo?id_token=some.thing.to-hide',
+            'Set-Cookie': 'deadbeef'
+          }
+        }
+      };
+      const opts = getOpts(sandbox);
+      opts.headersRegex = new RegExp('location', 'i');
+      opts.headerValueCallback = (key, value) => {
+        const regex = /id_token=[\w-]+\.[\w-]+\.[\w-]+/i;
+        return value.replace(regex, 'id_token=***');
+      };
+      defaultAdapter.onInboundRequest.call(opts, { ctx });
+      defaultAdapter.onOutboundResponse.call(opts, { ctx });
+      opts.logger.info.callCount.should.equal(2);
+      opts.logger.info.args[1][0].should.eql({
+        status: undefined,
+        duration: NaN,
+        userId: 'test-user-id',
+        protocol: undefined,
+        method: 'POST',
+        path: '/test',
+        query: null,
+        requestId: uuid,
+        headers: { headers: { Location: '/test/foo?id_token=***' } },
+        contentLength: 0,
+        userAgent: '',
+        log_tag: 'outbound_response'
+      });
+    });
+
     it('should handle health endpoint', () => {
       const ctx = {
         state: {},
