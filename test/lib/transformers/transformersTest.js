@@ -14,7 +14,7 @@ describe('mapOutReq', () => {
     result.should.eql({
       method: undefined,
       protocol: 'http',
-      host: 'hostname',
+      riviereHost: 'hostname',
       port: undefined,
       path: 'path',
       query: 'query',
@@ -46,7 +46,7 @@ describe('mapOutReq', () => {
     result.should.eql({
       method: undefined,
       protocol: 'http',
-      host: 'hostname',
+      riviereHost: 'hostname',
       port: undefined,
       path: 'path',
       query: 'query',
@@ -84,7 +84,7 @@ describe('mapOutReq', () => {
     result.should.eql({
       method: 'POST',
       protocol: 'http',
-      host: 'hostname',
+      riviereHost: 'hostname',
       port: undefined,
       path: 'path',
       query: 'query',
@@ -122,7 +122,7 @@ describe('mapOutReq', () => {
     result.should.eql({
       method: 'POST',
       protocol: 'http',
-      host: 'hostname',
+      riviereHost: 'hostname',
       port: undefined,
       path: 'path',
       query: 'query',
@@ -176,7 +176,7 @@ describe('mapOutReq', () => {
     result.should.eql({
       method: 'POST',
       protocol: 'http',
-      host: 'hostname',
+      riviereHost: 'hostname',
       port: undefined,
       path: 'path',
       query: 'query',
@@ -220,7 +220,7 @@ describe('mapOutReq', () => {
     result.should.eql({
       method: 'POST',
       protocol: 'http',
-      host: 'hostname',
+      riviereHost: 'hostname',
       port: undefined,
       path: 'path',
       query: 'query',
@@ -261,7 +261,7 @@ describe('mapOutReq', () => {
     result.should.eql({
       method: 'POST',
       protocol: 'http',
-      host: 'hostname',
+      riviereHost: 'hostname',
       port: undefined,
       path: 'path',
       query: 'query',
