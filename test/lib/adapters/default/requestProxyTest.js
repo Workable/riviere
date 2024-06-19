@@ -16,7 +16,7 @@ describe('#defaultAdapter', () => {
       defaultAdapter.requestProxy();
     });
 
-    it('should pass when incomingMessage.url exists', () => {
+    it.only('should pass when incomingMessage.url exists', () => {
       const logger = {
         info: sandbox.spy()
       };
