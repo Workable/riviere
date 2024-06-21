@@ -41,12 +41,13 @@ describe('mapOutReq', () => {
       }
     };
     const result = mapOutReq(inMsg, undefined, {
-      headersRegex: new RegExp('^X-.*', 'i')
+      headersRegex: new RegExp('^X-.*', 'i'),
+      hostFieldName: 'test_host'
     });
     result.should.eql({
       method: undefined,
       protocol: 'http',
-      host: 'hostname',
+      test_host: 'hostname',
       port: undefined,
       path: 'path',
       query: 'query',

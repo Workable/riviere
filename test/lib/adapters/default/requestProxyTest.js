@@ -31,7 +31,8 @@ describe('#defaultAdapter', () => {
           request: {
             enabled: true
           },
-          headersRegex: new RegExp('^X-.*', 'i')
+          headersRegex: new RegExp('^X-.*', 'i'),
+          hostFieldName: 'myHost'
         }
       });
       const options = {
@@ -71,7 +72,7 @@ describe('#defaultAdapter', () => {
               query: 'some=something',
               requestId: 'ok',
               href: 'http://some-host:8080/some',
-              host: 'some-host',
+              myHost: 'some-host',
               metaBody: {},
               metaHeaders: {},
               contentLength: 0,
@@ -80,7 +81,7 @@ describe('#defaultAdapter', () => {
             logger.info.args[1][0].should.eql({
               method: 'GET',
               path: '/some',
-              host: 'some-host',
+              myHost: 'some-host',
               duration: 0,
               query: 'some=something',
               href: 'http://some-host:8080/some',
@@ -114,7 +115,8 @@ describe('#defaultAdapter', () => {
         opts: {
           request: {
             enabled: true
-          }
+          },
+          hostFieldName: 'myHost'
         }
       });
       const options = {
@@ -177,7 +179,8 @@ describe('#defaultAdapter', () => {
           blacklistedPathRegex: new RegExp('^/v4.0/traces$'),
           request: {
             enabled: true
-          }
+          },
+          hostFieldName: 'myHost'
         }
       });
       const options = {
@@ -221,7 +224,8 @@ describe('#defaultAdapter', () => {
         opts: {
           request: {
             enabled: true
-          }
+          },
+          hostFieldName: 'myHost'
         }
       });
       const options = {
@@ -255,7 +259,7 @@ describe('#defaultAdapter', () => {
         path: '/some?somequery=query',
         query: undefined,
         requestId: 'ok',
-        host: 'test-host',
+        myHost: 'test-host',
         protocol: 'https',
         href: 'https://test-host:8080/some%3Fsomequery=query',
         metaBody: {},
@@ -267,7 +271,7 @@ describe('#defaultAdapter', () => {
         method: 'GET',
         path: '/some?somequery=query',
         status: 200,
-        host: 'test-host',
+        myHost: 'test-host',
         protocol: 'https',
         href: 'https://test-host:8080/some%3Fsomequery=query',
         duration: 0,
@@ -295,7 +299,8 @@ describe('#defaultAdapter', () => {
           headersRegex: new RegExp('test', 'i'),
           request: {
             enabled: true
-          }
+          },
+          hostFieldName: 'myHost'
         }
       });
       const options = {
@@ -327,7 +332,7 @@ describe('#defaultAdapter', () => {
       logger.info.args[0][0].should.containEql({
         method: 'GET',
         protocol: 'https',
-        host: 'test-host',
+        myHost: 'test-host',
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
@@ -337,7 +342,7 @@ describe('#defaultAdapter', () => {
       });
       logger.info.args[1][0].should.containEql({
         method: 'GET',
-        host: 'test-host',
+        myHost: 'test-host',
         path: '/some?somequery=query',
         status: 200,
         duration: 0,
@@ -434,7 +439,8 @@ describe('#defaultAdapter', () => {
         opts: {
           request: {
             enabled: true
-          }
+          },
+          hostFieldName: 'myHost'
         }
       });
       const options = {
@@ -465,7 +471,7 @@ describe('#defaultAdapter', () => {
       logger.info.args[0][0].should.eql({
         method: 'GET',
         protocol: 'https',
-        host: 'test-host',
+        myHost: 'test-host',
         port: '8080',
         path: '/some?somequery=query',
         query: undefined,
@@ -482,7 +488,7 @@ describe('#defaultAdapter', () => {
         status: 200,
         duration: 0,
         href: 'https://test-host/some%3Fsomequery=query',
-        host: 'test-host',
+        myHost: 'test-host',
         query: undefined,
         protocol: 'https',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
@@ -509,7 +515,8 @@ describe('#defaultAdapter', () => {
         opts: {
           request: {
             enabled: true
-          }
+          },
+          hostFieldName: 'myHost'
         }
       });
       const options = null;
@@ -542,7 +549,8 @@ describe('#defaultAdapter', () => {
         opts: {
           request: {
             enabled: true
-          }
+          },
+          hostFieldName: 'myHost'
         }
       });
       const options = {
@@ -572,7 +580,7 @@ describe('#defaultAdapter', () => {
       logger.info.args[0][0].should.eql({
         method: 'GET',
         protocol: 'http',
-        host: 'some-host',
+        myHost: 'some-host',
         href: 'http://some-host:8080/some',
         port: '8080',
         path: '/some',
@@ -599,7 +607,8 @@ describe('#defaultAdapter', () => {
         opts: {
           request: {
             enabled: true
-          }
+          },
+          hostFieldName: 'myHost'
         }
       });
       const http = {
@@ -635,14 +644,14 @@ describe('#defaultAdapter', () => {
               path: '/some',
               query: 'some=something',
               href: 'http://some-host/some',
-              host: 'some-host',
+              myHost: 'some-host',
               metaBody: {},
               log_tag: 'outbound_request'
             });
             logger.info.args[1][0].should.containEql({
               method: 'GET',
               path: '/some',
-              host: 'some-host',
+              myHost: 'some-host',
               duration: 0,
               query: 'some=something',
               status: undefined,
@@ -670,7 +679,8 @@ describe('#defaultAdapter', () => {
         opts: {
           request: {
             enabled: false
-          }
+          },
+          hostFieldName: 'myHost'
         }
       });
       const options = {
@@ -705,7 +715,7 @@ describe('#defaultAdapter', () => {
             logger.info.args[0][0].should.eql({
               method: 'GET',
               path: '/some',
-              host: 'some-host',
+              myHost: 'some-host',
               duration: 0,
               query: 'some=something',
               href: 'http://some-host:8080/some',

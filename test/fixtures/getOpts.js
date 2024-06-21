@@ -37,6 +37,7 @@ const getOpts = sandbox => {
       level: 'info',
       enabled: true
     },
+    hostFieldName: 'host',
     traceHeaderName: 'X-Ap-ID'
   };
 };
