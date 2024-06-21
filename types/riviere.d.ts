@@ -31,7 +31,7 @@ export function riviere(options?: {
   bodyKeysCallback?: (body: any, ctx?: any) => any,
   headersRegex?: RegExp,
   headerValueCallback?: (key: string, value: any) => any,
-  hostFieldName: string,
+  hostFieldName?: string,
   traceHeaderName?: string,
   forceIds?: boolean
 }): any;
