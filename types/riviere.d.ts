@@ -11,6 +11,7 @@ export function riviere(options?: {
     info: any,
     error: any
   },
+  loggerCallback?: (event: any) => void,
   inbound?: {
     enabled: boolean,
     request?: {
