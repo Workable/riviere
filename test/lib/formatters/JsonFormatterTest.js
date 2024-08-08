@@ -117,4 +117,24 @@ describe('Test Json Formatter', () => {
     json.message.should.equal('test-error');
     json.stack_trace.should.equal(obj.stack);
   });
+
+  it('should call lggerCallback', () => {
+    const stub = sandbox.stub();
+    const formatter = new JsonFormatter(false, false, '', stub);
+    const obj = {
+      method: 'GET',
+      requestId: 'testRequestId',
+      path: 'test-path',
+      log_tag: 'inbound_request',
+      duration: 50
+    };
+    formatter.formatObject(obj);
+    const event = stub.args[0][0];
+
+    event.severity.should.equal('info');
+    event['logging.googleapis.com/operation'].id.should.equal(obj.requestId);
+    event.requestId.should.equal(obj.requestId);
+    event.httpRequest.requestUrl.should.equal(obj.path);
+    event.httpRequest.latency.should.equal('0.050000s');
+  });
 });
