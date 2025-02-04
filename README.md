@@ -525,6 +525,25 @@ Defaults to [].
 }
 ```
 
+<a name="options_outbound_request_obfuscated_headers"></a>
+**outbound.request.obfuscatedHeaders**
+
+This option can be used to prevent specific URL paths from being logged.
+Every request that carries a header with a key that matches the values
+will obfuscate the URL path when logging.
+
+*Example*:
+
+```js
+{
+    outbound: {
+        request: {
+            obfuscatedHeaders: ['some-header']
+        }
+    }
+}
+```
+
 <a name="options_trace_header_name"></a>
 **traceHeaderName**
 
