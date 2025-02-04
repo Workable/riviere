@@ -736,5 +736,84 @@ describe('#defaultAdapter', () => {
       http.request(options);
       logger.info.callCount.should.eql(1);
     });
+
+    it('should pass and obfuscate URL path if request contains headers from request.obfuscateHeaders values', () => {
+      const logger = {
+        info: sandbox.spy()
+      };
+      const serialize = a => a;
+      const traceHeaderName = 'test';
+      const requestProxy = defaultAdapter.requestProxy({
+        logger,
+        traceHeaderName,
+        serialize,
+        level: 'info',
+        opts: {
+          request: {
+            enabled: true,
+            obfuscateHeaders: ['some-obfuscated-header']
+          },
+          hostFieldName: 'myHost'
+        }
+      });
+      const options = {
+        method: 'GET',
+        port: '8080',
+        headers: {
+          [traceHeaderName]: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+          'some-obfuscated-header': true
+        },
+        protocol: 'https:',
+        href: 'https://test-host/some?somequery=query',
+        path: '/some?somequery=query',
+        pathname: '/some?somequery=query',
+        host: 'test-host'
+      };
+      const http = {
+        request: () => {
+          return {
+            on: (event, fn) => {
+              fn({
+                statusCode: 200
+              });
+            }
+          };
+        }
+      };
+      http.request = new Proxy(http.request, requestProxy);
+      http.request(options);
+      logger.info.callCount.should.eql(2);
+      logger.info.args[0][0].should.eql({
+        method: 'GET',
+        protocol: 'https',
+        myHost: 'test-host',
+        port: '8080',
+        path: '/some?somequery=query',
+        query: undefined,
+        href: 'https://test-host/***',
+        requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+        metaBody: {},
+        metaHeaders: {},
+        contentLength: 0,
+        log_tag: 'outbound_request'
+      });
+      logger.info.args[1][0].should.eql({
+        method: 'GET',
+        path: '/some?somequery=query',
+        status: 200,
+        duration: 0,
+        href: 'https://test-host/***',
+        myHost: 'test-host',
+        query: undefined,
+        protocol: 'https',
+        requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+        contentLength: 0,
+        userAgent: '',
+        log_tag: 'inbound_response',
+        metaHeaders: {
+          request: {}
+        }
+      });
+    });
   });
 });
