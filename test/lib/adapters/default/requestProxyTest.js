@@ -751,7 +751,7 @@ describe('#defaultAdapter', () => {
         opts: {
           request: {
             enabled: true,
-            obfuscateHeaders: ['some-obfuscated-header']
+            obfuscateHrefIfHeaderExists: ['X-Riviere-obfuscate']
           },
           hostFieldName: 'myHost'
         }
@@ -761,10 +761,9 @@ describe('#defaultAdapter', () => {
         port: '8080',
         headers: {
           [traceHeaderName]: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
-          'some-obfuscated-header': true
+          'X-Riviere-obfuscate': true
         },
         protocol: 'https:',
-        href: 'https://test-host/some?somequery=query',
         path: '/some?somequery=query',
         pathname: '/some?somequery=query',
         host: 'test-host'
@@ -788,7 +787,7 @@ describe('#defaultAdapter', () => {
         protocol: 'https',
         myHost: 'test-host',
         port: '8080',
-        path: '/some?somequery=query',
+        path: '/***',
         query: undefined,
         href: 'https://test-host/***',
         requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
@@ -799,7 +798,7 @@ describe('#defaultAdapter', () => {
       });
       logger.info.args[1][0].should.eql({
         method: 'GET',
-        path: '/some?somequery=query',
+        path: '/***',
         status: 200,
         duration: 0,
         href: 'https://test-host/***',
