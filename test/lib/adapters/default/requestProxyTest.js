@@ -737,7 +737,7 @@ describe('#defaultAdapter', () => {
       logger.info.callCount.should.eql(1);
     });
 
-    it('should pass and obfuscate URL path if request contains headers from request.obfuscateHeaders values', () => {
+    it('should pass and obfuscate URL path if request contains headers from obfuscateHeaders values', () => {
       const logger = {
         info: sandbox.spy()
       };
@@ -750,10 +750,10 @@ describe('#defaultAdapter', () => {
         level: 'info',
         opts: {
           request: {
-            enabled: true,
-            obfuscateHrefIfHeaderExists: ['X-Riviere-obfuscate']
+            enabled: true
           },
-          hostFieldName: 'myHost'
+          hostFieldName: 'myHost',
+          obfuscateHrefIfHeaderExists: ['X-Riviere-obfuscate']
         }
       });
       const options = {
