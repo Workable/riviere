@@ -538,7 +538,7 @@ Defaults to `['X-Riviere-obfuscate']`
 ```js
 {
     outbound: {
-        obfuscateHrefIfHeaderExists: ['X-Riviere-obfuscate']
+        obfuscateHrefIfHeaderExists: 'X-Riviere-obfuscate'
     }
 }
 ```

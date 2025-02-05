@@ -753,7 +753,7 @@ describe('#defaultAdapter', () => {
             enabled: true
           },
           hostFieldName: 'myHost',
-          obfuscateHrefIfHeaderExists: ['X-Riviere-obfuscate']
+          obfuscateHrefIfHeaderExists: 'X-Riviere-obfuscate'
         }
       });
       const options = {
