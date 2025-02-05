@@ -531,7 +531,7 @@ Defaults to [].
 This option can be used to prevent specific URL paths from being logged.
 Every request that carries a header with a key that matches the values
 will obfuscate the URL path when logging. <br>
-Defaults to `['X-Riviere-obfuscate']`
+Defaults to `'X-Riviere-obfuscate'`
 
 *Example*:
 
