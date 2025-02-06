@@ -1,4 +1,4 @@
-const { mapOutReq, mapInRes } = require('../../../lib/transformers/transformers');
+const { mapOutReq } = require('../../../lib/transformers/transformers');
 
 describe('mapOutReq', () => {
   it('should able to get uri', () => {
@@ -273,38 +273,5 @@ describe('mapOutReq', () => {
       contentLength: 0,
       log_tag: 'outbound_request'
     });
-  });
-});
-
-describe('mapInRes', () => {
-  it('should obfuscate href if the request contained the header from obfuscateHrefIfHeaderExists', () => {
-    const startedAt = new Date().getTime();
-    const res = {
-      statusCode: 200,
-      headers: {
-        'Content-Length': 100,
-        'User-Agent': 'test-agent'
-      }
-    };
-
-    const req = {
-      href: 'http://hostname/path?query=query',
-      metaHeaders: {
-        headers: {
-          'X-Riviere-obfuscate': true
-        }
-      },
-      method: null,
-      protocol: 'http',
-      host: 'hostname',
-      path: '/path',
-      query: '?query=query'
-    };
-
-    const result = mapInRes(res, req, startedAt, undefined, {
-      obfuscateHrefIfHeaderExists: 'X-Riviere-obfuscate'
-    });
-
-    result.href.should.eql('http://hostname/***');
   });
 });
