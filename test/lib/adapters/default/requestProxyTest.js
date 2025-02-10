@@ -737,81 +737,153 @@ describe('#defaultAdapter', () => {
       logger.info.callCount.should.eql(1);
     });
 
-    it('should pass and obfuscate URL path if request contains headers from obfuscateHeaders values', () => {
-      const logger = {
-        info: sandbox.spy()
-      };
-      const serialize = a => a;
-      const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({
-        logger,
-        traceHeaderName,
-        serialize,
-        level: 'info',
-        opts: {
-          request: {
-            enabled: true
+    context('when request contains the header from obfuscateHrefIfHeaderExists value', () => {
+      it('should pass and obfuscate URL path when request is enabled', () => {
+        const logger = {
+          info: sandbox.spy()
+        };
+        const serialize = a => a;
+        const traceHeaderName = 'test';
+        const requestProxy = defaultAdapter.requestProxy({
+          logger,
+          traceHeaderName,
+          serialize,
+          level: 'info',
+          opts: {
+            request: {
+              enabled: true
+            },
+            hostFieldName: 'myHost',
+            obfuscateHrefIfHeaderExists: 'X-Riviere-obfuscate'
+          }
+        });
+        const options = {
+          method: 'GET',
+          port: '8080',
+          headers: {
+            [traceHeaderName]: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+            'X-Riviere-obfuscate': true
           },
-          hostFieldName: 'myHost',
-          obfuscateHrefIfHeaderExists: 'X-Riviere-obfuscate'
-        }
+          protocol: 'https:',
+          path: '/some?somequery=query',
+          pathname: '/some?somequery=query',
+          host: 'test-host'
+        };
+        const http = {
+          request: () => {
+            return {
+              on: (event, fn) => {
+                fn({
+                  statusCode: 200
+                });
+              }
+            };
+          }
+        };
+        http.request = new Proxy(http.request, requestProxy);
+        http.request(options);
+        logger.info.callCount.should.eql(2);
+        logger.info.args[0][0].should.eql({
+          method: 'GET',
+          protocol: 'https',
+          myHost: 'test-host',
+          port: '8080',
+          path: '/***',
+          query: undefined,
+          href: 'https://test-host/***',
+          requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+          metaBody: {},
+          metaHeaders: {},
+          contentLength: 0,
+          log_tag: 'outbound_request'
+        });
+        logger.info.args[1][0].should.eql({
+          method: 'GET',
+          path: '/***',
+          status: 200,
+          duration: 0,
+          href: 'https://test-host/***',
+          myHost: 'test-host',
+          query: undefined,
+          protocol: 'https',
+          requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+          contentLength: 0,
+          userAgent: '',
+          log_tag: 'inbound_response',
+          metaHeaders: {
+            request: {}
+          }
+        });
       });
-      const options = {
-        method: 'GET',
-        port: '8080',
-        headers: {
-          [traceHeaderName]: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
-          'X-Riviere-obfuscate': true
-        },
-        protocol: 'https:',
-        path: '/some?somequery=query',
-        pathname: '/some?somequery=query',
-        host: 'test-host'
-      };
-      const http = {
-        request: () => {
-          return {
-            on: (event, fn) => {
-              fn({
-                statusCode: 200
-              });
+
+      it('should pass and obfuscate URL path from response when request is disabled', () => {
+        const logger = {
+          info: sandbox.spy()
+        };
+        const serialize = a => a;
+        const traceHeaderName = 'test';
+        const requestProxy = defaultAdapter.requestProxy({
+          logger,
+          traceHeaderName,
+          serialize,
+          level: 'info',
+          opts: {
+            request: {
+              enabled: false
+            },
+            hostFieldName: 'myHost',
+            obfuscateHrefIfHeaderExists: 'X-Riviere-obfuscate',
+            headersRegex: new RegExp('^X-.*$')
+          }
+        });
+        const options = {
+          method: 'GET',
+          port: '8080',
+          headers: {
+            [traceHeaderName]: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+            'X-Riviere-obfuscate': true
+          },
+          protocol: 'https:',
+          path: '/some?somequery=query',
+          pathname: '/some?somequery=query',
+          host: 'test-host'
+        };
+        const http = {
+          request: () => {
+            return {
+              on: (event, fn) => {
+                fn({
+                  statusCode: 200,
+                  headers: []
+                });
+              }
+            };
+          }
+        };
+        http.request = new Proxy(http.request, requestProxy);
+        http.request(options);
+        logger.info.callCount.should.eql(1);
+        logger.info.args[0][0].should.eql({
+          method: 'GET',
+          path: '/***',
+          status: 200,
+          duration: 0,
+          href: 'https://test-host/***',
+          myHost: 'test-host',
+          query: undefined,
+          protocol: 'https',
+          requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
+          contentLength: 0,
+          userAgent: '',
+          log_tag: 'inbound_response',
+          metaHeaders: {
+            request: {
+              headers: {
+                'X-Riviere-obfuscate': true
+              }
             }
-          };
-        }
-      };
-      http.request = new Proxy(http.request, requestProxy);
-      http.request(options);
-      logger.info.callCount.should.eql(2);
-      logger.info.args[0][0].should.eql({
-        method: 'GET',
-        protocol: 'https',
-        myHost: 'test-host',
-        port: '8080',
-        path: '/***',
-        query: undefined,
-        href: 'https://test-host/***',
-        requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
-        metaBody: {},
-        metaHeaders: {},
-        contentLength: 0,
-        log_tag: 'outbound_request'
-      });
-      logger.info.args[1][0].should.eql({
-        method: 'GET',
-        path: '/***',
-        status: 200,
-        duration: 0,
-        href: 'https://test-host/***',
-        myHost: 'test-host',
-        query: undefined,
-        protocol: 'https',
-        requestId: 'cff07fc2-4ef6-42b6-9a74-ba3abf8b31a2',
-        contentLength: 0,
-        userAgent: '',
-        log_tag: 'inbound_response',
-        metaHeaders: {
-          request: {}
-        }
+          }
+        });
       });
     });
   });
