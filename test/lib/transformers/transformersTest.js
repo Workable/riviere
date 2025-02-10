@@ -274,4 +274,45 @@ describe('mapOutReq', () => {
       log_tag: 'outbound_request'
     });
   });
+
+  it('should convert a string bodyKeysRegex to RegExp', () => {
+    const inMsg = {
+      method: 'POST',
+      body: '{ "bananas": "bar", "banana1": "apple1", "banana2": "apple2" }',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      uri: {
+        protocol: 'http:',
+        hostname: 'hostname',
+        pathname: 'path',
+        query: 'query'
+      }
+    };
+
+    const options = {
+      bodyKeysRegex: '^banana\\d+'
+    };
+
+    const result = mapOutReq(inMsg, undefined, options);
+    result.should.eql({
+      method: 'POST',
+      protocol: 'http',
+      host: 'hostname',
+      port: undefined,
+      path: 'path',
+      query: 'query',
+      href: 'http://hostname/path',
+      requestId: undefined,
+      contentLength: 0,
+      log_tag: 'outbound_request',
+      metaHeaders: {},
+      metaBody: {
+        body: {
+          banana1: 'apple1',
+          banana2: 'apple2'
+        }
+      }
+    });
+  });
 });
