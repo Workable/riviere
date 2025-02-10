@@ -164,50 +164,100 @@ describe('#defaultAdapter', () => {
       logger.info.callCount.should.eql(0);
     });
 
-    it('should pass but not log when path is in blacklisted paths', () => {
-      const logger = {
-        info: sandbox.spy()
-      };
-      const serialize = a => a;
-      const traceHeaderName = 'test';
-      const requestProxy = defaultAdapter.requestProxy({
-        logger,
-        serialize,
-        traceHeaderName,
-        level: 'info',
-        opts: {
-          blacklistedPathRegex: new RegExp('^/v4.0/traces$'),
-          request: {
-            enabled: true
+    context('when path is in blacklisted paths', () => {
+      it('should pass but not log when path is in blacklisted paths', () => {
+        const logger = {
+          info: sandbox.spy()
+        };
+        const serialize = a => a;
+        const traceHeaderName = 'test';
+        const requestProxy = defaultAdapter.requestProxy({
+          logger,
+          serialize,
+          traceHeaderName,
+          level: 'info',
+          opts: {
+            blacklistedPathRegex: new RegExp('^/v4.0/traces$'),
+            request: {
+              enabled: true
+            },
+            hostFieldName: 'myHost'
+          }
+        });
+        const options = {
+          method: 'PUT',
+          port: '8080',
+          headers: {
+            test: 'ok'
           },
-          hostFieldName: 'myHost'
-        }
+          protocol: 'https:',
+          path: '/v4.0/traces',
+          pathname: '/v4.0/traces',
+          hostname: 'test-host'
+        };
+        const http = {
+          request: () => {
+            return {
+              on: (event, fn) => {
+                fn({
+                  statusCode: 200
+                });
+              }
+            };
+          }
+        };
+        http.request = new Proxy(http.request, requestProxy);
+        http.request(options);
+        logger.info.callCount.should.eql(0);
       });
-      const options = {
-        method: 'PUT',
-        port: '8080',
-        headers: {
-          test: 'ok'
-        },
-        protocol: 'https:',
-        path: '/v4.0/traces',
-        pathname: '/v4.0/traces',
-        hostname: 'test-host'
-      };
-      const http = {
-        request: () => {
-          return {
-            on: (event, fn) => {
-              fn({
-                statusCode: 200
-              });
-            }
-          };
-        }
-      };
-      http.request = new Proxy(http.request, requestProxy);
-      http.request(options);
-      logger.info.callCount.should.eql(0);
+
+      it('should convert a string blacklistedPathRegex to RegExp', () => {
+        const logger = {
+          info: sandbox.spy(),
+          error: sandbox.spy()
+        };
+        const serialize = a => a;
+        const traceHeaderName = 'test';
+        const requestProxy = defaultAdapter.requestProxy({
+          logger,
+          serialize,
+          traceHeaderName,
+          level: 'info',
+          opts: {
+            blacklistedPathRegex: '^/v4.0/trac.*',
+            request: {
+              enabled: true
+            },
+            hostFieldName: 'myHost'
+          }
+        });
+        const options = {
+          method: 'PUT',
+          port: '8080',
+          headers: {
+            test: 'ok'
+          },
+          protocol: 'https:',
+          path: '/v4.0/traces',
+          pathname: '/v4.0/traces',
+          hostname: 'test-host'
+        };
+        const http = {
+          request: () => {
+            return {
+              on: (event, fn) => {
+                fn({
+                  statusCode: 200
+                });
+              }
+            };
+          }
+        };
+        http.request = new Proxy(http.request, requestProxy);
+        http.request(options);
+        logger.info.callCount.should.eql(0);
+        logger.error.callCount.should.eql(0);
+      });
     });
 
     it('should pass when incomingMessage.url does not exist', () => {
