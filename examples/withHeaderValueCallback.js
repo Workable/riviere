@@ -1,6 +1,5 @@
 const Koa = require('koa');
 const riviere = require('../index');
-const request = require('request-promise');
 
 const app = new Koa();
 

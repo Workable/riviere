@@ -109,15 +109,11 @@ app.listen(3000);
 const Koa = require('koa');
 const riviere = require('riviere');
 
-// this is just an example, you can use any http library
-const rp = require('request-promise');
-
 const app = new Koa();
 
 app.use(riviere());
 app.use(async function(ctx) {
-  await rp({
-    uri: 'https://www.google.com',
+  await fetch('https://www.google.com', {
     // You can include the x-riviere-id header
     // to trace the request's context inside which
     // the external request is made
