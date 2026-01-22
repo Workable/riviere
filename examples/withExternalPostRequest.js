@@ -1,6 +1,5 @@
 const Koa = require('koa');
 const riviere = require('../index');
-const request = require('request-promise');
 
 const app = new Koa();
 
@@ -15,22 +14,18 @@ app.use(
 );
 
 app.use(async function(ctx) {
-  var options = {
+  await fetch('https://jsonplaceholder.typicode.com/posts', {
     method: 'POST',
-    uri: 'https://jsonplaceholder.typicode.com/posts',
-    body: {
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'x-riviere-id': ctx.request.headers['x-riviere-id'] // Please note header keys are lowercased
+    },
+    body: JSON.stringify({
       title: 'foo',
       body: 'bar',
       userId: 1
-    },
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-      'x-riviere-id': ctx.request.headers['x-riviere-id'] // Please note header keys are lowercased
-    },
-    json: true
-  };
-
-  await request(options);
+    })
+  });
 
   ctx.body = 'Hello World';
 });

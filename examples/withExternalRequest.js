@@ -1,6 +1,5 @@
 const Koa = require('koa');
 const riviere = require('../index');
-const request = require('request-promise');
 
 const app = new Koa();
 
@@ -13,8 +12,7 @@ app.use(
 );
 
 app.use(async function(ctx) {
-  await request({
-    uri: 'https://www.google.com',
+  await fetch('https://www.google.com', {
     // You can include the X-Riviere-Id header to trace the request's context inside which
     // the external request is made. This is optional but recommended for better tracing:
     headers: {
