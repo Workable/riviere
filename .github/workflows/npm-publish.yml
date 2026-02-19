@@ -26,5 +26,5 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm test
-      - run: npm publish --ignore-scripts
+      - run: unset NODE_AUTH_TOKEN && npm publish --ignore-scripts
 
