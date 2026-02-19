@@ -18,7 +18,8 @@ export function riviere(options?: {
       enabled: boolean
     },
     level: string,
-    maxBodyValueChars?: number
+    maxBodyValueChars?: number,
+    blacklistedPaths?: string[]
   },
   outbound?: {
     enabled: boolean,

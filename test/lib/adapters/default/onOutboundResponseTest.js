@@ -489,5 +489,36 @@ describe('#defaultAdapter', () => {
         duration: NaN
       });
     });
+    it('should respect inbound blacklisted paths', () => {
+      const ctx = {
+        state: {},
+        request: {
+          method: 'GET',
+          headers: {
+            test_user_id_header: 'test-user-id'
+          },
+          path: '/health',
+          req: {
+            url: '/health'
+          }
+        },
+        req: {
+          headers: {
+            'x-ap-id': uuid
+          }
+        },
+        originalUrl: '/health',
+        response: {
+          status: 200
+        }
+      };
+      const opts = getOpts(sandbox);
+      opts.inbound.blacklistedPaths = ['/health'];
+
+      defaultAdapter.onInboundRequest.call(opts, { ctx });
+      defaultAdapter.onOutboundResponse.call(opts, { ctx });
+      opts.logger.info.args.should.be.empty();
+      opts.logger.info.called.should.be.false();
+    });
   });
 });
