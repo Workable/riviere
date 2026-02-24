@@ -31,7 +31,9 @@
     "test": "nyc mocha test/**/*Test.js",
     "posttest": "nyc report --reporter=html --reporter=lcov",
     "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "gh:release": "gh release create v$npm_package_version --generate-notes --verify-tag --target master",
+    "gh:prerelease": "gh release create v$npm_package_version --prerelease --generate-notes --verify-tag --target master"
   },
   "lint-staged": {
     "*.js": [

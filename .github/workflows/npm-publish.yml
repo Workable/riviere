@@ -7,24 +7,25 @@ on:
   release:
     types: 
       - published
-      - created
-      - edited
-      - released
+  workflow_dispatch:
 
 permissions:
-  id-token: write
   contents: read
+  id-token: write
 
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org/
+      - run: npm install -g npm@latest
       - run: npm ci
-      - run: npm test
-      - run: unset NODE_AUTH_TOKEN && npm publish --ignore-scripts
+      - run: npm run build
+      - run: |
+          TAG=$(node -p "require('./package.json').version.includes('-') ? 'beta' : 'latest'")
+          npm publish --provenance --ignore-scripts --tag $TAG
 
