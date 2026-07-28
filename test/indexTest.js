@@ -116,7 +116,8 @@ describe('riviere', () => {
       response: {},
       body: readable,
       res: writable,
-      onerror: () => {}
+      // Non-arrow so a binding regression would surface as wrong `this`
+      onerror: function() {}
     };
 
     const next = () => {};
@@ -132,5 +133,43 @@ describe('riviere', () => {
     readable.push(null);
     await end;
     ctx.state.calculatedContentLength.should.equal(26);
+  });
+
+  it('should call ctx.onerror bound to ctx when streamed body errors', async function() {
+    const readable = new Readable({ read() {} });
+    const writable = new Writable({ write() {} });
+
+    const middleware = riviere({
+      logger: {
+        info: sandbox.spy()
+      }
+    });
+
+    const streamError = new Error('client disconnect');
+    const onerror = sandbox.spy(function(err) {
+      // Mimic Koa's Context#onerror which uses `this.app.emit(...)`
+      this.app.emit('error', err, this);
+    });
+
+    const ctx = {
+      state: {},
+      response: {},
+      body: readable,
+      res: writable,
+      app: {
+        emit: sandbox.spy()
+      },
+      onerror
+    };
+
+    await middleware(ctx, () => {});
+
+    ctx.body.emit('error', streamError);
+
+    onerror.calledOnce.should.equal(true);
+    onerror.calledWith(streamError).should.equal(true);
+    onerror.thisValues[0].should.equal(ctx);
+    ctx.app.emit.calledOnce.should.equal(true);
+    ctx.app.emit.calledWith('error', streamError, ctx).should.equal(true);
   });
 });
