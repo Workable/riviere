@@ -67,7 +67,7 @@ function buildRiviere(options = {}) {
         let counter;
 
         if (!length && ctx.body && ctx.body.readable) {
-          ctx.body = ctx.body.pipe((counter = Counter())).on('error', ctx.onerror);
+          ctx.body = ctx.body.pipe((counter = Counter())).on('error', err => ctx.onerror(err));
         }
 
         const res = ctx.res;
